@@ -566,6 +566,13 @@ textarea {
   html, body {
     background: #0E0C09;
   }
+  html {
+    /* iOS shows only the flat base color in the rubber-band gap, and the
+       page is white on top / ink on the bottom — no single color fits.
+       Disable the root bounce instead; unsupported browsers fall back to
+       an ink-colored bounce. */
+    overscroll-behavior-y: none;
+  }
   body {
     position: relative;
   }
