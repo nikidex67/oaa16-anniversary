@@ -6,8 +6,8 @@
 
   // Supabase — paste your Project URL and anon/publishable key from
   // Project Settings → API. Leave empty to run the form without a backend.
-  var SUPABASE_URL = '';
-  var SUPABASE_ANON_KEY = '';
+  var SUPABASE_URL = 'https://gbrbmtwpugxmenrfkloh.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_i9sm2any3EigKUBkxCv7Jg_j0UmtOac';
   var sb = (SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase)
     ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     : null;
