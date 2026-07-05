@@ -559,6 +559,10 @@ textarea {
 /* ============ RESPONSIVE ============ */
 
 @media (max-width: 1023px) {
+  /* Overscroll: white above the form, ink below the visual panel */
+  html {
+    background: linear-gradient(to bottom, #FFFFFF 50%, #0E0C09 50%);
+  }
   .page {
     height: auto;
     max-height: none;
