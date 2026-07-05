@@ -576,5 +576,5 @@ textarea {
   .visual-panel { height: auto; min-height: 640px; }
   .visual-content { padding: 40px 28px; }
   .crest-area { padding: 0 0 24px; }
-  .crest-box { top: 0; max-width: min(55%, 210px); min-height: 200px; }
+  .crest-box { top: 10px; max-width: min(55%, 210px); min-height: 200px; }
 }
