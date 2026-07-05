@@ -559,9 +559,24 @@ textarea {
 /* ============ RESPONSIVE ============ */
 
 @media (max-width: 1023px) {
-  /* Overscroll: white above the form, ink below the visual panel */
-  html {
-    background: linear-gradient(to bottom, #FFFFFF 50%, #0E0C09 50%);
+  /* Overscroll: white above the form, ink below the visual panel.
+     iOS Safari paints the bounce with the base background-color only
+     (gradients are ignored), so the base is ink and a block painted
+     above the document top covers the white end. */
+  html, body {
+    background: #0E0C09;
+  }
+  body {
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: absolute;
+    top: -600px;
+    left: 0;
+    right: 0;
+    height: 600px;
+    background: #FFFFFF;
   }
   .page {
     height: auto;
