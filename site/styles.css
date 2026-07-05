@@ -559,32 +559,10 @@ textarea {
 /* ============ RESPONSIVE ============ */
 
 @media (max-width: 1023px) {
-  /* Overscroll: white above the form, ink below the visual panel.
-     iOS Safari paints the bounce with the base background-color only
-     (gradients are ignored), so the base is ink and a block painted
-     above the document top covers the white end. */
-  html, body {
-    background: #0E0C09;
-  }
-  html {
-    /* iOS shows only the flat base color in the rubber-band gap, and the
-       page is white on top / ink on the bottom — no single color fits.
-       Disable the root bounce instead; unsupported browsers fall back to
-       an ink-colored bounce. */
-    overscroll-behavior-y: none;
-  }
-  body {
-    position: relative;
-  }
-  body::before {
-    content: '';
-    position: absolute;
-    top: -600px;
-    left: 0;
-    right: 0;
-    height: 600px;
-    background: #FFFFFF;
-  }
+  /* Overscroll: iOS paints the rubber-band gap with the flat base color
+     only, so keep it white to match the form at the top (pull-to-refresh
+     stays native). The bottom edge is stopped in JS instead — see the
+     touchmove handler in app.js. */
   .page {
     height: auto;
     max-height: none;

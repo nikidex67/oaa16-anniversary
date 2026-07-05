@@ -262,6 +262,24 @@
     });
   });
 
+  /* ---------- Bottom overscroll stop (mobile) ---------- */
+  // iOS can only paint the rubber-band gap in one flat color, and the page
+  // is white on top / ink on the bottom. Keep the native top bounce (and
+  // pull-to-refresh) and cancel only finger-driven overscroll at the bottom.
+
+  if (window.matchMedia('(max-width: 1023px)').matches) {
+    var touchStartY = 0;
+    document.addEventListener('touchstart', function (e) {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchmove', function (e) {
+      var el = document.scrollingElement || document.documentElement;
+      var atBottom = el.scrollTop + window.innerHeight >= el.scrollHeight - 1;
+      var pullingUp = e.touches[0].clientY < touchStartY;
+      if (atBottom && pullingUp && e.cancelable) e.preventDefault();
+    }, { passive: false });
+  }
+
   /* ---------- Announcement slider ---------- */
 
   var slide = 0;
