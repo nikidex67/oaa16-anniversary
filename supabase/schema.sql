@@ -5,6 +5,7 @@ create table public.registrations (
   created_at    timestamptz not null default now(),
   first_name    text not null,
   last_name     text not null,
+  nickname      text,
   email         text not null,
   gender        text not null check (gender in ('Male', 'Female')),
   country_code  text not null,

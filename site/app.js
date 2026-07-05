@@ -202,6 +202,7 @@
     var payload = {
       firstName: fieldInputs.firstName.value.trim(),
       lastName: fieldInputs.lastName.value.trim(),
+      nickname: $('#oaa-nickname').value.trim(),
       email: fieldInputs.email.value.trim(),
       gender: fieldInputs.gender.value,
       countryCode: $('#oaa-cc').value,
@@ -230,6 +231,7 @@
     sb.from('registrations').insert({
       first_name: payload.firstName,
       last_name: payload.lastName,
+      nickname: payload.nickname || null,
       email: payload.email,
       gender: payload.gender,
       country_code: payload.countryCode,
