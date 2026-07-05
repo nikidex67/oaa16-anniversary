@@ -179,6 +179,8 @@ html, body { margin: 0; padding: 0; background: #FFFFFF; }
 
 .field-row { display: flex; gap: 16px; flex-wrap: wrap; }
 .field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
+.field-wide { flex: 2; }
+.field-narrow { flex: 1; min-width: 130px; }
 .field-col { display: flex; flex-direction: column; gap: 6px; }
 .phone-row { display: flex; gap: 10px; }
 

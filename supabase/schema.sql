@@ -6,6 +6,7 @@ create table public.registrations (
   first_name    text not null,
   last_name     text not null,
   email         text not null,
+  gender        text not null check (gender in ('Male', 'Female')),
   country_code  text not null,
   phone         text not null,
   is_whatsapp   boolean not null default false,

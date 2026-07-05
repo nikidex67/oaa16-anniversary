@@ -15,6 +15,11 @@
   var $ = function (sel) { return document.querySelector(sel); };
   var $$ = function (sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
 
+  var HOUSES = {
+    Male: ['Aggrey House', 'Livingstone House', 'Lugard House', 'Cadbury House', 'Guggisberg House', 'Gyamfi House', 'Fraser House', 'Kwapong House'],
+    Female: ['Clark House', 'Kingsley House', 'Slessor House', 'McCarthy House', 'Baeta House', 'OAA House', 'SOA House']
+  };
+
   var form = $('#oaa-form');
   var step1 = $('#step-1');
   var step2 = $('#step-2');
@@ -29,6 +34,7 @@
     firstName: $('#oaa-first'),
     lastName: $('#oaa-last'),
     email: $('#oaa-email'),
+    gender: $('#oaa-gender'),
     phone: $('#oaa-phone'),
     waPhone: $('#oaa-wa'),
     house: $('#oaa-house'),
@@ -75,6 +81,7 @@
     var email = fieldInputs.email.value.trim();
     if (!email) errors.email = 'Required';
     else if (!emailRe.test(email)) errors.email = 'Enter a valid email';
+    if (!fieldInputs.gender.value) errors.gender = 'Required';
     var digits = digitsOf(fieldInputs.phone.value);
     if (!digits) errors.phone = 'Required';
     else if (!phoneRe.test(digits)) errors.phone = 'Enter a valid phone number';
@@ -93,6 +100,36 @@
     if (!fieldInputs.classGroup.value) errors.classGroup = 'Required';
     return errors;
   }
+
+  /* ---------- House options (filtered by gender) ---------- */
+
+  function populateHouses() {
+    var select = fieldInputs.house;
+    var gender = fieldInputs.gender.value;
+    var current = select.value;
+    select.innerHTML = '';
+    var placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = 'Select house…';
+    select.appendChild(placeholder);
+    var genders = gender ? [gender] : ['Male', 'Female'];
+    genders.forEach(function (g) {
+      var group = document.createElement('optgroup');
+      group.label = g === 'Male' ? "Boys' houses" : "Girls' houses";
+      HOUSES[g].forEach(function (name) {
+        var opt = document.createElement('option');
+        opt.textContent = name;
+        group.appendChild(opt);
+      });
+      select.appendChild(group);
+    });
+    // keep the selection when it's still valid for the chosen gender
+    select.value = current;
+    if (select.value !== current) select.value = '';
+  }
+
+  fieldInputs.gender.addEventListener('change', populateHouses);
+  populateHouses();
 
   /* ---------- Step navigation ---------- */
 
@@ -166,6 +203,7 @@
       firstName: fieldInputs.firstName.value.trim(),
       lastName: fieldInputs.lastName.value.trim(),
       email: fieldInputs.email.value.trim(),
+      gender: fieldInputs.gender.value,
       countryCode: $('#oaa-cc').value,
       phone: digitsOf(fieldInputs.phone.value),
       isWhatsApp: isWaCheckbox.checked,
@@ -193,6 +231,7 @@
       first_name: payload.firstName,
       last_name: payload.lastName,
       email: payload.email,
+      gender: payload.gender,
       country_code: payload.countryCode,
       phone: payload.phone,
       is_whatsapp: payload.isWhatsApp,

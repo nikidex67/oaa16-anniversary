@@ -61,10 +61,20 @@
                 </div>
               </div>
 
-              <!-- Email -->
-              <div class="field-col">
-                <input id="oaa-email" name="email" type="email" placeholder="Email address" autocomplete="email">
-                <div class="error-msg" data-error-for="email" hidden></div>
+              <!-- Email + Gender -->
+              <div class="field-row">
+                <div class="field field-wide">
+                  <input id="oaa-email" name="email" type="email" placeholder="Email address" autocomplete="email">
+                  <div class="error-msg" data-error-for="email" hidden></div>
+                </div>
+                <div class="field field-narrow">
+                  <select id="oaa-gender" name="gender" class="chevron-select" aria-label="Gender">
+                    <option value="">Gender…</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                  </select>
+                  <div class="error-msg" data-error-for="gender" hidden></div>
+                </div>
               </div>
 
               <!-- Phone -->
@@ -132,16 +142,26 @@
                 <div class="field">
                   <select id="oaa-house" name="house" class="chevron-select">
                     <option value="">Select house…</option>
-                    <option>House 1</option><option>House 2</option><option>House 3</option>
-                    <option>House 4</option><option>House 5</option><option>House 6</option>
                   </select>
                   <div class="error-msg" data-error-for="house" hidden></div>
                 </div>
                 <div class="field">
                   <select id="oaa-class" name="classGroup" class="chevron-select">
                     <option value="">Select class…</option>
-                    <option>Class 1</option><option>Class 2</option><option>Class 3</option>
-                    <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+                    <optgroup label="Science">
+                      <option>Science 1</option><option>Science 2</option><option>Science 3</option><option>Science 4</option>
+                      <option>Science 5</option><option>Science 6</option><option>Science 7</option><option>Science 8</option>
+                    </optgroup>
+                    <optgroup label="Arts">
+                      <option>Arts 1</option><option>Arts 2</option><option>Arts 3</option><option>Arts 4</option>
+                      <option>Arts 5</option><option>Arts 6</option><option>Arts 7</option><option>Arts 8</option>
+                    </optgroup>
+                    <optgroup label="Home Econs">
+                      <option>Voc 1</option>
+                    </optgroup>
+                    <optgroup label="Visual Arts">
+                      <option>Voc 2</option>
+                    </optgroup>
                   </select>
                   <div class="error-msg" data-error-for="classGroup" hidden></div>
                 </div>
