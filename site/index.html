@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OAA 16 — Class of 2016 · 10 Years On</title>
+<meta name="description" content="Achimota School Class of 2016 (OAA 16) 10th anniversary. Reconnect with the year group — register your details and join the WhatsApp group.">
+<link rel="icon" type="image/png" href="assets/oaa16-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ============ LEFT: FORM PANEL ============ -->
+  <div class="form-panel">
+    <img src="assets/oaa16-watermark.png" alt="" aria-hidden="true" class="watermark">
+    <div class="form-panel-inner">
+      <div class="form-column">
+
+        <!-- ============ SUBMITTED STATE ============ -->
+        <div id="submitted-state" class="submitted-wrap" hidden>
+          <div class="submitted-card">
+            <div class="submitted-check">✓</div>
+            <div class="submitted-title">You're in! 🎉</div>
+            <div class="submitted-copy">We'll be in touch with anniversary updates. Join the WhatsApp group so you don't miss anything.</div>
+            <a id="whatsapp-cta" href="#" target="_blank" rel="noopener" class="whatsapp-btn">Join the WhatsApp Group <span>↗</span></a>
+          </div>
+          <div class="eyebrow center">Class of 2016 · 10 Years On</div>
+        </div>
+
+        <!-- ============ FORM STATE ============ -->
+        <div id="form-state" class="form-wrap">
+
+          <div>
+            <img src="assets/oaa16-logo.png" alt="OAA 16" class="logo">
+          </div>
+
+          <div class="heading-block">
+            <h1>Hi there, Akora</h1>
+            <p>It's been 10 years! Help us reconnect the year group. <br>Fill in your details below.</p>
+          </div>
+
+          <form id="oaa-form" novalidate>
+
+            <!-- ============ STEP 1 ============ -->
+            <div id="step-1" class="step">
+
+              <!-- Names -->
+              <div class="field-row">
+                <div class="field">
+                  <input id="oaa-first" name="firstName" type="text" placeholder="First name(s)" autocomplete="given-name">
+                  <div class="error-msg" data-error-for="firstName" hidden></div>
+                </div>
+                <div class="field">
+                  <input id="oaa-last" name="lastName" type="text" placeholder="Last name" autocomplete="family-name">
+                  <div class="error-msg" data-error-for="lastName" hidden></div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="field-col">
+                <input id="oaa-email" name="email" type="email" placeholder="Email address" autocomplete="email">
+                <div class="error-msg" data-error-for="email" hidden></div>
+              </div>
+
+              <!-- Phone -->
+              <div class="field-col">
+                <div class="phone-row">
+                  <select id="oaa-cc" name="countryCode" aria-label="Country code" class="cc-select">
+                    <option value="+233">+233</option>
+                    <option value="+44">+44</option>
+                    <option value="+1">+1</option>
+                    <option value="+49">+49</option>
+                    <option value="+971">+971</option>
+                    <option value="+27">+27</option>
+                  </select>
+                  <input id="oaa-phone" name="phone" type="tel" placeholder="Phone number" autocomplete="tel-national">
+                </div>
+                <div class="error-msg" data-error-for="phone" hidden></div>
+                <label class="checkbox-label">
+                  <input id="oaa-is-wa" type="checkbox">
+                  This is my WhatsApp number
+                </label>
+              </div>
+
+              <!-- WhatsApp number (only when phone is NOT WhatsApp) -->
+              <div id="wa-field" class="field-col wa-field">
+                <div class="phone-row">
+                  <select id="oaa-wa-cc" name="waCountryCode" aria-label="WhatsApp country code" class="cc-select">
+                    <option value="+233">+233</option>
+                    <option value="+44">+44</option>
+                    <option value="+1">+1</option>
+                    <option value="+49">+49</option>
+                    <option value="+971">+971</option>
+                    <option value="+27">+27</option>
+                  </select>
+                  <input id="oaa-wa" name="waPhone" type="tel" placeholder="WhatsApp number">
+                </div>
+                <div class="error-msg" data-error-for="waPhone" hidden></div>
+              </div>
+
+              <!-- WhatsApp group check -->
+              <div class="group-card">
+                <div class="group-card-label">Are you already in the OAA 16 WhatsApp group?</div>
+                <div class="group-options">
+                  <label class="radio-label">
+                    <input type="radio" name="ingroup" value="yes">
+                    Yes
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="ingroup" value="no">
+                    No
+                  </label>
+                  <div id="invite-hint" class="invite-hint" hidden><span class="dot"></span>You'll get the invite link after submitting.</div>
+                </div>
+                <div class="error-msg" data-error-for="inGroup" hidden></div>
+              </div>
+
+              <button type="button" id="next-btn" class="primary-btn">Next <span>→</span></button>
+              <div class="eyebrow center">Step 1 of 2 · Contact</div>
+            </div>
+
+            <!-- ============ STEP 2 ============ -->
+            <div id="step-2" class="step" hidden>
+
+              <!-- House + Class -->
+              <div class="field-row">
+                <div class="field">
+                  <select id="oaa-house" name="house" class="chevron-select">
+                    <option value="">Select house…</option>
+                    <option>House 1</option><option>House 2</option><option>House 3</option>
+                    <option>House 4</option><option>House 5</option><option>House 6</option>
+                  </select>
+                  <div class="error-msg" data-error-for="house" hidden></div>
+                </div>
+                <div class="field">
+                  <select id="oaa-class" name="classGroup" class="chevron-select">
+                    <option value="">Select class…</option>
+                    <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                    <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+                  </select>
+                  <div class="error-msg" data-error-for="classGroup" hidden></div>
+                </div>
+              </div>
+
+              <!-- Profession + Company -->
+              <div class="field-row">
+                <div class="field">
+                  <input id="oaa-prof" name="profession" type="text" placeholder="Current profession">
+                </div>
+                <div class="field">
+                  <input id="oaa-company" name="company" type="text" placeholder="Company">
+                </div>
+              </div>
+
+              <!-- Industry -->
+              <div class="field-col">
+                <select id="oaa-industry" name="industry" class="chevron-select">
+                  <option value="">Select industry…</option>
+                  <option>Technology</option><option>Finance</option><option>Healthcare</option>
+                  <option>Law</option><option>Education</option><option>Energy</option>
+                  <option>Media &amp; Creative</option><option>Government</option>
+                  <option>Entrepreneurship</option><option>Other</option>
+                </select>
+              </div>
+
+              <!-- Description -->
+              <div class="field-col desc-field">
+                <textarea id="oaa-desc" name="description" rows="3" maxlength="300" placeholder="Briefly, what do you do?"></textarea>
+                <div class="char-count"><span id="desc-count">0</span>/300</div>
+              </div>
+
+              <button type="submit" id="register-btn" class="primary-btn">Register</button>
+              <div id="submit-error" class="error-msg center" hidden></div>
+
+              <div class="step-footer">
+                <button type="button" id="back-btn" class="back-btn"><span>←</span> Back</button>
+                <div class="eyebrow">Step 2 of 2 · About you</div>
+              </div>
+            </div>
+
+            <div class="privacy-note">We protect your privacy. Your details are used exclusively within the Akora 16 community. Stay connected with Akora 16 through our newsletter. <br>You can opt out anytime.</div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RIGHT: VISUAL PANEL ============ -->
+  <div class="visual-panel">
+    <div class="visual-overlay"></div>
+
+    <div class="visual-content">
+
+      <div class="crest-area">
+        <div class="crest-box">
+          <img src="assets/2016-crest.webp" alt="2016 crest" class="crest-img">
+          <div aria-hidden="true" class="crest-shine"></div>
+        </div>
+      </div>
+
+      <div class="visual-lower">
+        <div class="news-badge"><span class="badge-dot"></span>News &amp; Upcoming Events</div>
+
+        <div class="slides-headline">
+          <div class="slide" data-slide="0">10th Anniversary Career &amp; Mentorship fair. <span class="slide-sub">Dates, venue and lineup dropping soon.</span></div>
+          <div class="slide" data-slide="1">Join the WhatsApp Group. <span class="slide-sub">Stay in the loop with everything OAA 16.</span></div>
+        </div>
+
+        <div class="slides-footer">
+          <div class="slides-copy">
+            <div class="slide" data-slide="0">Check back here for announcements.</div>
+            <div class="slide" data-slide="1">Fill the form to find the link.</div>
+          </div>
+          <div class="slide-controls">
+            <button type="button" id="prev-slide" aria-label="Previous announcement" class="slide-btn">←</button>
+            <button type="button" id="next-slide" aria-label="Next announcement" class="slide-btn">→</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>
