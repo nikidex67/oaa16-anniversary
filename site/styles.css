@@ -442,6 +442,8 @@ textarea {
   align-items: center;
   justify-content: center;
   top: 32px;
+  /* bob the box, not the img, so the shine overlay stays aligned */
+  animation: crest-bob 4.5s ease-in-out infinite;
 }
 
 .crest-img {
@@ -451,7 +453,6 @@ textarea {
   max-height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 20px 40px rgba(0,0,0,.35));
-  animation: crest-bob 4.5s ease-in-out infinite;
   display: block;
 }
 
