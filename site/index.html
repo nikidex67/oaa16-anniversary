@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 
@@ -85,14 +85,7 @@
               <!-- Phone -->
               <div class="field-col">
                 <div class="phone-row">
-                  <select id="oaa-cc" name="countryCode" aria-label="Country code" class="cc-select">
-                    <option value="+233">+233</option>
-                    <option value="+44">+44</option>
-                    <option value="+1">+1</option>
-                    <option value="+49">+49</option>
-                    <option value="+971">+971</option>
-                    <option value="+27">+27</option>
-                  </select>
+                  <select id="oaa-cc" name="countryCode" aria-label="Country code" class="cc-select"></select>
                   <input id="oaa-phone" name="phone" type="tel" placeholder="Phone number" autocomplete="tel-national">
                 </div>
                 <div class="error-msg" data-error-for="phone" hidden></div>
@@ -105,14 +98,7 @@
               <!-- WhatsApp number (only when phone is NOT WhatsApp) -->
               <div id="wa-field" class="field-col wa-field">
                 <div class="phone-row">
-                  <select id="oaa-wa-cc" name="waCountryCode" aria-label="WhatsApp country code" class="cc-select">
-                    <option value="+233">+233</option>
-                    <option value="+44">+44</option>
-                    <option value="+1">+1</option>
-                    <option value="+49">+49</option>
-                    <option value="+971">+971</option>
-                    <option value="+27">+27</option>
-                  </select>
+                  <select id="oaa-wa-cc" name="waCountryCode" aria-label="WhatsApp country code" class="cc-select"></select>
                   <input id="oaa-wa" name="waPhone" type="tel" placeholder="WhatsApp number">
                 </div>
                 <div class="error-msg" data-error-for="waPhone" hidden></div>
