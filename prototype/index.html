@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OAA 16 — Achimota School Class of 2016 · 10 Years On</title>
+<link rel="stylesheet" href="app.css">
+<style>
+.hero {
+  display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center;
+  padding: 40px 0 64px;
+}
+.hero h1 { font-weight: 800; font-size: clamp(38px, 5vw, 58px); line-height: 1.05; margin: 14px 0 18px; text-wrap: balance; }
+.hero p { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0 0 30px; max-width: 460px; }
+.hero-visual {
+  background: var(--ink) url('assets/right-panel-bg.webp') center/cover no-repeat;
+  border-radius: 32px; min-height: 440px;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.hero-visual img { max-width: 62%; filter: drop-shadow(0 20px 40px rgba(0,0,0,.35)); }
+.stat-strip { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 34px; }
+.stat-chip { background: var(--field-bg); border-radius: 18px; padding: 12px 22px; }
+.stat-chip .v { font-size: 22px; font-weight: 800; }
+.stat-chip .l { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.event-mini { display: flex; flex-direction: column; gap: 10px; }
+.event-mini .date { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .08em; text-transform: uppercase; }
+.event-mini h3 { margin: 0; font-size: 19px; font-weight: 800; }
+.event-mini p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; }
+.merch-mini { border-radius: 20px; overflow: hidden; background: var(--field-bg); text-align: center; padding: 26px 18px 22px; }
+.merch-mini .ph { font-size: 44px; }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .hero-visual { min-height: 300px; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <img class="nav-logo" src="assets/oaa16-logo.png" alt="OAA 16">
+  <div class="nav-links">
+    <a href="index.html" class="active">Home</a>
+    <a href="events.html">Events</a>
+    <a href="merch.html">Merch</a>
+    <a href="#">Updates</a>
+    <a href="dashboard.html" class="keep btn btn-ghost btn-sm">Sign in</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <section class="hero">
+    <div>
+      <span class="pill pill-soft"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent)"></span>425 Akoras registered</span>
+      <h1>Ten years on. One year group.</h1>
+      <p>The Achimota School Class of 2016 is reconnecting for our 10th anniversary — career fair, inter-house sports, thanksgiving and more. Register to be counted.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="document.getElementById('reg-modal').classList.add('open')">Register <span>→</span></button>
+        <a class="btn btn-ghost" href="events.html">See what's coming</a>
+      </div>
+      <div class="stat-strip">
+        <div class="stat-chip"><div class="v">425</div><div class="l">Registered</div></div>
+        <div class="stat-chip"><div class="v">15</div><div class="l">Houses</div></div>
+        <div class="stat-chip"><div class="v">3</div><div class="l">Events planned</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="assets/2016-crest.webp" alt="2016 crest">
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label">Upcoming events</p>
+    <div class="grid-3">
+      <div class="card event-mini">
+        <span class="date">Sat · 5 Sep 2026</span>
+        <h3>Career &amp; Mentorship Fair</h3>
+        <p>Panels, mentorship circles and networking with the year group's professionals.</p>
+        <a class="btn btn-ghost btn-sm" href="events.html" style="align-self:flex-start">RSVP →</a>
+      </div>
+      <div class="card event-mini">
+        <span class="date">Sat · 24 Oct 2026</span>
+        <h3>Inter-house Sports</h3>
+        <p>The houses meet again. Old rivalries, new hamstring injuries.</p>
+        <a class="btn btn-ghost btn-sm" href="events.html" style="align-self:flex-start">RSVP →</a>
+      </div>
+      <div class="card event-mini">
+        <span class="date">Sun · 25 Oct 2026</span>
+        <h3>Thanksgiving Service</h3>
+        <p>A service of thanksgiving for ten years, together at Achimota.</p>
+        <a class="btn btn-ghost btn-sm" href="events.html" style="align-self:flex-start">RSVP →</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top:56px">
+    <p class="section-label">Anniversary merch</p>
+    <div class="grid-3">
+      <div class="merch-mini"><div class="ph">👕</div><div style="font-weight:800;margin-top:8px">Anniversary tee</div><div style="font-size:13px;color:var(--muted)">In your house colour · GH₵120</div></div>
+      <div class="merch-mini"><div class="ph">🧢</div><div style="font-weight:800;margin-top:8px">OAA 16 cap</div><div style="font-size:13px;color:var(--muted)">Ink black, crest embroidery · GH₵90</div></div>
+      <div class="merch-mini"><div class="ph">☕</div><div style="font-weight:800;margin-top:8px">Crest mug</div><div style="font-size:13px;color:var(--muted)">For the office desk flex · GH₵70</div></div>
+    </div>
+    <div style="margin-top:20px"><a class="btn btn-primary btn-sm" href="merch.html">Browse the shop →</a></div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <span>© 2026 OAA 16 · Achimota School Class of 2016</span>
+  <span>info@oaa2016.org</span>
+</footer>
+
+<!-- Registration modal (step 1 shown; same two-step form as today) -->
+<div class="modal-backdrop" id="reg-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('reg-modal').classList.remove('open')">✕</button>
+    <p class="page-eyebrow">Class of 2016 · 10 Years On</p>
+    <h2 style="font-weight:800;font-size:28px;margin:8px 0 6px">Hi there, Akora</h2>
+    <p style="font-size:15px;color:var(--muted);line-height:1.6;margin:0 0 22px">It's been 10 years! Help us reconnect the year group.</p>
+    <div class="form-stack">
+      <div class="field-row">
+        <input type="text" placeholder="First name(s)">
+        <input type="text" placeholder="Last name">
+      </div>
+      <input type="text" placeholder="School nickname (if you had one)">
+      <div class="field-row">
+        <input type="email" placeholder="Email address" style="flex:2">
+        <select><option>Gender…</option><option>Male</option><option>Female</option></select>
+      </div>
+      <div class="field-row">
+        <select style="flex:0 0 118px"><option>🇬🇭 +233</option></select>
+        <input type="tel" placeholder="Phone number">
+      </div>
+      <button class="btn btn-primary" style="width:100%">Next <span>→</span></button>
+      <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:center;font-weight:500">Step 1 of 2 · Contact</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Events — OAA 16</title>
+<link rel="stylesheet" href="app.css">
+<style>
+.event-card { display: flex; flex-direction: column; gap: 14px; }
+.event-date {
+  display: inline-flex; flex-direction: column; align-items: center;
+  background: var(--field-bg); border-radius: 16px; padding: 12px 18px;
+  align-self: flex-start;
+}
+.event-date .d { font-size: 24px; font-weight: 800; line-height: 1; }
+.event-date .m { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.event-card h3 { margin: 0; font-size: 22px; font-weight: 800; }
+.event-card .where { font-size: 13.5px; color: var(--muted); }
+.event-card p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+.going { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+.faces { display: flex; }
+.faces span {
+  width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff;
+  margin-left: -8px; display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 9px; font-weight: 800;
+}
+.faces span:first-child { margin-left: 0; }
+.event-actions { display: flex; gap: 10px; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <img class="nav-logo" src="assets/oaa16-logo.png" alt="OAA 16">
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="events.html" class="active">Events</a>
+    <a href="merch.html">Merch</a>
+    <a href="#">Updates</a>
+    <a href="dashboard.html" class="keep nav-member"><span class="avatar" style="background:#C1272D">NK</span> Chairman</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <p class="page-eyebrow">10th Anniversary</p>
+  <h1 class="page-title">Events</h1>
+  <p class="page-sub">RSVP so we can plan numbers — your QR member card gets you checked in at the door.</p>
+
+  <div class="grid-3">
+
+    <div class="card event-card">
+      <div class="event-date"><span class="d">5</span><span class="m">Sep</span></div>
+      <h3>Career &amp; Mentorship Fair</h3>
+      <span class="where">Achimota School · 10:00 – 16:00</span>
+      <p>Panels and mentorship circles with the year group's doctors, engineers, founders, lawyers and creatives. Bring your questions — and your business cards.</p>
+      <div class="going">
+        <span class="faces">
+          <span style="background:#C1272D">EA</span><span style="background:#2456C4">FD</span><span style="background:#2F9E44">KO</span><span style="background:#7C3AED">AB</span>
+        </span>
+        132 going
+      </div>
+      <div class="event-actions">
+        <span class="pill pill-good">You're going ✓</span>
+        <button class="btn btn-ghost btn-sm">Change</button>
+      </div>
+    </div>
+
+    <div class="card event-card">
+      <div class="event-date"><span class="d">24</span><span class="m">Oct</span></div>
+      <h3>Inter-house Sports</h3>
+      <span class="where">Achimota School fields · 08:00</span>
+      <p>Fifteen houses, one trophy. Athletics, football, and the walking race nobody trains for. Wear your house colours.</p>
+      <div class="going">
+        <span class="faces">
+          <span style="background:#FFD400;color:#0E0C09">LM</span><span style="background:#4FA8E0">TN</span><span style="background:#8A4B6D">SA</span>
+        </span>
+        87 going
+      </div>
+      <div class="event-actions">
+        <button class="btn btn-primary btn-sm">RSVP — I'm going</button>
+        <button class="btn btn-ghost btn-sm">Can't make it</button>
+      </div>
+    </div>
+
+    <div class="card event-card">
+      <div class="event-date"><span class="d">25</span><span class="m">Oct</span></div>
+      <h3>Thanksgiving Service</h3>
+      <span class="where">Achimota School · 09:30</span>
+      <p>A service of thanksgiving for ten years — followed by a group photo on the very steps from 2016. Families welcome.</p>
+      <div class="going">
+        <span class="faces">
+          <span style="background:#14532D">BO</span><span style="background:#ED7014">MM</span>
+        </span>
+        64 going
+      </div>
+      <div class="event-actions">
+        <button class="btn btn-primary btn-sm">RSVP — I'm going</button>
+        <button class="btn btn-ghost btn-sm">Can't make it</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card-flat" style="margin-top:36px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+    <div>
+      <b>Committee view</b>
+      <div style="font-size:13px;color:var(--muted)">Live attendance numbers per event, per house — visible to organisers only.</div>
+    </div>
+    <span class="pill pill-soft">🔒 Committee only</span>
+  </div>
+</div>
+
+<footer class="footer">
+  <span>© 2026 OAA 16 · Achimota School Class of 2016</span>
+  <span>info@oaa2016.org</span>
+</footer>
+
+</body>
+</html>

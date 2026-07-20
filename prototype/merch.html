@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merch — OAA 16</title>
+<link rel="stylesheet" href="app.css">
+<style>
+.product { display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+.product .visual {
+  background: var(--field-bg); min-height: 210px;
+  display: flex; align-items: center; justify-content: center; font-size: 64px;
+}
+.product .body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 10px; }
+.product h3 { margin: 0; font-size: 18px; font-weight: 800; }
+.product .desc { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin: 0; }
+.price { font-size: 20px; font-weight: 800; }
+.swatches { display: flex; gap: 6px; }
+.swatches i { width: 18px; height: 18px; border-radius: 50%; display: inline-block; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(14,12,9,.12); }
+.size-row { display: flex; gap: 8px; }
+.size-row button {
+  border: 1.5px solid var(--field-bg); background: #fff; border-radius: 10px;
+  padding: 7px 12px; font-family: var(--font); font-weight: 700; font-size: 13px; cursor: pointer;
+}
+.size-row button.on { border-color: var(--ink); background: var(--ink); color: #fff; }
+.preorder-note {
+  background: var(--success-bg); color: var(--success-ink);
+  border-radius: 14px; padding: 12px 16px; font-size: 13px; line-height: 1.5;
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <img class="nav-logo" src="assets/oaa16-logo.png" alt="OAA 16">
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="events.html">Events</a>
+    <a href="merch.html" class="active">Merch</a>
+    <a href="#">Updates</a>
+    <a href="dashboard.html" class="keep nav-member"><span class="avatar" style="background:#C1272D">NK</span> Chairman</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <p class="page-eyebrow">Anniversary collection</p>
+  <h1 class="page-title">Merch</h1>
+  <p class="page-sub">Pre-order now, pay with MoMo or card, pick up at any anniversary event. Nothing gets printed until it's paid for — no waste, no guesswork.</p>
+
+  <div class="preorder-note" style="margin-bottom:28px">✓ Pre-order window closes <b>22 Aug</b> · pickup starts at the Career &amp; Mentorship Fair (5 Sep)</div>
+
+  <div class="grid-3">
+
+    <div class="card product">
+      <div class="visual">👕</div>
+      <div class="body">
+        <h3>Anniversary tee</h3>
+        <p class="desc">Heavyweight cotton, crest on the chest, “10 Years On” on the back — in your house colour.</p>
+        <div class="swatches">
+          <i style="background:#C1272D"></i><i style="background:#2456C4"></i><i style="background:#2F9E44"></i><i style="background:#FFD400"></i><i style="background:#7C3AED"></i><i style="background:#ED7014"></i><i style="background:#0E0C09"></i>
+        </div>
+        <div class="size-row"><button>S</button><button>M</button><button class="on">L</button><button>XL</button><button>2XL</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <span class="price">GH₵120</span>
+          <button class="btn btn-primary btn-sm">Pre-order</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card product">
+      <div class="visual">🧢</div>
+      <div class="body">
+        <h3>OAA 16 cap</h3>
+        <p class="desc">Ink black, embroidered 20/16 crest, adjustable strap. One size fits all heads, even swollen ones.</p>
+        <div class="swatches"><i style="background:#0E0C09"></i><i style="background:#F0EDF8"></i></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <span class="price">GH₵90</span>
+          <button class="btn btn-primary btn-sm">Pre-order</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card product">
+      <div class="visual">☕</div>
+      <div class="body">
+        <h3>Crest mug</h3>
+        <p class="desc">Ceramic, dishwasher-safe, purple crest card artwork wrapped around. Desk flex certified.</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <span class="price">GH₵70</span>
+          <button class="btn btn-primary btn-sm">Pre-order</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card product">
+      <div class="visual">🎽</div>
+      <div class="body">
+        <h3>House jersey</h3>
+        <p class="desc">Breathable sports jersey for Inter-house Sports day — house colour, your nickname on the back.</p>
+        <div class="swatches">
+          <i style="background:#C1272D"></i><i style="background:#2456C4"></i><i style="background:#2F9E44"></i><i style="background:#FFD400"></i><i style="background:#4FA8E0"></i>
+        </div>
+        <div class="size-row"><button>S</button><button>M</button><button>L</button><button>XL</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <span class="price">GH₵150</span>
+          <button class="btn btn-primary btn-sm">Pre-order</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card product">
+      <div class="visual">🧣</div>
+      <div class="body">
+        <h3>Anniversary scarf</h3>
+        <p class="desc">Woven scarf in school colours — for the thanksgiving service and every graduation photo after.</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <span class="price">GH₵110</span>
+          <button class="btn btn-primary btn-sm">Pre-order</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card product">
+      <div class="visual">📖</div>
+      <div class="body">
+        <h3>“10 Years On” yearbook</h3>
+        <p class="desc">Then-and-now photos, nicknames, where everyone ended up. The keepsake of the decade.</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <span class="price">GH₵200</span>
+          <button class="btn btn-primary btn-sm">Pre-order</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <span>© 2026 OAA 16 · Achimota School Class of 2016</span>
+  <span>info@oaa2016.org</span>
+</footer>
+
+</body>
+</html>
