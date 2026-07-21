@@ -30,7 +30,8 @@
 .ev-meta div:last-child { border-bottom: 0; }
 
 .ev-slider {
-  display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;
+  display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x proximity;
+  scroll-padding-left: 28px;
   padding: 32px 96px 64px 28px; margin: -32px -61px -16px -28px;
   -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
@@ -121,7 +122,7 @@
       </div>
     </div>
 
-    <div style="flex:1 1 480px;min-width:0;position:relative;overflow:hidden">
+    <div style="flex:1 1 480px;min-width:0;position:relative">
       <div class="ev-slider" id="ev-slider">
         <div class="ev-card" data-ev="0" onmouseenter="setEvent(0)">
           <span class="pill pill-glass when">Sat · 5 Sep</span>
@@ -218,7 +219,11 @@ function setEvent(i) {
 }
 function goEvent(i) {
   setEvent(i);
-  document.getElementById('ev-slider').scrollTo({ left: activeEvent * 340, behavior: 'smooth' });
+  var slider = document.getElementById('ev-slider');
+  var cards = slider.querySelectorAll('.ev-card');
+  var target = cards[activeEvent].offsetLeft - cards[0].offsetLeft;
+  var max = slider.scrollWidth - slider.clientWidth;
+  slider.scrollTo({ left: Math.min(target, max), behavior: 'smooth' });
 }
 setEvent(0);
 </script>
