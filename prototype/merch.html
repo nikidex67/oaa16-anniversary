@@ -4,141 +4,104 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Merch — OAA 16</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
 <style>
-.product { display: flex; flex-direction: column; overflow: hidden; padding: 0; }
-.product .visual {
-  background: var(--field-bg); min-height: 210px;
-  display: flex; align-items: center; justify-content: center; font-size: 64px;
+.product {
+  flex: 1 1 340px; min-width: 300px; max-width: 520px; overflow: hidden;
+  position: relative; min-height: 520px;
+  box-shadow: 0 6px 18px rgba(14,12,9,.12); display: flex; align-items: flex-end;
 }
-.product .body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 10px; }
-.product h3 { margin: 0; font-size: 18px; font-weight: 800; }
-.product .desc { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin: 0; }
-.price { font-size: 20px; font-weight: 800; }
-.swatches { display: flex; gap: 6px; }
-.swatches i { width: 18px; height: 18px; border-radius: 50%; display: inline-block; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(14,12,9,.12); }
-.size-row { display: flex; gap: 8px; }
-.size-row button {
-  border: 1.5px solid var(--field-bg); background: #fff; border-radius: 10px;
-  padding: 7px 12px; font-family: var(--font); font-weight: 700; font-size: 13px; cursor: pointer;
+.product .alt { position: absolute; inset: 0; opacity: 0; transition: opacity .35s; pointer-events: none; }
+.product:hover .alt { opacity: 1; }
+.product .foot {
+  padding: 28px; width: 100%; position: relative;
+  background: linear-gradient(to top, rgba(14,12,9,.78) 30%, rgba(14,12,9,.3) 75%, transparent);
+  backdrop-filter: blur(2px); display: flex; flex-direction: column;
 }
-.size-row button.on { border-color: var(--ink); background: var(--ink); color: #fff; }
-.preorder-note {
-  background: var(--success-bg); color: var(--success-ink);
-  border-radius: 14px; padding: 12px 16px; font-size: 13px; line-height: 1.5;
-}
+.product .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+.product h3 { margin: 0; font-size: 26px; font-weight: 800; color: #FFFFFF; }
+.product .price { font-size: 20px; font-weight: 800; color: #FFFFFF; }
+.product .tags { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.info-col { flex: 1 1 220px; min-width: 0; }
+.info-col .k { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.info-col p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <img class="nav-logo" src="assets/oaa16-logo.png" alt="OAA 16">
-  <div class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="events.html">Events</a>
-    <a href="merch.html" class="active">Merch</a>
-    <a href="#">Updates</a>
-    <a href="dashboard.html" class="keep nav-member"><span class="avatar" style="background:#C1272D">NK</span> Chairman</a>
-  </div>
-</nav>
-
-<div class="page-wrap">
-  <p class="page-eyebrow">Anniversary collection</p>
-  <h1 class="page-title">Merch</h1>
-  <p class="page-sub">Pre-order now, pay with MoMo or card, pick up at any anniversary event. Nothing gets printed until it's paid for — no waste, no guesswork.</p>
-
-  <div class="preorder-note" style="margin-bottom:28px">✓ Pre-order window closes <b>22 Aug</b> · pickup starts at the Career &amp; Mentorship Fair (5 Sep)</div>
-
-  <div class="grid-3">
-
-    <div class="card product">
-      <div class="visual">👕</div>
-      <div class="body">
-        <h3>Anniversary tee</h3>
-        <p class="desc">Heavyweight cotton, crest on the chest, “10 Years On” on the back — in your house colour.</p>
-        <div class="swatches">
-          <i style="background:#C1272D"></i><i style="background:#2456C4"></i><i style="background:#2F9E44"></i><i style="background:#FFD400"></i><i style="background:#7C3AED"></i><i style="background:#ED7014"></i><i style="background:#0E0C09"></i>
-        </div>
-        <div class="size-row"><button>S</button><button>M</button><button class="on">L</button><button>XL</button><button>2XL</button></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-          <span class="price">GH₵120</span>
-          <button class="btn btn-primary btn-sm">Pre-order</button>
-        </div>
-      </div>
+<div class="band">
+  <div class="band-bg" aria-hidden="true"></div>
+  <nav class="nav nav-dark">
+    <a href="index.html"><img class="nav-logo" src="assets/oaa16-logo-white.png" alt="OAA 16"></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="events.html">Events</a>
+      <a href="merch.html" class="on">Merch</a>
+      <button type="button" onclick="openModal('reg-modal')">Register</button>
+      <a href="dashboard.html" class="nav-signin">Sign in</a>
     </div>
-
-    <div class="card product">
-      <div class="visual">🧢</div>
-      <div class="body">
-        <h3>OAA 16 cap</h3>
-        <p class="desc">Ink black, embroidered 20/16 crest, adjustable strap. One size fits all heads, even swollen ones.</p>
-        <div class="swatches"><i style="background:#0E0C09"></i><i style="background:#F0EDF8"></i></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-          <span class="price">GH₵90</span>
-          <button class="btn btn-primary btn-sm">Pre-order</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card product">
-      <div class="visual">☕</div>
-      <div class="body">
-        <h3>Crest mug</h3>
-        <p class="desc">Ceramic, dishwasher-safe, purple crest card artwork wrapped around. Desk flex certified.</p>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-          <span class="price">GH₵70</span>
-          <button class="btn btn-primary btn-sm">Pre-order</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card product">
-      <div class="visual">🎽</div>
-      <div class="body">
-        <h3>House jersey</h3>
-        <p class="desc">Breathable sports jersey for Inter-house Sports day — house colour, your nickname on the back.</p>
-        <div class="swatches">
-          <i style="background:#C1272D"></i><i style="background:#2456C4"></i><i style="background:#2F9E44"></i><i style="background:#FFD400"></i><i style="background:#4FA8E0"></i>
-        </div>
-        <div class="size-row"><button>S</button><button>M</button><button>L</button><button>XL</button></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-          <span class="price">GH₵150</span>
-          <button class="btn btn-primary btn-sm">Pre-order</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card product">
-      <div class="visual">🧣</div>
-      <div class="body">
-        <h3>Anniversary scarf</h3>
-        <p class="desc">Woven scarf in school colours — for the thanksgiving service and every graduation photo after.</p>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-          <span class="price">GH₵110</span>
-          <button class="btn btn-primary btn-sm">Pre-order</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card product">
-      <div class="visual">📖</div>
-      <div class="body">
-        <h3>“10 Years On” yearbook</h3>
-        <p class="desc">Then-and-now photos, nicknames, where everyone ended up. The keepsake of the decade.</p>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-          <span class="price">GH₵200</span>
-          <button class="btn btn-primary btn-sm">Pre-order</button>
-        </div>
-      </div>
-    </div>
-
+  </nav>
+  <div class="band-inner">
+    <p class="eyebrow-mono">Anniversary Collection</p>
+    <h1 class="display-hero" style="font-size:clamp(52px,7vw,84px)">The merch</h1>
+    <p class="band-sub">Rep Akora 16. Heavyweight cotton, the 20/16 crest, oversized fit. Free delivery within Accra or pick up at any anniversary event.</p>
   </div>
 </div>
 
-<footer class="footer">
+<div class="wrap" style="padding-top:56px;padding-bottom:72px">
+
+  <div style="background:var(--success-bg);color:var(--success-ink);border-radius:14px;padding:12px 16px;font-size:13px;line-height:1.5;margin-bottom:36px;display:inline-block">✓ Ships in 3–5 working days · pickup starts at the Career &amp; Mentorship Fair (5 Sep)</div>
+
+  <div style="display:flex;gap:24px;flex-wrap:wrap">
+
+    <div class="product" style="background:#0E0C09 url('assets/tee-black.png') center top/cover no-repeat">
+      <div class="alt" aria-hidden="true" style="background:#0E0C09 url('assets/tee-black-back.png') center 30%/cover no-repeat"></div>
+      <div class="foot">
+        <div class="head"><h3>Black Tee</h3><span class="price">GH₵300</span></div>
+        <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Crest front · 10 Years On back</span></div>
+        <button class="btn btn-white" style="width:100%" onclick="openProduct(0)">Pre-order →</button>
+      </div>
+    </div>
+
+    <div class="product" style="background:#EDE8F5 url('assets/tee-beige.png') center top/cover no-repeat">
+      <div class="alt" aria-hidden="true" style="background:#EDE8F5 url('assets/tee-beige-front-3.png') center 45%/cover no-repeat"></div>
+      <div class="foot">
+        <div class="head"><h3>Beige Tee</h3><span class="price">GH₵300</span></div>
+        <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Bold crest back print</span></div>
+        <button class="btn btn-white" style="width:100%" onclick="openProduct(1)">Pre-order →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display:flex;gap:36px;flex-wrap:wrap;margin-top:48px">
+    <div class="info-col">
+      <div class="k">Fabric</div>
+      <p>Heavyweight 240gsm cotton, pre-shrunk, oversized fit. Sizes M through 3XL.</p>
+    </div>
+    <div class="info-col">
+      <div class="k">Payment</div>
+      <p>Pay with Mobile Money or card at checkout. Nothing prints until it's paid for.</p>
+    </div>
+    <div class="info-col">
+      <div class="k">Delivery</div>
+      <p>Free within Accra, or pick up at any anniversary event. Ships in 3–5 working days.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-dark"><div class="inner">
   <span>© 2026 OAA 16 · Achimota School Class of 2016</span>
   <span>info@oaa2016.org</span>
-</footer>
+</div></div>
+
+<div id="product-modal-root"></div>
+<div id="reg-modal-root"></div>
+<script src="shared.js"></script>
 
 </body>
 </html>

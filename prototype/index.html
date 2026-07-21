@@ -4,135 +4,224 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OAA 16 — Achimota School Class of 2016 · 10 Years On</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
 <style>
-.hero {
-  display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center;
-  padding: 40px 0 64px;
+.hero { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; padding: 40px 0 64px; }
+.hero-copy { flex: 1 1 460px; min-width: 0; }
+.hero-copy h1 {
+  font-family: var(--display); font-style: italic; font-weight: 400;
+  font-size: clamp(52px, 7vw, 87px); line-height: 1.05; margin: 14px 0 18px;
+  color: #FFFFFF; text-wrap: balance; text-transform: capitalize;
 }
-.hero h1 { font-weight: 800; font-size: clamp(38px, 5vw, 58px); line-height: 1.05; margin: 14px 0 18px; text-wrap: balance; }
-.hero p { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0 0 30px; max-width: 460px; }
-.hero-visual {
-  background: var(--ink) url('assets/right-panel-bg.webp') center/cover no-repeat;
-  border-radius: 32px; min-height: 440px;
-  display: flex; align-items: center; justify-content: center; overflow: hidden;
+.hero-copy p { font-size: 17px; line-height: 1.65; color: rgba(255,255,255,.72); margin: 0 0 30px; max-width: 460px; text-wrap: pretty; }
+.hero-crest { flex: 1 1 380px; min-width: 0; min-height: 480px; display: flex; align-items: center; justify-content: center; }
+.hero-crest img { max-width: 86%; max-height: min(520px, 62vh); width: auto; filter: drop-shadow(0 20px 40px rgba(0,0,0,.35)); animation: crest-bob 4.5s ease-in-out infinite; }
+.reg-count { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: rgba(255,255,255,.85); margin-top: 10px; }
+.reg-count i { width: 7px; height: 7px; border-radius: 50%; background: #B79CED; animation: dot-blink 1.6s ease-in-out infinite; }
+
+.split { display: flex; gap: 48px; flex-wrap: wrap; align-items: flex-start; }
+.split-copy { flex: 0 1 340px; min-width: 0; max-width: 340px; display: flex; flex-direction: column; gap: 16px; align-self: stretch; }
+.split-copy h3 { margin: 0 0 10px; font-size: 34px; font-weight: 800; line-height: 1.15; text-wrap: balance; white-space: pre-line; }
+.split-copy .desc { margin: 0; font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 440px; text-wrap: pretty; }
+.ev-meta div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid rgba(14,12,9,.12); font-size: 14px; }
+.ev-meta div:last-child { border-bottom: 0; }
+
+.ev-slider {
+  display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 32px 96px 64px 28px; margin: -32px -61px -16px -28px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
-.hero-visual img { max-width: 62%; filter: drop-shadow(0 20px 40px rgba(0,0,0,.35)); }
-.stat-strip { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 34px; }
-.stat-chip { background: var(--field-bg); border-radius: 18px; padding: 12px 22px; }
-.stat-chip .v { font-size: 22px; font-weight: 800; }
-.stat-chip .l { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
-.event-mini { display: flex; flex-direction: column; gap: 10px; }
-.event-mini .date { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .08em; text-transform: uppercase; }
-.event-mini h3 { margin: 0; font-size: 19px; font-weight: 800; }
-.event-mini p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; }
-.merch-mini { border-radius: 20px; overflow: hidden; background: var(--field-bg); text-align: center; padding: 26px 18px 22px; }
-.merch-mini .ph { font-size: 44px; }
-@media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .hero-visual { min-height: 300px; } }
+.ev-slider::-webkit-scrollbar { display: none; }
+.ev-card {
+  cursor: pointer; flex: 0 0 320px; scroll-snap-align: start; overflow: hidden;
+  position: relative; min-height: 440px;
+  background: linear-gradient(160deg, #2A1B4A, #5B21B6 45%, #7C3AED 90%);
+  box-shadow: 0 6px 18px rgba(14,12,9,.12);
+  display: flex; align-items: flex-end; transition: box-shadow .25s;
+}
+.ev-card.on { box-shadow: 0 16px 36px rgba(124,58,237,.38), inset 0 0 0 2px rgba(255,255,255,.65); }
+.ev-card .when { position: absolute; top: 16px; right: 16px; white-space: nowrap; }
+.ev-card .foot {
+  padding: 24px; width: 100%;
+  background: linear-gradient(to top, rgba(14,12,9,.72) 30%, rgba(14,12,9,.28) 75%, transparent);
+  backdrop-filter: blur(2px); display: flex; flex-direction: column;
+}
+.ev-card h3 { margin: 0 0 8px; font-size: 22px; font-weight: 800; color: #FFFFFF; }
+.ev-card .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
+.merch-card {
+  flex: 0 0 320px; overflow: hidden; position: relative; min-height: 440px;
+  box-shadow: 0 6px 18px rgba(14,12,9,.12); display: flex; align-items: flex-end;
+}
+.merch-card .alt { position: absolute; inset: 0; opacity: 0; transition: opacity .35s; pointer-events: none; }
+.merch-card:hover .alt { opacity: 1; }
+.merch-card .foot {
+  padding: 24px; width: 100%; position: relative;
+  background: linear-gradient(to top, rgba(14,12,9,.72) 30%, rgba(14,12,9,.28) 75%, transparent);
+  backdrop-filter: blur(2px); display: flex; flex-direction: column;
+}
+.merch-card h3 { margin: 0 0 12px; font-size: 22px; font-weight: 800; color: #FFFFFF; }
+.merch-card .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <img class="nav-logo" src="assets/oaa16-logo.png" alt="OAA 16">
-  <div class="nav-links">
-    <a href="index.html" class="active">Home</a>
-    <a href="events.html">Events</a>
-    <a href="merch.html">Merch</a>
-    <a href="#">Updates</a>
-    <a href="dashboard.html" class="keep btn btn-ghost btn-sm">Sign in</a>
+<div class="band">
+  <div class="band-bg" aria-hidden="true"></div>
+  <nav class="nav nav-dark">
+    <a href="index.html"><img class="nav-logo" src="assets/oaa16-logo-white.png" alt="OAA 16"></a>
+    <div class="nav-links">
+      <a href="index.html" class="on">Home</a>
+      <a href="events.html">Events</a>
+      <a href="merch.html">Merch</a>
+      <button type="button" onclick="openModal('reg-modal')">Register</button>
+      <a href="dashboard.html" class="nav-signin">Sign in</a>
+    </div>
+  </nav>
+
+  <div class="band-inner" style="padding-top:24px">
+    <div class="hero">
+      <div class="hero-copy">
+        <h1>Ten years on. One year group.</h1>
+        <p>The Achimota School Class of 2016 is reconnecting for our 10th anniversary — career fair, inter-house sports, thanksgiving and more. Register to be counted.</p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <button class="btn btn-white" onclick="openModal('reg-modal')">Register <span>→</span></button>
+          <a class="btn btn-glass" href="events.html">See what's coming</a>
+        </div>
+        <div class="reg-count"><i></i>425 Akoras registered</div>
+      </div>
+      <div class="hero-crest"><img src="assets/2016-crest.webp" alt="2016 crest"></div>
+    </div>
   </div>
-</nav>
+</div>
 
-<div class="page-wrap">
+<div class="wrap" style="padding-top:56px;padding-bottom:72px">
 
-  <section class="hero">
-    <div>
-      <span class="pill pill-soft"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent)"></span>425 Akoras registered</span>
-      <h1>Ten years on. One year group.</h1>
-      <p>The Achimota School Class of 2016 is reconnecting for our 10th anniversary — career fair, inter-house sports, thanksgiving and more. Register to be counted.</p>
-      <div style="display:flex;gap:14px;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="document.getElementById('reg-modal').classList.add('open')">Register <span>→</span></button>
-        <a class="btn btn-ghost" href="events.html">See what's coming</a>
+  <!-- Upcoming events -->
+  <p class="display-section">Upcoming events</p>
+  <div class="rule"></div>
+  <div class="split">
+    <div class="split-copy">
+      <div style="display:flex;flex-direction:column;gap:16px;min-height:400px">
+        <h3 id="ev-title"></h3>
+        <p class="desc" id="ev-desc"></p>
+        <div class="ev-meta" style="margin-top:8px">
+          <div><b id="ev-date"></b></div>
+          <div><b id="ev-venue"></b></div>
+          <div><b id="ev-time"></b></div>
+        </div>
       </div>
-      <div class="stat-strip">
-        <div class="stat-chip"><div class="v">425</div><div class="l">Registered</div></div>
-        <div class="stat-chip"><div class="v">15</div><div class="l">Houses</div></div>
-        <div class="stat-chip"><div class="v">3</div><div class="l">Events planned</div></div>
+      <div style="display:flex;gap:12px;margin-top:17px;align-items:center">
+        <a id="ev-href" href="events.html" class="btn btn-ink btn-sm">RSVP →</a>
+        <button class="arrow-btn" aria-label="Previous event" onclick="goEvent(activeEvent - 1)">←</button>
+        <button class="arrow-btn" aria-label="Next event" onclick="goEvent(activeEvent + 1)">→</button>
       </div>
     </div>
-    <div class="hero-visual">
-      <img src="assets/2016-crest.webp" alt="2016 crest">
-    </div>
-  </section>
 
-  <section>
-    <p class="section-label">Upcoming events</p>
-    <div class="grid-3">
-      <div class="card event-mini">
-        <span class="date">Sat · 5 Sep 2026</span>
-        <h3>Career &amp; Mentorship Fair</h3>
-        <p>Panels, mentorship circles and networking with the year group's professionals.</p>
-        <a class="btn btn-ghost btn-sm" href="events.html" style="align-self:flex-start">RSVP →</a>
-      </div>
-      <div class="card event-mini">
-        <span class="date">Sat · 24 Oct 2026</span>
-        <h3>Inter-house Sports</h3>
-        <p>The houses meet again. Old rivalries, new hamstring injuries.</p>
-        <a class="btn btn-ghost btn-sm" href="events.html" style="align-self:flex-start">RSVP →</a>
-      </div>
-      <div class="card event-mini">
-        <span class="date">Sun · 25 Oct 2026</span>
-        <h3>Thanksgiving Service</h3>
-        <p>A service of thanksgiving for ten years, together at Achimota.</p>
-        <a class="btn btn-ghost btn-sm" href="events.html" style="align-self:flex-start">RSVP →</a>
+    <div style="flex:1 1 480px;min-width:0;position:relative;overflow:hidden">
+      <div class="ev-slider" id="ev-slider">
+        <div class="ev-card" data-ev="0" onmouseenter="setEvent(0)">
+          <span class="pill pill-glass when">Sat · 5 Sep</span>
+          <div class="foot">
+            <h3>Career &amp; Mentorship Fair</h3>
+            <div class="tags"><span class="pill pill-glass">Achimota School</span><span class="pill pill-glass">10:00 – 16:00</span></div>
+            <a href="events.html#career-fair" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
+          </div>
+        </div>
+        <div class="ev-card" data-ev="1" onmouseenter="setEvent(1)">
+          <span class="pill pill-glass when">Sat · 24 Oct</span>
+          <div class="foot">
+            <h3>Inter-house Sports</h3>
+            <div class="tags"><span class="pill pill-glass">School fields</span><span class="pill pill-glass">08:00</span></div>
+            <a href="events.html#sports" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
+          </div>
+        </div>
+        <div class="ev-card" data-ev="2" onmouseenter="setEvent(2)">
+          <span class="pill pill-glass when">Sun · 25 Oct</span>
+          <div class="foot">
+            <h3>Thanksgiving Service</h3>
+            <div class="tags"><span class="pill pill-glass">Achimota School</span><span class="pill pill-glass">09:30</span></div>
+            <a href="events.html#thanksgiving" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section style="margin-top:56px">
-    <p class="section-label">Anniversary merch</p>
-    <div class="grid-3">
-      <div class="merch-mini"><div class="ph">👕</div><div style="font-weight:800;margin-top:8px">Anniversary tee</div><div style="font-size:13px;color:var(--muted)">In your house colour · GH₵120</div></div>
-      <div class="merch-mini"><div class="ph">🧢</div><div style="font-weight:800;margin-top:8px">OAA 16 cap</div><div style="font-size:13px;color:var(--muted)">Ink black, crest embroidery · GH₵90</div></div>
-      <div class="merch-mini"><div class="ph">☕</div><div style="font-weight:800;margin-top:8px">Crest mug</div><div style="font-size:13px;color:var(--muted)">For the office desk flex · GH₵70</div></div>
+  <!-- Merch preview -->
+  <div style="margin-top:72px">
+    <p class="display-section">Anniversary merch</p>
+    <div class="rule"></div>
+    <div class="split">
+      <div class="split-copy">
+        <h3>Available now</h3>
+        <p class="desc">The anniversary tee is here! Grab yours now and rep Akora 16. Ships in 3-5 working days with free delivery within Accra.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+          <a href="merch.html" class="btn btn-soft btn-sm">Browse the shop</a>
+        </div>
+      </div>
+      <div style="flex:1 1 480px;min-width:0;display:flex;gap:20px;flex-wrap:wrap">
+        <div class="merch-card" style="background:#0E0C09 url('assets/tee-black.png') center top/cover no-repeat">
+          <div class="alt" aria-hidden="true" style="background:#0E0C09 url('assets/tee-black-back.png') center 30%/cover no-repeat"></div>
+          <div class="foot">
+            <h3>Black Tee</h3>
+            <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Ships in 3-5 working days</span></div>
+            <button class="btn btn-white btn-sm" style="width:100%" onclick="openProduct(0)">Pre-order →</button>
+          </div>
+        </div>
+        <div class="merch-card" style="background:#EDE8F5 url('assets/tee-beige.png') center top/cover no-repeat">
+          <div class="alt" aria-hidden="true" style="background:#EDE8F5 url('assets/tee-beige-front-3.png') center 45%/cover no-repeat"></div>
+          <div class="foot">
+            <h3>Beige Tee</h3>
+            <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Ships in 3-5 working days</span></div>
+            <button class="btn btn-white btn-sm" style="width:100%" onclick="openProduct(1)">Pre-order →</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div style="margin-top:20px"><a class="btn btn-primary btn-sm" href="merch.html">Browse the shop →</a></div>
-  </section>
+  </div>
 
 </div>
 
-<footer class="footer">
+<div class="footer-dark"><div class="inner">
   <span>© 2026 OAA 16 · Achimota School Class of 2016</span>
   <span>info@oaa2016.org</span>
-</footer>
+</div></div>
 
-<!-- Registration modal (step 1 shown; same two-step form as today) -->
-<div class="modal-backdrop" id="reg-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="document.getElementById('reg-modal').classList.remove('open')">✕</button>
-    <p class="page-eyebrow">Class of 2016 · 10 Years On</p>
-    <h2 style="font-weight:800;font-size:28px;margin:8px 0 6px">Hi there, Akora</h2>
-    <p style="font-size:15px;color:var(--muted);line-height:1.6;margin:0 0 22px">It's been 10 years! Help us reconnect the year group.</p>
-    <div class="form-stack">
-      <div class="field-row">
-        <input type="text" placeholder="First name(s)">
-        <input type="text" placeholder="Last name">
-      </div>
-      <input type="text" placeholder="School nickname (if you had one)">
-      <div class="field-row">
-        <input type="email" placeholder="Email address" style="flex:2">
-        <select><option>Gender…</option><option>Male</option><option>Female</option></select>
-      </div>
-      <div class="field-row">
-        <select style="flex:0 0 118px"><option>🇬🇭 +233</option></select>
-        <input type="tel" placeholder="Phone number">
-      </div>
-      <button class="btn btn-primary" style="width:100%">Next <span>→</span></button>
-      <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:center;font-weight:500">Step 1 of 2 · Contact</div>
-    </div>
-  </div>
-</div>
+<div id="product-modal-root"></div>
+<div id="reg-modal-root"></div>
+
+<script src="shared.js"></script>
+<script>
+var events = [
+  { title: 'Career & \nMentorship Fair', desc: "Panels and mentorship circles with the year group's doctors, engineers, founders, lawyers and creatives. Bring your questions — and your business cards.", date: 'Sat 5 Sep 2026', venue: 'Achimota School', time: '10:00 – 16:00', href: 'events.html#career-fair' },
+  { title: 'Inter-house Sports', desc: 'Fifteen houses, one trophy. Athletics, football, and the walking race nobody trains for. Wear your house colours.', date: 'Sat 24 Oct 2026', venue: 'Achimota School fields', time: '08:00', href: 'events.html#sports' },
+  { title: 'Thanksgiving Service', desc: 'A service of thanksgiving for ten years — followed by a group photo on the very steps from 2016. Families welcome.', date: 'Sun 25 Oct 2026', venue: 'Achimota School', time: '09:30', href: 'events.html#thanksgiving' }
+];
+var activeEvent = 0;
+
+function setEvent(i) {
+  activeEvent = (i + 3) % 3;
+  var ev = events[activeEvent];
+  document.getElementById('ev-title').textContent = ev.title;
+  document.getElementById('ev-desc').textContent = ev.desc;
+  document.getElementById('ev-date').textContent = ev.date;
+  document.getElementById('ev-venue').textContent = ev.venue;
+  document.getElementById('ev-time').textContent = ev.time;
+  document.getElementById('ev-href').href = ev.href;
+  document.querySelectorAll('.ev-card').forEach(function (c) {
+    c.classList.toggle('on', Number(c.dataset.ev) === activeEvent);
+  });
+}
+function goEvent(i) {
+  setEvent(i);
+  document.getElementById('ev-slider').scrollTo({ left: activeEvent * 340, behavior: 'smooth' });
+}
+setEvent(0);
+</script>
 
 </body>
 </html>

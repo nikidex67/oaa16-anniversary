@@ -4,116 +4,193 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Events — OAA 16</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
 <style>
-.event-card { display: flex; flex-direction: column; gap: 14px; }
-.event-date {
-  display: inline-flex; flex-direction: column; align-items: center;
-  background: var(--field-bg); border-radius: 16px; padding: 12px 18px;
-  align-self: flex-start;
+.event {
+  scroll-margin-top: 24px; background: #FFFFFF;
+  box-shadow: 0 6px 24px rgba(14,12,9,.09);
+  display: flex; flex-wrap: wrap; overflow: hidden; min-height: 340px;
 }
-.event-date .d { font-size: 24px; font-weight: 800; line-height: 1; }
-.event-date .m { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-.event-card h3 { margin: 0; font-size: 22px; font-weight: 800; }
-.event-card .where { font-size: 13.5px; color: var(--muted); }
-.event-card p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
-.going { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+.event .visual {
+  flex: 0 0 380px; min-width: 280px; position: relative;
+  background: linear-gradient(160deg, #2A1B4A, #5B21B6 45%, #7C3AED 90%);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.event .visual img {
+  width: 64%; max-width: 230px; opacity: .96;
+  filter: drop-shadow(0 16px 32px rgba(0,0,0,.4));
+  animation: crest-bob 5s ease-in-out infinite;
+}
+.date-chip {
+  position: absolute; top: 20px; left: 20px;
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,255,255,.16); backdrop-filter: blur(8px);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.3);
+  border-radius: 16px; padding: 12px 18px; color: #FFFFFF;
+}
+.date-chip .mono-sm { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; opacity: .85; }
+.date-chip .d { font-size: 34px; font-weight: 800; line-height: 1.05; }
+.event .tag { position: absolute; bottom: 20px; left: 20px; }
+.event .details { flex: 1 1 420px; min-width: 0; padding: 32px 34px; display: flex; flex-direction: column; gap: 14px; }
+.event h3 { margin: 0; font-size: 30px; font-weight: 800; line-height: 1.1; text-wrap: balance; }
+.event .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); }
+.event .desc { margin: 0; font-size: 15px; line-height: 1.65; color: var(--muted); max-width: 520px; text-wrap: pretty; }
+.going-row { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); margin-top: auto; }
 .faces { display: flex; }
 .faces span {
-  width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff;
-  margin-left: -8px; display: inline-flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 9px; font-weight: 800;
+  width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800;
 }
-.faces span:first-child { margin-left: 0; }
-.event-actions { display: flex; gap: 10px; margin-top: 4px; }
+.faces span + span { margin-left: -9px; }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <img class="nav-logo" src="assets/oaa16-logo.png" alt="OAA 16">
-  <div class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="events.html" class="active">Events</a>
-    <a href="merch.html">Merch</a>
-    <a href="#">Updates</a>
-    <a href="dashboard.html" class="keep nav-member"><span class="avatar" style="background:#C1272D">NK</span> Chairman</a>
-  </div>
-</nav>
-
-<div class="page-wrap">
-  <p class="page-eyebrow">10th Anniversary</p>
-  <h1 class="page-title">Events</h1>
-  <p class="page-sub">RSVP so we can plan numbers — your QR member card gets you checked in at the door.</p>
-
-  <div class="grid-3">
-
-    <div class="card event-card">
-      <div class="event-date"><span class="d">5</span><span class="m">Sep</span></div>
-      <h3>Career &amp; Mentorship Fair</h3>
-      <span class="where">Achimota School · 10:00 – 16:00</span>
-      <p>Panels and mentorship circles with the year group's doctors, engineers, founders, lawyers and creatives. Bring your questions — and your business cards.</p>
-      <div class="going">
-        <span class="faces">
-          <span style="background:#C1272D">EA</span><span style="background:#2456C4">FD</span><span style="background:#2F9E44">KO</span><span style="background:#7C3AED">AB</span>
-        </span>
-        132 going
-      </div>
-      <div class="event-actions">
-        <span class="pill pill-good">You're going ✓</span>
-        <button class="btn btn-ghost btn-sm">Change</button>
-      </div>
+<div class="band">
+  <div class="band-bg" aria-hidden="true"></div>
+  <nav class="nav nav-dark">
+    <a href="index.html"><img class="nav-logo" src="assets/oaa16-logo-white.png" alt="OAA 16"></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="events.html" class="on">Events</a>
+      <a href="merch.html">Merch</a>
+      <button type="button" onclick="openModal('reg-modal')">Register</button>
+      <a href="dashboard.html" class="nav-signin">Sign in</a>
     </div>
-
-    <div class="card event-card">
-      <div class="event-date"><span class="d">24</span><span class="m">Oct</span></div>
-      <h3>Inter-house Sports</h3>
-      <span class="where">Achimota School fields · 08:00</span>
-      <p>Fifteen houses, one trophy. Athletics, football, and the walking race nobody trains for. Wear your house colours.</p>
-      <div class="going">
-        <span class="faces">
-          <span style="background:#FFD400;color:#0E0C09">LM</span><span style="background:#4FA8E0">TN</span><span style="background:#8A4B6D">SA</span>
-        </span>
-        87 going
-      </div>
-      <div class="event-actions">
-        <button class="btn btn-primary btn-sm">RSVP — I'm going</button>
-        <button class="btn btn-ghost btn-sm">Can't make it</button>
-      </div>
-    </div>
-
-    <div class="card event-card">
-      <div class="event-date"><span class="d">25</span><span class="m">Oct</span></div>
-      <h3>Thanksgiving Service</h3>
-      <span class="where">Achimota School · 09:30</span>
-      <p>A service of thanksgiving for ten years — followed by a group photo on the very steps from 2016. Families welcome.</p>
-      <div class="going">
-        <span class="faces">
-          <span style="background:#14532D">BO</span><span style="background:#ED7014">MM</span>
-        </span>
-        64 going
-      </div>
-      <div class="event-actions">
-        <button class="btn btn-primary btn-sm">RSVP — I'm going</button>
-        <button class="btn btn-ghost btn-sm">Can't make it</button>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="card-flat" style="margin-top:36px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
-    <div>
-      <b>Committee view</b>
-      <div style="font-size:13px;color:var(--muted)">Live attendance numbers per event, per house — visible to organisers only.</div>
-    </div>
-    <span class="pill pill-soft">🔒 Committee only</span>
+  </nav>
+  <div class="band-inner">
+    <p class="eyebrow-mono">10th Anniversary · Founders' Week</p>
+    <h1 class="display-hero" style="font-size:clamp(52px,7vw,84px)">The events</h1>
+    <p class="band-sub">Three days, one year group. RSVP so we can plan numbers — your QR member card checks you in at the door.</p>
   </div>
 </div>
 
-<footer class="footer">
+<div class="wrap" style="padding-top:64px;padding-bottom:72px;display:flex;flex-direction:column;gap:28px">
+
+  <div class="event" id="career-fair" data-ev="fair">
+    <div class="visual">
+      <img src="assets/2016-crest.webp" alt="" aria-hidden="true">
+      <div class="date-chip"><span class="mono-sm">Sat</span><span class="d">5</span><span class="mono-sm">Sep</span></div>
+      <span class="pill pill-glass tag">Career Fair</span>
+    </div>
+    <div class="details">
+      <h3>Career &amp; Mentorship Fair</h3>
+      <div class="meta">
+        <span><b style="color:var(--ink)">Venue</b> Achimota School</span>
+        <span><b style="color:var(--ink)">Time</b> 10:00 – 16:00</span>
+      </div>
+      <p class="desc">Panels and mentorship circles with the year group's doctors, engineers, founders, lawyers and creatives. Bring your questions — and your business cards.</p>
+      <div class="going-row">
+        <span class="faces">
+          <span style="background:#C1272D;color:#fff">EA</span><span style="background:#2456C4;color:#fff">FD</span><span style="background:#2F9E44;color:#fff">KO</span><span style="background:#7C3AED;color:#fff">AB</span>
+        </span>
+        <span class="count" data-base="131">131 going</span>
+      </div>
+      <div class="rsvp-zone"></div>
+    </div>
+  </div>
+
+  <div class="event" id="sports" data-ev="sports">
+    <div class="visual">
+      <img src="assets/2016-crest.webp" alt="" aria-hidden="true">
+      <div class="date-chip"><span class="mono-sm">Sat</span><span class="d">24</span><span class="mono-sm">Oct</span></div>
+      <span class="pill pill-glass tag">Inter-house</span>
+    </div>
+    <div class="details">
+      <h3>Inter-house Sports</h3>
+      <div class="meta">
+        <span><b style="color:var(--ink)">Venue</b> Achimota School fields</span>
+        <span><b style="color:var(--ink)">Time</b> 08:00</span>
+      </div>
+      <p class="desc">Fifteen houses, one trophy. Athletics, football, and the walking race nobody trains for. Wear your house colours.</p>
+      <div class="going-row">
+        <span class="faces">
+          <span style="background:#FFD400;color:#0E0C09">LM</span><span style="background:#4FA8E0;color:#fff">TN</span><span style="background:#8A4B6D;color:#fff">SA</span>
+        </span>
+        <span class="count" data-base="87">87 going</span>
+      </div>
+      <div class="rsvp-zone"></div>
+    </div>
+  </div>
+
+  <div class="event" id="thanksgiving" data-ev="thanks">
+    <div class="visual">
+      <img src="assets/2016-crest.webp" alt="" aria-hidden="true">
+      <div class="date-chip"><span class="mono-sm">Sun</span><span class="d">25</span><span class="mono-sm">Oct</span></div>
+      <span class="pill pill-glass tag">Thanksgiving</span>
+    </div>
+    <div class="details">
+      <h3>Thanksgiving Service</h3>
+      <div class="meta">
+        <span><b style="color:var(--ink)">Venue</b> Achimota School</span>
+        <span><b style="color:var(--ink)">Time</b> 09:30</span>
+      </div>
+      <p class="desc">A service of thanksgiving for ten years — followed by a group photo on the very steps from 2016. Families welcome.</p>
+      <div class="going-row">
+        <span class="faces">
+          <span style="background:#14532D;color:#fff">BO</span><span style="background:#ED7014;color:#fff">MM</span>
+        </span>
+        <span class="count" data-base="64">64 going</span>
+      </div>
+      <div class="rsvp-zone"></div>
+    </div>
+  </div>
+
+  <div style="background:var(--field-bg);border-radius:20px;padding:24px 28px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+    <div>
+      <b>Committee view</b>
+      <div style="font-size:13px;color:var(--muted);margin-top:2px">Live attendance numbers per event, per house — visible to organisers only.</div>
+    </div>
+    <span class="pill" style="background:#fff;color:var(--muted)">🔒 Committee only</span>
+  </div>
+</div>
+
+<div class="footer-dark"><div class="inner">
   <span>© 2026 OAA 16 · Achimota School Class of 2016</span>
   <span>info@oaa2016.org</span>
-</footer>
+</div></div>
+
+<div id="reg-modal-root"></div>
+<script src="shared.js"></script>
+<script>
+var rsvp = { fair: 'going', sports: '', thanks: '' };
+
+function renderRsvp() {
+  document.querySelectorAll('.event').forEach(function (card) {
+    var key = card.dataset.ev;
+    var v = rsvp[key];
+    var zone = card.querySelector('.rsvp-zone');
+    var count = card.querySelector('.count');
+    count.textContent = (Number(count.dataset.base) + (v === 'going' ? 1 : 0)) + ' going';
+    if (v === 'going') {
+      zone.innerHTML = '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
+        '<span class="pill pill-good" style="padding:8px 16px;font-size:13px">You\'re going ✓</span>' +
+        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + key + '\', \'\')">Change</button></div>';
+    } else if (v === 'no') {
+      zone.innerHTML = '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
+        '<span class="pill pill-soft" style="padding:8px 16px;font-size:13px">Not attending</span>' +
+        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + key + '\', \'\')">Change</button></div>';
+    } else {
+      zone.innerHTML = '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+        '<button class="btn btn-ink btn-sm" onclick="setRsvp(\'' + key + '\', \'going\')">RSVP — I\'m going <span>→</span></button>' +
+        '<button class="btn btn-soft btn-sm" onclick="setRsvp(\'' + key + '\', \'no\')">Can\'t make it</button></div>';
+    }
+  });
+}
+function setRsvp(key, val) { rsvp[key] = val; renderRsvp(); }
+renderRsvp();
+
+if (location.hash) {
+  requestAnimationFrame(function () {
+    var el = document.getElementById(location.hash.slice(1));
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 24, behavior: 'smooth' });
+  });
+}
+</script>
 
 </body>
 </html>
