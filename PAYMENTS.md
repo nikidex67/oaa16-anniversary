@@ -30,11 +30,11 @@ If the chosen provider lacks webhooks or a sandbox, raise it before building
 3. **Idempotency by `(provider, provider_ref)`** — unique constraint. Webhooks
    retry; a replay must be a no-op, enforced by the database, not by code.
 4. **Amount owed is always computed** (view), never stored on the member.
-5. **Never trust the client.** The amount recorded comes from Paystack's
+5. **Never trust the client.** The amount recorded comes from the provider's
    webhook/verify API, not from anything the browser sends.
 6. **Secrets live in Supabase Edge Function secrets** (like the existing
-   `SMTP_PASSWORD`). Nothing secret ever enters this public repo. The
-   Paystack *public* key may ship in frontend code; the *secret* key may not.
+   `SMTP_PASSWORD`). Nothing secret ever enters this public repo. A provider's
+   *public/publishable* key may ship in frontend code; secret keys may not.
 
 ## Schema
 
@@ -45,7 +45,7 @@ yet applied to production; coordinate with Robbie before applying).
   levy, dinner…). Amounts in pesewas.
 - `member_dues` — assigns a schedule to a registration, optional per-member
   override (waivers/tiers).
-- `payments` — the ledger. `provider` is `'paystack' | 'manual'`;
+- `payments` — the ledger. `provider` is `'<provider>' | 'manual'`;
   `manual` rows record cash/direct-MoMo taken by the treasurer.
 - `member_dues_status` — view computing paid/owed per member.
 
@@ -54,17 +54,17 @@ yet applied to production; coordinate with Robbie before applying).
 ## Reference format
 
 `DUES-<short-member-id>-<seq>` (e.g. `DUES-K7M2-003`), generated server-side
-when creating a pending payment, passed to Paystack as the transaction
+when creating a pending payment, passed to the provider as the transaction
 reference. Human-readable on bank statements → reconciliation stays sane.
 
 ## Flow
 
 1. Member (authenticated — auth is being built; until then, test harness)
    requests to pay N pesewas toward a schedule.
-2. Server (edge function) creates a `pending` payment row + reference, calls
-   Paystack Initialize, returns the checkout URL/access code.
-3. Member completes checkout on Paystack's UI.
-4. Paystack calls `paystack-webhook` → verify signature → verify amount and
+2. Server (edge function) creates a `pending` payment row + reference, calls the
+   provider's initialize/create-charge API, returns the checkout URL.
+3. Member completes checkout on the provider's UI.
+4. The provider calls our webhook → verify signature → verify amount and
    status via the API → mark the payment row `success` (idempotent upsert).
 5. Receipt email via the existing SMTP pattern (see
    `supabase/functions/send-welcome/` for the working example).
@@ -83,7 +83,7 @@ reference. Human-readable on bank statements → reconciliation stays sane.
 ## Division of labour
 
 - Schema + RLS + this design: Robbie (with Claude) — ask before diverging.
-- Paystack checkout wiring + webhook implementation: you.
+- Provider checkout wiring + webhook implementation: you.
 - The visual design for the payment UI is in `prototype/dashboard.html`
-  (the Paystack-styled modal is a mock — replace with the real Paystack
-  popup, keep the surrounding dues UI).
+  (the payment modal is a mock styled after a generic processor — replace
+  with the real provider's checkout, keep the surrounding dues UI).
