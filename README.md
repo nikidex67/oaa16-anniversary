@@ -26,3 +26,20 @@ Registration form + announcements, implemented from the Claude Design comp
 Push to `main` on GitHub, then in the repo settings enable
 **Settings → Pages → Source: GitHub Actions**. The site publishes to
 `https://<user>.github.io/<repo>/`.
+
+## Working on the redesign
+
+The new site design lives on the **`redesign`** branch — never edit `main`
+directly (it is the live site at oaa2016.org and deploys on every push).
+
+```
+git clone https://github.com/nikidex67/oaa16-anniversary.git
+cd oaa16-anniversary
+git checkout redesign
+```
+
+Edit the pages in `prototype/`, then commit and push. To preview your work,
+just open `prototype/index.html` in a browser — no build step, no server.
+
+When the redesign is complete, it goes live via a pull request from
+`redesign` into `main`.
