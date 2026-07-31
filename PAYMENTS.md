@@ -6,17 +6,20 @@ designed deliberately. Questions → Robbie / the info@ inbox.
 
 ## Provider
 
-**Paystack** (Ghana), chosen for Mobile Money + card support, hosted checkout,
-webhooks, and a sandbox. Build **entirely against test keys** — the live
-account will be activated under the foundation's registration later, and the
-upgrade changes keys only, not code.
+**To be confirmed — NOT Paystack.** The provider decision is being finalised
+(PayUp is under discussion). Do not build against any provider until it's
+settled and its API docs are shared. Everything below is provider-agnostic
+and stands regardless; the provider supplies only two touchpoints:
 
-- Checkout: use Paystack's **hosted popup/redirect** (Inline JS or
-  Transaction Initialize API). We never render our own card/MoMo fields and
-  we never see payment credentials.
-- Webhook: Paystack POSTs `charge.success` to our Supabase Edge Function.
-  Verify the `x-paystack-signature` header (HMAC-SHA512 of the raw body with
-  the secret key) before trusting anything.
+1. **Checkout hand-off** — always the provider's own hosted page/popup. We
+   never render card/MoMo fields ourselves.
+2. **Server-side confirmation** — a signed webhook and/or a verify API. The
+   `paystack-webhook` function in `supabase/functions/` is a *reference
+   skeleton* showing the shape (signature check → idempotent ledger update);
+   adapt the signature scheme to the chosen provider.
+
+If the chosen provider lacks webhooks or a sandbox, raise it before building
+— that changes the reconciliation design (see Flow, step 4).
 
 ## Invariants (non-negotiable)
 
