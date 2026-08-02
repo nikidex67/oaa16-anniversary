@@ -1,11 +1,13 @@
 // Create a dues payment: pending ledger row + Bakery Pay MoMo collection.
-// See PAYMENTS.md. Auth: x-api-secret header (PAY_API_SECRET) — to be
-// replaced by Supabase member auth when login ships.
+// See PAYMENTS.md. Two auth paths:
+//   1. Member: Authorization: Bearer <supabase user JWT>. The registration is
+//      resolved from the verified email — the client cannot pay as someone else.
+//   2. Server: x-api-secret header (PAY_API_SECRET), registration_id in body.
 //
 // Mock mode (BAKERYPAY_MOCK=true): skips the real API, fabricates a
 // reference. Lets the whole flow run before Bakery Pay credentials exist.
 //
-// Request JSON: { registration_id, schedule_id?, amount_pesewas, phone, operator }
+// Request JSON: { registration_id?, schedule_id?, amount_pesewas, phone, operator }
 // operator: mtn | vodafone | airteltigo. phone: 0XXXXXXXXX.
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
@@ -13,8 +15,17 @@ import { createClient } from 'npm:@supabase/supabase-js@2'
 const OPERATORS = ['mtn', 'vodafone', 'airteltigo']
 
 Deno.serve(async (req) => {
-  if (req.headers.get('x-api-secret') !== Deno.env.get('PAY_API_SECRET')) {
-    return json({ error: 'forbidden' }, 403)
+  if (req.method === 'OPTIONS') return new Response(null, { headers: CORS })
+
+  const isServer = req.headers.get('x-api-secret') === Deno.env.get('PAY_API_SECRET')
+  let memberEmail: string | null = null
+  if (!isServer) {
+    const jwt = (req.headers.get('authorization') ?? '').replace(/^Bearer /i, '')
+    if (!jwt) return json({ error: 'unauthorised' }, 401)
+    const authClient = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!)
+    const { data: userData, error: userErr } = await authClient.auth.getUser(jwt)
+    if (userErr || !userData?.user?.email) return json({ error: 'unauthorised' }, 401)
+    memberEmail = userData.user.email
   }
 
   let body
@@ -33,12 +44,12 @@ Deno.serve(async (req) => {
 
   const db = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
 
-  const { data: reg, error: regErr } = await db
-    .from('registrations')
-    .select('id, first_name, last_name, email')
-    .eq('id', registration_id)
-    .single()
-  if (regErr || !reg) return json({ error: 'registration not found' }, 404)
+  let regQuery = db.from('registrations').select('id, first_name, last_name, email')
+  regQuery = memberEmail ? regQuery.ilike('email', memberEmail) : regQuery.eq('id', registration_id)
+  const { data: reg, error: regErr } = await regQuery.single()
+  if (regErr || !reg) {
+    return json({ error: memberEmail ? 'no registration found for your account email' : 'registration not found' }, 404)
+  }
 
   const amountGhs = amount_pesewas / 100
   let providerRef: string
@@ -89,6 +100,12 @@ Deno.serve(async (req) => {
   })
 })
 
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+}
+
 function json(obj: unknown, status = 200) {
-  return new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json' } })
+  return new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json', ...CORS } })
 }

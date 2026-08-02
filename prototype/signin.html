@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — OAA 16</title>
+<link rel="stylesheet" href="app.css">
+<style>
+body { min-height: 100vh; display: flex; flex-direction: column; }
+.signin-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px 24px; }
+.signin-card { width: 100%; max-width: 420px; }
+.signin-card .logo { height: 72px; width: auto; display: block; margin: 0 auto 24px; }
+.signin-card h1 { font-weight: 800; font-size: 30px; margin: 8px 0 6px; text-align: center; }
+.signin-card .sub { font-size: 15px; color: var(--muted); line-height: 1.6; text-align: center; margin: 0 0 26px; }
+.hint { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 14px; line-height: 1.6; }
+.msg { border-radius: 14px; padding: 12px 16px; font-size: 13.5px; line-height: 1.5; margin-top: 14px; display: none; }
+.msg.ok { background: var(--success-bg); color: var(--success-ink); display: block; }
+.msg.err { background: #FBE4E4; color: var(--error); display: block; }
+.code-input { text-align: center; font-size: 22px; letter-spacing: .4em; font-family: var(--mono); }
+</style>
+</head>
+<body>
+
+<nav class="nav nav-light" style="width:100%">
+  <a href="index.html"><img class="nav-logo" src="assets/oaa16-logo.png" alt="OAA 16"></a>
+  <div class="nav-links"><a href="index.html">← Back to site</a></div>
+</nav>
+
+<div class="signin-wrap">
+  <div class="signin-card">
+    <img class="logo" src="assets/oaa16-logo.png" alt="OAA 16">
+    <p class="page-eyebrow" style="text-align:center">Member sign in</p>
+    <h1>Akwaaba back</h1>
+    <p class="sub">Enter the email you registered with and we'll send you a sign-in link — no password needed.</p>
+
+    <div id="step-email" class="form-stack" style="display:flex;flex-direction:column;gap:14px">
+      <input type="email" id="email" placeholder="Email address" autocomplete="email">
+      <button class="btn btn-ink" style="width:100%" id="send-btn" onclick="sendLink()">Email me a sign-in link</button>
+    </div>
+
+    <div id="step-code" style="display:none;flex-direction:column;gap:14px">
+      <input type="text" id="code" class="code-input" placeholder="000000" maxlength="6" inputmode="numeric">
+      <button class="btn btn-ink" style="width:100%" id="verify-btn" onclick="verifyCode()">Sign in</button>
+      <button class="btn btn-soft btn-sm" style="width:100%" onclick="backToEmail()">Use a different email</button>
+    </div>
+
+    <div class="msg" id="msg"></div>
+    <p class="hint">Click the link in the email, or type the 6-digit code here — either works.<br>Not registered yet? <a href="index.html" style="color:var(--accent);font-weight:700">Register first</a>.</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+var sb = window.supabase.createClient(OAA_SUPABASE_URL, OAA_SUPABASE_KEY);
+
+sb.auth.getSession().then(function (r) {
+  if (r.data.session) window.location.href = 'dashboard.html';
+});
+
+function show(kind, text) {
+  var m = document.getElementById('msg');
+  m.className = 'msg ' + kind;
+  m.textContent = text;
+}
+
+var pendingEmail = '';
+
+function sendLink() {
+  var email = document.getElementById('email').value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { show('err', 'Enter a valid email address.'); return; }
+  var btn = document.getElementById('send-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  sb.auth.signInWithOtp({
+    email: email,
+    options: { emailRedirectTo: window.location.origin + window.location.pathname.replace('signin.html', 'dashboard.html') }
+  }).then(function (r) {
+    btn.disabled = false; btn.textContent = 'Email me a sign-in link';
+    if (r.error) { show('err', r.error.message); return; }
+    pendingEmail = email;
+    document.getElementById('step-email').style.display = 'none';
+    document.getElementById('step-code').style.display = 'flex';
+    show('ok', 'Sent! Check ' + email + ' — click the link, or enter the code here.');
+  });
+}
+
+function verifyCode() {
+  var code = document.getElementById('code').value.trim();
+  if (!/^\d{6}$/.test(code)) { show('err', 'The code is 6 digits.'); return; }
+  var btn = document.getElementById('verify-btn');
+  btn.disabled = true; btn.textContent = 'Checking…';
+  sb.auth.verifyOtp({ email: pendingEmail, token: code, type: 'email' }).then(function (r) {
+    btn.disabled = false; btn.textContent = 'Sign in';
+    if (r.error) { show('err', 'That code didn\'t work — check it or request a new one.'); return; }
+    window.location.href = 'dashboard.html';
+  });
+}
+
+function backToEmail() {
+  document.getElementById('step-code').style.display = 'none';
+  document.getElementById('step-email').style.display = 'flex';
+  document.getElementById('msg').className = 'msg';
+}
+</script>
+
+</body>
+</html>

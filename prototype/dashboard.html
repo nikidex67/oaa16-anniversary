@@ -21,43 +21,37 @@
 .side button:hover, .side a:hover { background: #F7F5FB; color: var(--ink); }
 .side button.on { background: var(--field-bg); color: var(--ink); font-weight: 700; }
 .main { flex: 1 1 560px; min-width: 0; }
-@media (max-width: 920px) {
-  .side {
-    position: static; flex: 1 1 100%; min-width: 0;
-    flex-direction: row; flex-wrap: nowrap; overflow-x: auto;
-    gap: 6px; padding-bottom: 6px;
-  }
-  .side .memid, .side > div { display: none; }
-  .side button, .side a { white-space: nowrap; flex-shrink: 0; }
-}
 .main .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin: 0; }
 .main h1 { font-weight: 800; font-size: 38px; line-height: 1.08; margin: 10px 0 8px; }
 .main .sub { font-size: 16px; line-height: 1.6; color: var(--muted); margin: 0 0 40px; max-width: 560px; }
 .display-sm { font-family: var(--display); font-style: italic; font-weight: 400; font-size: 26px; line-height: 1.2; margin: 0 0 16px; }
 .tab { display: none; }
 .tab.on { display: block; }
-
-.member-card {
-  background: #C1272D; border-radius: 24px; padding: 28px; color: #fff;
-  position: relative; overflow: hidden; min-height: 210px;
+@media (max-width: 920px) {
+  .side { position: static; flex: 1 1 100%; min-width: 0; flex-direction: row; flex-wrap: nowrap; overflow-x: auto; gap: 6px; padding-bottom: 6px; }
+  .side .memid, .side > div { display: none; }
+  .side button, .side a { white-space: nowrap; flex-shrink: 0; }
 }
+
+.member-card { background: #0E0C09; border-radius: 24px; padding: 28px; color: #fff; position: relative; overflow: hidden; min-height: 210px; transition: background .3s; }
 .member-card::after { content: ''; position: absolute; right: -40px; top: -40px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,.08); }
 .member-card .ey { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; opacity: .75; font-weight: 500; }
 .member-card h2 { margin: 6px 0 2px; font-size: 24px; font-weight: 800; }
-.member-card .nick { font-size: 15px; opacity: .85; font-style: italic; }
+.member-card .nick { font-size: 15px; opacity: .85; font-style: italic; min-height: 1em; }
 .member-card .meta { display: flex; gap: 20px; margin-top: 22px; font-size: 13px; }
 .member-card .meta b { display: block; font-size: 15px; }
 .member-card .qr { position: absolute; right: 24px; bottom: 24px; width: 66px; height: 66px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; z-index: 1; }
 
 .progress { background: var(--field-bg); border-radius: 999px; height: 14px; overflow: hidden; margin-top: 22px; }
-.progress i { display: block; height: 100%; border-radius: 0 999px 999px 0; background: #C1272D; transition: width .4s; }
+.progress i { display: block; height: 100%; border-radius: 0 999px 999px 0; background: var(--accent); transition: width .4s, background .3s; }
 
 .row-item { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0; border-bottom: 1px solid rgba(14,12,9,.06); }
 .row-item:last-child { border-bottom: 0; }
+.empty-note { padding: 22px 0; font-size: 14px; color: var(--muted); }
 
-.pay-hdr { background: #011B33; color: #fff; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.method-btn { flex: 1; cursor: pointer; font-family: var(--font); font-weight: 700; font-size: 13.5px; padding: 12px; border-radius: 12px; border: 0; background: #F6F7F9; color: var(--muted); transition: all .15s; }
-.method-btn.on { background: #E6F9FF; color: #011B33; box-shadow: inset 0 0 0 1.5px #00C3F7; }
+.pay-hdr { background: #0E0C09; color: #fff; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pay-field label { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin: 0 0 6px 4px; letter-spacing: .04em; }
+.spinner { width: 44px; height: 44px; border-radius: 50%; border: 4px solid #EEE9F8; border-top-color: var(--accent); animation: spin .8s linear infinite; }
 </style>
 </head>
 <body>
@@ -68,42 +62,55 @@
     <a href="index.html">Home</a>
     <a href="events.html">Events</a>
     <a href="merch.html">Merch</a>
-    <button type="button" onclick="openModal('reg-modal')">Register</button>
-    <a href="dashboard.html" class="nav-member"><span class="avatar" style="background:#C1272D">NK</span> Chairman</a>
+    <a href="dashboard.html" class="nav-member"><span class="avatar" id="nav-avatar" style="background:#0E0C09">··</span> <span id="nav-name">Member</span></a>
   </div>
 </nav>
 
 <div class="layout">
 
   <aside class="side">
-    <div class="memid">Member ID · OAA-16-0001</div>
+    <div class="memid" id="side-memid">Member ID · —</div>
     <button data-tab="dash" class="on" onclick="goTab('dash')">Account Dashboard</button>
     <button data-tab="dues" onclick="goTab('dues')">Dues</button>
     <button data-tab="events" onclick="goTab('events')">Events</button>
     <button data-tab="orders" onclick="goTab('orders')">Orders</button>
     <button data-tab="account" onclick="goTab('account')">Account details</button>
     <div style="height:1px;background:var(--field-bg);margin:12px 16px"></div>
-    <a href="index.html">Sign out</a>
+    <a href="#" onclick="signOut(); return false;">Sign out</a>
   </aside>
 
   <main class="main">
-    <p class="eyebrow" id="hd-eyebrow"></p>
-    <h1 id="hd-title"></h1>
-    <p class="sub" id="hd-sub"></p>
+    <p class="eyebrow" id="hd-eyebrow">Member dashboard</p>
+    <h1 id="hd-title">Akwaaba 👋</h1>
+    <p class="sub" id="hd-sub">Loading your account…</p>
+
+    <div id="not-registered" style="display:none" class="card">
+      <h3 style="margin:0 0 8px;font-size:20px;font-weight:800">We couldn't find your registration</h3>
+      <p style="margin:0 0 18px;font-size:14.5px;line-height:1.6;color:var(--muted)">
+        You're signed in as <b id="nr-email"></b>, but no member registration uses that email.
+        If you registered with a different address, sign out and use that one — or register now.
+      </p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn-ink btn-sm" href="index.html">Register</a>
+        <button class="btn btn-soft btn-sm" onclick="signOut()">Sign out</button>
+      </div>
+    </div>
+
+    <div id="member-ui" style="display:none">
 
     <!-- Overview -->
     <section class="tab on" id="tab-dash">
       <div style="display:flex;gap:24px;flex-wrap:wrap">
         <div style="flex:1 1 320px;min-width:280px">
           <p class="display-sm">Your member card</p>
-          <div class="member-card">
+          <div class="member-card" id="member-card">
             <div class="ey">OAA 16 · Class of 2016</div>
-            <h2>Nicholas Kumi Danso</h2>
-            <div class="nick">“Chairman”</div>
+            <h2 id="mc-name">—</h2>
+            <div class="nick" id="mc-nick"></div>
             <div class="meta">
-              <span><b>Aggrey House</b>House</span>
-              <span><b>Voc 2</b>Class</span>
-              <span><b>#0001</b>Member №</span>
+              <span><b id="mc-house">—</b>House</span>
+              <span><b id="mc-class">—</b>Class</span>
+              <span><b id="mc-no">—</b>Member №</span>
             </div>
             <div class="qr" aria-label="Check-in QR code">
               <svg width="48" height="48" viewBox="0 0 21 21"><rect width="21" height="21" fill="#fff"/><path fill="#0E0C09" d="M0 0h7v7H0zM2 2h3v3H2zM14 0h7v7h-7zM16 2h3v3h-3zM0 14h7v7H0zM2 16h3v3H2zM9 0h2v3H9zM9 5h2v4H9zM12 9h3v2h-3zM9 12h2v2H9zM14 9h2v2h-2zM18 9h3v2h-3zM9 16h2v2H9zM12 14h2v3h-2zM16 14h2v2h-2zM14 18h3v3h-3zM19 16h2v2h-2zM12 19h1v2h-1zM0 9h3v2H0zM5 9h2v2H5z"/></svg>
@@ -114,41 +121,23 @@
         <div style="flex:1 1 320px;min-width:280px">
           <p class="display-sm">Dues at a glance</p>
           <div class="card">
-            <div style="font-size:36px;font-weight:800;line-height:1.1">GH₵180 <small style="font-size:17px;color:var(--muted);font-weight:700">of GH₵300</small></div>
-            <span class="pill pill-good" style="margin-top:10px"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-ink)"></span>60% paid up</span>
-            <div class="progress"><i style="width:60%"></i></div>
-            <button class="btn btn-accent btn-sm" style="margin-top:22px" onclick="goTab('dues')">Pay Balance</button>
+            <div style="font-size:36px;font-weight:800;line-height:1.1"><span id="glance-paid">GH₵0.00</span> <small style="font-size:17px;color:var(--muted);font-weight:700" id="glance-total">of GH₵0.00</small></div>
+            <span class="pill pill-good" style="margin-top:10px"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-ink)"></span><span id="glance-pct">—</span></span>
+            <div class="progress"><i id="glance-bar" style="width:0%"></i></div>
+            <button class="btn btn-accent btn-sm" style="margin-top:22px" id="glance-btn" onclick="goTab('dues')">View dues</button>
           </div>
         </div>
       </div>
 
       <div style="margin-top:40px">
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
-          <p class="display-sm" style="margin:0">Your events</p>
+          <p class="display-sm" style="margin:0">Your events <span class="pill pill-soft" style="font-size:10.5px;vertical-align:middle">demo data</span></p>
           <button style="border:0;background:transparent;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;color:var(--accent)" onclick="goTab('events')">View all →</button>
         </div>
         <div class="card-list">
-          <div class="row-item"><div><b>Career &amp; Mentorship Fair</b><div style="font-size:12.5px;color:var(--muted)">Sat 5 Sep</div></div><span class="pill pill-good">Going ✓</span></div>
-          <div class="row-item"><div><b>Inter-house Sports</b><div style="font-size:12.5px;color:var(--muted)">Sat 24 Oct</div></div><span class="pill pill-soft">Not yet</span></div>
-          <div class="row-item"><div><b>Thanksgiving Service</b><div style="font-size:12.5px;color:var(--muted)">Sun 25 Oct</div></div><span class="pill pill-soft">Not yet</span></div>
-        </div>
-      </div>
-
-      <div style="margin-top:40px">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
-          <p class="display-sm" style="margin:0">Recent orders</p>
-          <button style="border:0;background:transparent;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;color:var(--accent)" onclick="goTab('orders')">View all →</button>
-        </div>
-        <div class="card-list" style="overflow-x:auto">
-          <div class="tbl-head" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1.6fr) minmax(0,1fr) minmax(0,.9fr) 100px;min-width:560px">
-            <span>Order no.</span><span>Item</span><span>Date</span><span>Total</span><span>Status</span>
-          </div>
-          <div class="tbl-row" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1.6fr) minmax(0,1fr) minmax(0,.9fr) 100px;min-width:560px">
-            <span class="mono" style="font-weight:500">OAA-0732</span><span>Anniversary Tee · Black · L</span><span style="color:var(--muted)">18 Jul 2026</span><b>GH₵300</b><span class="pill pill-good" style="justify-self:start">Paid</span>
-          </div>
-          <div class="tbl-row" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1.6fr) minmax(0,1fr) minmax(0,.9fr) 100px;min-width:560px;border-bottom:0">
-            <span class="mono" style="font-weight:500">OAA-0698</span><span>Anniversary Tee · Beige · XL</span><span style="color:var(--muted)">2 Jul 2026</span><b>GH₵300</b><span class="pill pill-soft" style="justify-self:start">Pending</span>
-          </div>
+          <div class="row-item"><div><b>Career &amp; Mentorship Fair</b><div style="font-size:12.5px;color:var(--muted)">Sat 5 Sep</div></div><span class="pill pill-soft">RSVP soon</span></div>
+          <div class="row-item"><div><b>Inter-house Sports</b><div style="font-size:12.5px;color:var(--muted)">Sat 24 Oct</div></div><span class="pill pill-soft">RSVP soon</span></div>
+          <div class="row-item"><div><b>Thanksgiving Service</b><div style="font-size:12.5px;color:var(--muted)">Sun 25 Oct</div></div><span class="pill pill-soft">RSVP soon</span></div>
         </div>
       </div>
     </section>
@@ -158,35 +147,25 @@
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
           <div>
-            <div style="font-size:44px;font-weight:800;line-height:1.05">GH₵180 <small style="font-size:18px;color:var(--muted);font-weight:700">of GH₵300</small></div>
-            <span class="pill pill-good" style="margin-top:12px"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-ink)"></span>60% paid up</span>
+            <div style="font-size:44px;font-weight:800;line-height:1.05"><span id="dues-paid">GH₵0.00</span> <small style="font-size:18px;color:var(--muted);font-weight:700" id="dues-total">of GH₵0.00</small></div>
+            <span class="pill pill-good" style="margin-top:12px"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-ink)"></span><span id="dues-pct">—</span></span>
           </div>
-          <button class="btn btn-accent" onclick="openPay()">Pay GH₵120 balance</button>
+          <button class="btn btn-accent" id="pay-open-btn" onclick="openPay()">Pay balance</button>
         </div>
-        <div class="progress" style="margin-top:24px"><i style="width:60%"></i></div>
+        <div class="progress" style="margin-top:24px"><i id="dues-bar" style="width:0%"></i></div>
       </div>
 
       <div style="margin-top:32px">
         <p class="display-sm" style="font-size:24px">Breakdown</p>
-        <div class="card-list">
-          <div class="row-item"><div><b>Registration levy</b><div style="font-size:12.5px;color:var(--muted)">One-time · 2026 membership</div></div><div style="display:flex;align-items:center;gap:16px"><b>GH₵100</b><span class="pill pill-good">Paid</span></div></div>
-          <div class="row-item"><div><b>Reunion dinner</b><div style="font-size:12.5px;color:var(--muted)">Partly paid</div></div><div style="display:flex;align-items:center;gap:16px"><b>GH₵120</b><span class="pill" style="background:#FBF0E4;color:#9A6114">GH₵80 paid</span></div></div>
-          <div class="row-item"><div><b>Anniversary levy</b><div style="font-size:12.5px;color:var(--muted)">Founders' Week fund</div></div><div style="display:flex;align-items:center;gap:16px"><b>GH₵80</b><span class="pill pill-soft">Due</span></div></div>
+        <div class="card-list" id="dues-breakdown">
+          <div class="empty-note">Loading…</div>
         </div>
       </div>
 
       <div style="margin-top:32px">
         <p class="display-sm" style="font-size:24px">Payment history</p>
-        <div class="card-list" style="overflow-x:auto">
-          <div class="tbl-head" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,.9fr);min-width:500px">
-            <span>Date</span><span>Method</span><span>Reference</span><span>Amount</span>
-          </div>
-          <div class="tbl-row" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,.9fr);min-width:500px">
-            <span style="color:var(--muted)">18 Jul 2026</span><span>Mobile Money</span><span class="mono" style="font-size:12.5px;color:var(--muted)">DUES-K7M2-002</span><b>GH₵100</b>
-          </div>
-          <div class="tbl-row" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,.9fr);min-width:500px;border-bottom:0">
-            <span style="color:var(--muted)">12 Jul 2026</span><span>Cash at meetup</span><span class="mono" style="font-size:12.5px;color:var(--muted)">By treasurer</span><b>GH₵80</b>
-          </div>
+        <div class="card-list" style="overflow-x:auto" id="pay-history">
+          <div class="empty-note">Loading…</div>
         </div>
         <p style="font-size:12.5px;color:var(--muted);margin:14px 4px 0">Pay in any instalments you like. Receipts go to your email.</p>
       </div>
@@ -194,60 +173,17 @@
 
     <!-- Events -->
     <section class="tab" id="tab-events">
-      <div style="display:flex;flex-direction:column;gap:20px">
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
-            <div><h3 style="margin:0 0 6px;font-size:22px;font-weight:800">Career &amp; Mentorship Fair</h3><div style="font-size:14px;color:var(--muted)">Sat 5 Sep · 10:00 – 16:00</div></div>
-            <span class="pill pill-good" style="padding:8px 16px;font-size:13px">Going ✓</span>
-          </div>
-          <p style="margin:16px 0 0;font-size:14.5px;line-height:1.6;color:var(--muted)">Panels and mentorship circles with the year group's doctors, engineers, founders and creatives.</p>
-          <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:18px;font-size:13.5px">
-            <span style="color:var(--muted)">Check-in <b style="color:var(--ink)">QR ready</b></span>
-            <span style="color:var(--muted)">Guests <b style="color:var(--ink)">+1</b></span>
-          </div>
-          <div style="margin-top:20px"><a href="events.html#career-fair" class="btn btn-soft btn-sm">Manage RSVP →</a></div>
-        </div>
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
-            <div><h3 style="margin:0 0 6px;font-size:22px;font-weight:800">Inter-house Sports</h3><div style="font-size:14px;color:var(--muted)">Sat 24 Oct · 08:00</div></div>
-            <span class="pill pill-soft" style="padding:8px 16px;font-size:13px">Not yet</span>
-          </div>
-          <p style="margin:16px 0 0;font-size:14.5px;line-height:1.6;color:var(--muted)">Fifteen houses, one trophy. Athletics, football, and the walking race nobody trains for.</p>
-          <div style="margin-top:20px"><a href="events.html#sports" class="btn btn-soft btn-sm">RSVP now →</a></div>
-        </div>
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
-            <div><h3 style="margin:0 0 6px;font-size:22px;font-weight:800">Thanksgiving Service</h3><div style="font-size:14px;color:var(--muted)">Sun 25 Oct · 09:30</div></div>
-            <span class="pill pill-soft" style="padding:8px 16px;font-size:13px">Not yet</span>
-          </div>
-          <p style="margin:16px 0 0;font-size:14.5px;line-height:1.6;color:var(--muted)">A service of thanksgiving for ten years — followed by a group photo on the very steps from 2016.</p>
-          <div style="margin-top:20px"><a href="events.html#thanksgiving" class="btn btn-soft btn-sm">RSVP now →</a></div>
-        </div>
+      <div class="card">
+        <h3 style="margin:0 0 8px;font-size:20px;font-weight:800">RSVPs are coming soon <span class="pill pill-soft" style="font-size:10.5px">demo</span></h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.6;color:var(--muted)">Event RSVPs will live here — Career &amp; Mentorship Fair (5 Sep), Inter-house Sports (24 Oct) and the Thanksgiving Service (25 Oct). See the <a href="events.html" style="color:var(--accent);font-weight:700">events page</a> for the full details.</p>
       </div>
     </section>
 
     <!-- Orders -->
     <section class="tab" id="tab-orders">
-      <div class="card-list" style="overflow-x:auto">
-        <div class="tbl-head" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1.8fr) minmax(0,1fr) minmax(0,.8fr) 100px minmax(0,1.1fr);min-width:640px">
-          <span>Order no.</span><span>Item</span><span>Date</span><span>Total</span><span>Status</span><span></span>
-        </div>
-        <div class="tbl-row" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1.8fr) minmax(0,1fr) minmax(0,.8fr) 100px minmax(0,1.1fr);min-width:640px">
-          <span class="mono" style="font-weight:500">OAA-0732</span><span>Anniversary Tee · Black · L</span><span style="color:var(--muted)">18 Jul 2026</span><b>GH₵300</b><span class="pill pill-good" style="justify-self:start">Paid</span><span style="color:var(--accent);font-weight:700;font-size:13px">Pickup · 5 Sep</span>
-        </div>
-        <div class="tbl-row" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1.8fr) minmax(0,1fr) minmax(0,.8fr) 100px minmax(0,1.1fr);min-width:640px">
-          <span class="mono" style="font-weight:500">OAA-0698</span><span>Anniversary Tee · Beige · XL</span><span style="color:var(--muted)">2 Jul 2026</span><b>GH₵300</b><span class="pill pill-soft" style="justify-self:start">Pending</span><span style="color:var(--accent);font-weight:700;font-size:13px">Awaiting payment</span>
-        </div>
-        <div class="tbl-row" style="grid-template-columns:minmax(0,1.2fr) minmax(0,1.8fr) minmax(0,1fr) minmax(0,.8fr) 100px minmax(0,1.1fr);min-width:640px;border-bottom:0">
-          <span class="mono" style="font-weight:500">OAA-0651</span><span>Reunion Dinner · 1 seat</span><span style="color:var(--muted)">20 Jun 2026</span><b>GH₵250</b><span class="pill pill-good" style="justify-self:start">Paid</span><span style="color:var(--accent);font-weight:700;font-size:13px">Confirmed</span>
-        </div>
-      </div>
-      <div style="background:var(--field-bg);border-radius:20px;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:32px">
-        <div>
-          <b>Pickup &amp; delivery</b>
-          <div style="font-size:13px;color:var(--muted);margin-top:2px">Paid orders ship in 3–5 working days, or collect at any anniversary event.</div>
-        </div>
-        <a href="merch.html" class="btn btn-ink btn-sm">Browse merch →</a>
+      <div class="card">
+        <h3 style="margin:0 0 8px;font-size:20px;font-weight:800">Merch orders coming soon <span class="pill pill-soft" style="font-size:10.5px">demo</span></h3>
+        <p style="margin:0;font-size:14.5px;line-height:1.6;color:var(--muted)">Your anniversary tee pre-orders will appear here with payment and pickup status. Browse the <a href="merch.html" style="color:var(--accent);font-weight:700">merch page</a> in the meantime.</p>
       </div>
     </section>
 
@@ -256,28 +192,21 @@
       <div class="card" style="display:flex;gap:40px;flex-wrap:wrap">
         <div style="flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:14px">
           <div style="font-size:15px;font-weight:800;margin-bottom:2px">Contact information</div>
-          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Name</span><b>Nicholas Kumi Danso</b></div>
-          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Email</span><b>nicholas@oaa2016.org</b></div>
-          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Phone</span><b>+233 24 000 0001</b></div>
-          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Password</span><a href="#" style="color:var(--accent);font-weight:700;text-decoration:none">Change password</a></div>
+          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Name</span><b id="acc-name">—</b></div>
+          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Email</span><b id="acc-email">—</b></div>
+          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Phone</span><b id="acc-phone">—</b></div>
         </div>
         <div style="flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:14px">
           <div style="font-size:15px;font-weight:800;margin-bottom:2px">Year-group details</div>
-          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">House</span><b>Aggrey</b></div>
-          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Class</span><b>Voc 2</b></div>
-          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Chapter</span><b>Accra</b></div>
-          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Member №</span><b>OAA-16-0001</b></div>
+          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">House</span><b id="acc-house">—</b></div>
+          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Class</span><b id="acc-class">—</b></div>
+          <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:var(--muted)">Member №</span><b id="acc-no">—</b></div>
         </div>
       </div>
-      <div style="margin-top:32px">
-        <p class="display-sm" style="font-size:24px">Notifications</p>
-        <div class="card-list">
-          <div class="row-item"><div><b>WhatsApp updates</b><div style="font-size:12.5px;color:var(--muted)">Event reminders and dues receipts</div></div><span class="pill pill-good">On</span></div>
-          <div class="row-item"><div><b>Email newsletter</b><div style="font-size:12.5px;color:var(--muted)">Monthly year-group round-up</div></div><span class="pill pill-good">On</span></div>
-          <div class="row-item"><div><b>SMS alerts</b><div style="font-size:12.5px;color:var(--muted)">Last-minute event changes only</div></div><span class="pill pill-soft">Off</span></div>
-        </div>
-      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:16px 4px 0">Something wrong? Reply to any of our emails or write to info@oaa2016.org and we'll correct it.</p>
     </section>
+
+    </div><!-- /member-ui -->
   </main>
 </div>
 
@@ -286,101 +215,302 @@
   <span>info@oaa2016.org</span>
 </div>
 
-<!-- Payment modal (Paystack-style simulation) -->
-<div class="overlay" id="pay-modal" style="z-index:70;background:rgba(1,27,51,.6)">
-  <div style="position:relative;width:100%;max-width:420px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(1,27,51,.4)" onclick="event.stopPropagation()">
+<!-- Payment modal — Bakery Pay mobile money -->
+<div class="overlay" id="pay-modal" style="z-index:70">
+  <div style="position:relative;width:100%;max-width:420px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(14,12,9,.4)" onclick="event.stopPropagation()">
     <div class="pay-hdr">
       <div style="display:flex;flex-direction:column;gap:3px">
-        <span style="font-size:12px;color:rgba(255,255,255,.6)">nicholas@oaa2016.org</span>
-        <span style="font-size:13px;color:rgba(255,255,255,.85)">OAA 16 Year Group</span>
+        <span style="font-size:12px;color:rgba(255,255,255,.6)" id="pay-email">—</span>
+        <span style="font-size:13px;color:rgba(255,255,255,.85)">OAA 16 anniversary dues</span>
       </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800"><span style="width:20px;height:20px;border-radius:50%;background:#00C3F7;display:inline-flex;align-items:center;justify-content:center;color:#011B33;font-size:12px;font-weight:800">P</span>paystack</div>
+      <div style="font-size:14px;font-weight:800">Mobile Money</div>
     </div>
     <div style="padding:26px 24px 24px">
 
-      <div id="pay-idle">
+      <div id="pay-form">
         <div style="text-align:center;margin-bottom:20px">
-          <div style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600">Amount due</div>
-          <div style="font-size:38px;font-weight:800;line-height:1.1;margin-top:4px">GH₵120</div>
+          <div style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600">Amount (GH₵)</div>
+          <input type="number" id="pay-amount" min="1" step="1" style="text-align:center;font-size:30px;font-weight:800;max-width:200px;margin:8px auto 0;border-radius:16px">
+          <div style="font-size:12px;color:var(--muted);margin-top:6px" id="pay-balance-note"></div>
         </div>
-        <div style="background:#F6F7F9;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
-          <div style="display:flex;justify-content:space-between;gap:12px;font-size:14px"><span style="color:var(--muted)">Item</span><b>Anniversary dues balance</b></div>
-          <div style="display:flex;justify-content:space-between;gap:12px;font-size:14px"><span style="color:var(--muted)">Member</span><b>Nicholas Kumi Danso</b></div>
-          <div style="display:flex;justify-content:space-between;gap:12px;font-size:14px"><span style="color:var(--muted)">Member №</span><b class="mono" style="font-size:12.5px">OAA-16-0001</b></div>
-          <div style="display:flex;justify-content:space-between;gap:12px;font-size:14px"><span style="color:var(--muted)">Reference</span><b class="mono" style="font-size:12.5px" id="pay-ref"></b></div>
+        <div class="pay-field" style="margin-bottom:12px">
+          <label>Mobile money number</label>
+          <input type="tel" id="pay-phone" placeholder="0XXXXXXXXX" maxlength="10" inputmode="numeric">
         </div>
-        <div style="display:flex;gap:10px;margin-bottom:18px">
-          <button class="method-btn on" id="m-momo" onclick="setMethod('momo')">Mobile Money</button>
-          <button class="method-btn" id="m-card" onclick="setMethod('card')">Card</button>
+        <div class="pay-field" style="margin-bottom:18px">
+          <label>Network</label>
+          <select id="pay-operator" class="chevron">
+            <option value="mtn">MTN MoMo</option>
+            <option value="vodafone">Telecel (Vodafone) Cash</option>
+            <option value="airteltigo">AT Money</option>
+          </select>
         </div>
-        <button style="width:100%;cursor:pointer;font-family:var(--font);font-weight:800;font-size:15px;padding:16px;border-radius:12px;border:0;background:#00C3F7;color:#011B33;transition:transform .15s" onclick="doPay()">Pay GH₵120</button>
+        <div id="pay-err" style="display:none;background:#FBE4E4;color:var(--error);border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px"></div>
+        <button class="btn btn-accent" style="width:100%" id="pay-go" onclick="submitPay()">Send payment prompt</button>
+        <p style="font-size:11.5px;color:var(--muted);text-align:center;margin:14px 0 0">A prompt will appear on your phone — approve it with your MoMo PIN.<br>Processed by Bakery Pay. Provider fees may apply on top.</p>
       </div>
 
-      <div id="pay-processing" style="display:none;flex-direction:column;align-items:center;gap:18px;padding:28px 0">
-        <div style="width:44px;height:44px;border-radius:50%;border:4px solid #E6F0F5;border-top-color:#00C3F7;animation:spin .8s linear infinite"></div>
-        <div style="font-size:15px;font-weight:700">Processing payment…</div>
-        <div style="font-size:13px;color:var(--muted)">Please don't close this window</div>
+      <div id="pay-waiting" style="display:none;flex-direction:column;align-items:center;gap:18px;padding:28px 0;text-align:center">
+        <div class="spinner"></div>
+        <div style="font-size:15px;font-weight:700">Check your phone 📲</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Approve the Mobile Money prompt with your PIN.<br>This page updates automatically — reference <b class="mono" id="pay-ref" style="font-size:12px"></b></div>
       </div>
 
       <div id="pay-done" style="display:none;flex-direction:column;align-items:center;gap:14px;padding:12px 0 4px;text-align:center">
         <div style="width:56px;height:56px;border-radius:50%;background:var(--success-bg);color:var(--success-ink);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800">✓</div>
-        <div style="font-size:20px;font-weight:800">Payment successful</div>
-        <div style="font-size:14px;color:var(--muted);line-height:1.5">GH₵120 received toward your anniversary dues. A receipt is on its way to your email.</div>
-        <div class="mono" style="background:#F6F7F9;border-radius:12px;padding:12px 16px;font-size:12.5px;color:var(--muted);margin-top:4px" id="pay-ref-done"></div>
-        <button style="width:100%;margin-top:8px;cursor:pointer;font-family:var(--font);font-weight:800;font-size:15px;padding:15px;border-radius:12px;border:0;background:#011B33;color:#fff" onclick="closeModal('pay-modal')">Done</button>
+        <div style="font-size:20px;font-weight:800">Payment received</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.5" id="pay-done-msg"></div>
+        <button style="width:100%;margin-top:8px;cursor:pointer;font-family:var(--font);font-weight:800;font-size:15px;padding:15px;border-radius:12px;border:0;background:var(--ink);color:#fff" onclick="closePayAndRefresh()">Done</button>
       </div>
 
-      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;font-size:11.5px;color:#9AA3AD">🔒 Secured by Paystack</div>
     </div>
     <button class="modal-close" style="background:rgba(255,255,255,.15);color:#fff;width:30px;height:30px;top:14px;right:14px" onclick="closeModal('pay-modal')" aria-label="Close">✕</button>
   </div>
 </div>
 
-<div id="reg-modal-root"></div>
-<script src="shared.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 <script>
+var sb = window.supabase.createClient(OAA_SUPABASE_URL, OAA_SUPABASE_KEY);
+var member = null;          // registration row
+var duesState = { totalDue: 0, totalPaid: 0, balance: 0 };
+var pollTimer = null;
+
 var TAB_META = {
-  dash:    { ey: 'Member dashboard', h: 'Akwaaba, Chairman 👋', sub: 'Welcome to your account. Your membership, dues, events and orders are all here.' },
-  dues:    { ey: 'Member dashboard · Dues', h: 'Your dues', sub: 'Track what you’ve paid toward the 10th anniversary and settle any balance.' },
-  events:  { ey: 'Member dashboard · Events', h: 'Your events', sub: 'Your RSVPs and check-in details for Founders’ Week.' },
-  orders:  { ey: 'Member dashboard · Orders', h: 'Your orders', sub: 'Every merch pre-order and dinner seat, with pickup and payment status.' },
-  account: { ey: 'Member dashboard · Account', h: 'Account details', sub: 'Your contact information, year-group record and notification preferences.' }
+  dash:    { ey: 'Member dashboard', sub: 'Welcome to your account. Your membership, dues, events and orders are all here.' },
+  dues:    { ey: 'Member dashboard · Dues', sub: 'Track what you’ve paid toward the 10th anniversary and settle any balance.' },
+  events:  { ey: 'Member dashboard · Events', sub: 'Your RSVPs and check-in details for Founders’ Week.' },
+  orders:  { ey: 'Member dashboard · Orders', sub: 'Every merch pre-order, with pickup and payment status.' },
+  account: { ey: 'Member dashboard · Account', sub: 'Your contact information and year-group record.' }
 };
 
 function goTab(key) {
   document.querySelectorAll('.side button[data-tab]').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === key); });
   document.querySelectorAll('.tab').forEach(function (t) { t.classList.toggle('on', t.id === 'tab-' + key); });
-  var m = TAB_META[key];
-  document.getElementById('hd-eyebrow').textContent = m.ey;
-  document.getElementById('hd-title').textContent = m.h;
-  document.getElementById('hd-sub').textContent = m.sub;
+  document.getElementById('hd-eyebrow').textContent = TAB_META[key].ey;
+  document.getElementById('hd-sub').textContent = TAB_META[key].sub;
   window.scrollTo({ top: 0 });
 }
-goTab('dash');
 
-function mkRef() { return 'OAA-DUES-' + Math.random().toString(36).slice(2, 8).toUpperCase(); }
+function signOut() {
+  sb.auth.signOut().then(function () { window.location.href = 'signin.html'; });
+}
+
+/* ---------- Boot ---------- */
+
+sb.auth.getSession().then(function (r) {
+  if (!r.data.session) { window.location.href = 'signin.html'; return; }
+  loadMember(r.data.session.user.email);
+});
+
+function loadMember(email) {
+  sb.from('registrations').select('*').ilike('email', email).maybeSingle().then(function (r) {
+    if (!r.data) {
+      document.getElementById('nr-email').textContent = email;
+      document.getElementById('not-registered').style.display = 'block';
+      document.getElementById('hd-title').textContent = 'Akwaaba 👋';
+      document.getElementById('hd-sub').textContent = 'One small snag with your account.';
+      return;
+    }
+    member = r.data;
+    renderMember();
+    loadDues();
+  });
+}
+
+function renderMember() {
+  var first = (member.nickname || member.first_name || 'Akora').trim();
+  var colour = OAA_HOUSE_COLORS[member.house] || '#0E0C09';
+  var initials = ((member.first_name || ' ')[0] + (member.last_name || ' ')[0]).toUpperCase();
+  var memNo = 'OAA-16-' + member.id.slice(0, 4).toUpperCase();
+
+  document.getElementById('member-ui').style.display = 'block';
+  document.getElementById('hd-title').textContent = 'Akwaaba, ' + first + ' 👋';
+  document.getElementById('hd-sub').textContent = TAB_META.dash.sub;
+  document.getElementById('nav-name').textContent = first;
+  var av = document.getElementById('nav-avatar');
+  av.textContent = initials; av.style.background = colour;
+  document.getElementById('side-memid').textContent = 'Member ID · ' + memNo;
+
+  var card = document.getElementById('member-card');
+  card.style.background = colour;
+  document.getElementById('mc-name').textContent = member.first_name + ' ' + member.last_name;
+  document.getElementById('mc-nick').textContent = member.nickname ? '“' + member.nickname + '”' : '';
+  document.getElementById('mc-house').textContent = member.house;
+  document.getElementById('mc-class').textContent = member.class_group;
+  document.getElementById('mc-no').textContent = '#' + member.id.slice(0, 4).toUpperCase();
+
+  document.getElementById('acc-name').textContent = member.first_name + ' ' + member.last_name;
+  document.getElementById('acc-email').textContent = member.email;
+  document.getElementById('acc-phone').textContent = (member.country_code || '') + ' ' + (member.phone || '');
+  document.getElementById('acc-house').textContent = member.house;
+  document.getElementById('acc-class').textContent = member.class_group;
+  document.getElementById('acc-no').textContent = memNo;
+
+  document.getElementById('glance-bar').style.background = colour;
+  document.getElementById('dues-bar').style.background = colour;
+  document.getElementById('pay-email').textContent = member.email;
+}
+
+/* ---------- Dues ---------- */
+
+function loadDues() {
+  Promise.all([
+    sb.from('member_dues').select('schedule_id, amount_override, dues_schedules(name, note, amount)').eq('registration_id', member.id),
+    sb.from('payments').select('*').eq('registration_id', member.id).order('created_at', { ascending: false }),
+  ]).then(function (res) {
+    var assignments = res[0].data || [];
+    var payments = res[1].data || [];
+
+    var paidBySchedule = {};
+    var totalPaid = 0;
+    payments.forEach(function (p) {
+      if (p.status !== 'success') return;
+      totalPaid += p.amount;
+      if (p.schedule_id) paidBySchedule[p.schedule_id] = (paidBySchedule[p.schedule_id] || 0) + p.amount;
+    });
+
+    var totalDue = 0;
+    var breakdown = document.getElementById('dues-breakdown');
+    breakdown.innerHTML = '';
+    if (!assignments.length) {
+      breakdown.innerHTML = '<div class="empty-note">No dues have been assigned yet — check back once the committee publishes them.</div>';
+    }
+    assignments.forEach(function (a) {
+      var due = a.amount_override != null ? a.amount_override : a.dues_schedules.amount;
+      totalDue += due;
+      var paid = paidBySchedule[a.schedule_id] || 0;
+      var badge = paid >= due
+        ? '<span class="pill pill-good">Paid</span>'
+        : paid > 0
+          ? '<span class="pill" style="background:#FBF0E4;color:#9A6114">' + oaaGhs(paid) + ' paid</span>'
+          : '<span class="pill pill-soft">Due</span>';
+      breakdown.insertAdjacentHTML('beforeend',
+        '<div class="row-item"><div><b>' + esc(a.dues_schedules.name) + '</b>' +
+        '<div style="font-size:12.5px;color:var(--muted)">' + esc(a.dues_schedules.note || '') + '</div></div>' +
+        '<div style="display:flex;align-items:center;gap:16px"><b>' + oaaGhs(due) + '</b>' + badge + '</div></div>');
+    });
+
+    var balance = Math.max(totalDue - totalPaid, 0);
+    duesState = { totalDue: totalDue, totalPaid: totalPaid, balance: balance };
+    var pct = totalDue > 0 ? Math.max(0, Math.min(100, Math.round(totalPaid / totalDue * 100))) : 0;
+
+    ['glance', 'dues'].forEach(function (k) {
+      document.getElementById(k + '-paid').textContent = oaaGhs(totalPaid);
+      document.getElementById(k + '-total').textContent = 'of ' + oaaGhs(totalDue);
+      document.getElementById(k + '-pct').textContent = totalDue > 0 ? pct + '% paid up' : 'No dues assigned yet';
+      document.getElementById(k + '-bar').style.width = pct + '%';
+    });
+    document.getElementById('glance-btn').textContent = balance > 0 ? 'Pay ' + oaaGhs(balance) + ' balance' : 'View dues';
+    var payBtn = document.getElementById('pay-open-btn');
+    if (balance > 0) { payBtn.textContent = 'Pay ' + oaaGhs(balance) + ' balance'; payBtn.disabled = false; payBtn.style.opacity = 1; }
+    else { payBtn.textContent = totalDue > 0 ? 'Fully paid ✓' : 'No dues yet'; payBtn.disabled = true; payBtn.style.opacity = .55; }
+
+    var hist = document.getElementById('pay-history');
+    if (!payments.length) {
+      hist.innerHTML = '<div class="empty-note">No payments yet.</div>';
+    } else {
+      var head = '<div class="tbl-head" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.5fr) minmax(0,.9fr) 90px;min-width:520px"><span>Date</span><span>Method</span><span>Reference</span><span>Amount</span><span>Status</span></div>';
+      var rows = payments.map(function (p) {
+        var date = new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        var method = p.provider === 'manual' ? 'Recorded by treasurer' : (p.channel === 'mobile_money' ? 'Mobile Money' : p.provider);
+        var badge = p.status === 'success' ? '<span class="pill pill-good">Paid</span>'
+          : p.status === 'pending' ? '<span class="pill pill-soft">Pending</span>'
+          : '<span class="pill" style="background:#FBE4E4;color:var(--error)">' + esc(p.status) + '</span>';
+        return '<div class="tbl-row" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.5fr) minmax(0,.9fr) 90px;min-width:520px">' +
+          '<span style="color:var(--muted)">' + date + '</span><span>' + esc(method) + '</span>' +
+          '<span class="mono" style="font-size:12.5px;color:var(--muted)">' + esc(p.provider_ref) + '</span>' +
+          '<b>' + oaaGhs(p.amount) + '</b>' + badge + '</div>';
+      }).join('');
+      hist.innerHTML = head + rows;
+    }
+  });
+}
+
+/* ---------- Payment ---------- */
+
 function openPay() {
-  var ref = mkRef();
-  document.getElementById('pay-ref').textContent = ref;
-  document.getElementById('pay-ref-done').textContent = 'Ref · ' + ref;
-  document.getElementById('pay-idle').style.display = '';
-  document.getElementById('pay-processing').style.display = 'none';
+  if (duesState.balance <= 0) return;
+  document.getElementById('pay-form').style.display = 'block';
+  document.getElementById('pay-waiting').style.display = 'none';
   document.getElementById('pay-done').style.display = 'none';
+  document.getElementById('pay-err').style.display = 'none';
+  document.getElementById('pay-amount').value = (duesState.balance / 100).toFixed(0);
+  document.getElementById('pay-balance-note').textContent = 'Balance: ' + oaaGhs(duesState.balance) + ' — pay any amount up to that.';
+  var phone = (member.phone || '').replace(/\D/g, '');
+  if (phone.length === 9) phone = '0' + phone;
+  if (/^0\d{9}$/.test(phone)) document.getElementById('pay-phone').value = phone;
   openModal('pay-modal');
 }
-function setMethod(m) {
-  document.getElementById('m-momo').classList.toggle('on', m === 'momo');
-  document.getElementById('m-card').classList.toggle('on', m === 'card');
+
+function payError(msg) {
+  var e = document.getElementById('pay-err');
+  e.textContent = msg; e.style.display = 'block';
+  var b = document.getElementById('pay-go');
+  b.disabled = false; b.textContent = 'Send payment prompt';
 }
-function doPay() {
-  document.getElementById('pay-idle').style.display = 'none';
-  document.getElementById('pay-processing').style.display = 'flex';
-  setTimeout(function () {
-    document.getElementById('pay-processing').style.display = 'none';
-    document.getElementById('pay-done').style.display = 'flex';
-  }, 1800);
+
+function submitPay() {
+  var ghsVal = Number(document.getElementById('pay-amount').value);
+  var pesewas = Math.round(ghsVal * 100);
+  var phone = document.getElementById('pay-phone').value.trim();
+  var operator = document.getElementById('pay-operator').value;
+  if (!Number.isFinite(ghsVal) || pesewas <= 0) { payError('Enter a valid amount.'); return; }
+  if (pesewas > duesState.balance) { payError('That’s more than your balance of ' + oaaGhs(duesState.balance) + '.'); return; }
+  if (!/^0\d{9}$/.test(phone)) { payError('Enter your MoMo number as 0XXXXXXXXX.'); return; }
+
+  var b = document.getElementById('pay-go');
+  b.disabled = true; b.textContent = 'Sending…';
+
+  sb.auth.getSession().then(function (r) {
+    return fetch(OAA_PAY_INIT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + r.data.session.access_token },
+      body: JSON.stringify({ amount_pesewas: pesewas, phone: phone, operator: operator }),
+    });
+  }).then(function (res) { return res.json().then(function (j) { return { ok: res.ok, j: j }; }); })
+    .then(function (r) {
+      if (!r.ok) { payError(r.j.error || 'Something went wrong — try again.'); return; }
+      b.disabled = false; b.textContent = 'Send payment prompt';
+      document.getElementById('pay-form').style.display = 'none';
+      document.getElementById('pay-waiting').style.display = 'flex';
+      document.getElementById('pay-ref').textContent = r.j.reference;
+      pollPayment(r.j.reference, pesewas);
+    })
+    .catch(function () { payError('Network error — try again.'); });
 }
+
+function pollPayment(reference, pesewas) {
+  clearInterval(pollTimer);
+  pollTimer = setInterval(function () {
+    sb.from('payments').select('status').eq('provider_ref', reference).maybeSingle().then(function (r) {
+      if (!r.data) return;
+      if (r.data.status === 'success') {
+        clearInterval(pollTimer);
+        document.getElementById('pay-waiting').style.display = 'none';
+        document.getElementById('pay-done').style.display = 'flex';
+        document.getElementById('pay-done-msg').textContent = oaaGhs(pesewas) + ' received toward your dues. A receipt is on its way to your email.';
+      } else if (r.data.status === 'failed') {
+        clearInterval(pollTimer);
+        document.getElementById('pay-waiting').style.display = 'none';
+        document.getElementById('pay-form').style.display = 'block';
+        payError('The payment didn’t go through. No money left your wallet — try again.');
+      }
+    });
+  }, 5000);
+}
+
+function closePayAndRefresh() {
+  closeModal('pay-modal');
+  loadDues();
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); clearInterval(pollTimer); }
 document.getElementById('pay-modal').addEventListener('click', function () { closeModal('pay-modal'); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal('pay-modal'); });
+
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 </script>
 
 </body>
