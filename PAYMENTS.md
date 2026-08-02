@@ -6,20 +6,45 @@ designed deliberately. Questions → Robbie / the info@ inbox.
 
 ## Provider
 
-**To be confirmed — NOT Paystack.** The provider decision is being finalised
-(PayUp is under discussion). Do not build against any provider until it's
-settled and its API docs are shared. Everything below is provider-agnostic
-and stands regardless; the provider supplies only two touchpoints:
+**Bakery Pay** (The Bakery Technologies — pay.thebakery.tech). API guide is
+with Robbie (not in this public repo). Key facts from the docs, and how they
+change the generic design:
 
-1. **Checkout hand-off** — always the provider's own hosted page/popup. We
-   never render card/MoMo fields ourselves.
-2. **Server-side confirmation** — a signed webhook and/or a verify API. The
-   `paystack-webhook` function in `supabase/functions/` is a *reference
-   skeleton* showing the shape (signature check → idempotent ledger update);
-   adapt the signature scheme to the chosen provider.
+1. **No webhooks.** Confirmation is not pushed to us. MoMo collections
+   confirm "in the background" on their side; we must **poll**
+   `GET /api/collections/{id}` until status resolves. The webhook skeleton in
+   `supabase/functions/paystack-webhook/` is superseded by a **reconciler**:
+   a scheduled edge function that polls all `pending` payments and applies
+   the same idempotent ledger update. Same invariants, different trigger.
+2. **No hosted checkout page.** A MoMo collection pushes an approval prompt
+   straight to the payer's phone. So OUR dues UI collects phone + network
+   (mtn / vodafone / airteltigo) and our server calls
+   `POST /api/collections/alpha/initialize`. No card fields ever; the PIN is
+   entered on the payer's phone. This is a fine UX — arguably better.
+3. **Their reference, not ours.** Initialize returns a `BP-XXXXXX` reference;
+   we cannot supply our own. Keep our internal `DUES-…` ref for display, but
+   idempotency is `(provider='bakerypay', provider_ref='BP-…')`.
+4. **Amounts are GHS decimals in their API** (e.g. `100`, `"2.50"`). Our
+   ledger stays integer pesewas; convert only at the API boundary.
+5. **Fees are added ON TOP for MoMo** — we receive exactly what we ask for;
+   the member pays amount + ~2.5% platform + ~2.5% gateway (≈ GH₵315.60 on a
+   GH₵300 ask). Committee must decide whether to present dues as "GH₵300 +
+   fees" or lower the ask to absorb. Bank transfer instead DEDUCTS 0.5% from
+   what's sent, with manual admin receipt review.
+6. **Auth is email-OTP → bearer token** (no API keys documented). A server
+   integration needs a long-lived token stored in Supabase secrets, obtained
+   semi-manually. Token lifetime is undocumented — blocking question below.
+7. **Funds custody**: collections land in a Bakery Pay wallet; we withdraw
+   to the foundation's bank/MoMo via their disbursement API.
 
-If the chosen provider lacks webhooks or a sandbox, raise it before building
-— that changes the reconciliation design (see Flow, step 4).
+**Open questions for the Bakery Pay team (blocking go-live, not build):**
+- Access-token lifetime, and whether machine/API-key auth exists for servers.
+- Sandbox / test environment? (None documented.)
+- Full set of collection status values and the failure/timeout behaviour
+  when a payer ignores or declines the MoMo prompt.
+- Polling rate limits.
+- Disbursement fees, and settlement timing to a bank account.
+- Bank of Ghana licensing (theirs or their aggregator's).
 
 ## Invariants (non-negotiable)
 
@@ -61,11 +86,13 @@ reference. Human-readable on bank statements → reconciliation stays sane.
 
 1. Member (authenticated — auth is being built; until then, test harness)
    requests to pay N pesewas toward a schedule.
-2. Server (edge function) creates a `pending` payment row + reference, calls the
-   provider's initialize/create-charge API, returns the checkout URL.
-3. Member completes checkout on the provider's UI.
-4. The provider calls our webhook → verify signature → verify amount and
-   status via the API → mark the payment row `success` (idempotent upsert).
+2. Member enters phone + network in our dues UI; server (edge function)
+   calls Bakery Pay initialize, stores the returned `BP-…` reference on a
+   `pending` payment row.
+3. Member approves the MoMo prompt on their phone (no redirect).
+4. A scheduled reconciler polls `GET /api/collections/{id}` for pending
+   rows → on success, mark the row `success` (idempotent); on failure,
+   mark `failed`.
 5. Receipt email via the existing SMTP pattern (see
    `supabase/functions/send-welcome/` for the working example).
 6. Dashboard reads the balance view; progress bar updates.
