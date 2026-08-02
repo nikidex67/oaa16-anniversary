@@ -37,13 +37,13 @@ a:hover { color: var(--accent); }
 @keyframes dot-blink { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+.wrap { max-width: 1320px; margin: 0 auto; padding: 0 32px; }
 
 /* ---------- Nav (light + dark variants) ---------- */
 
 .nav {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 20px; padding: 18px 32px; max-width: 1240px; margin: 0 auto; flex-wrap: wrap;
+  gap: 20px; padding: 18px 32px; max-width: 1320px; margin: 0 auto; flex-wrap: wrap;
   position: relative; z-index: 1;
 }
 .nav-logo { height: 46px; width: auto; display: block; }
@@ -88,7 +88,7 @@ a:hover { color: var(--accent); }
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 30%);
   pointer-events: none;
 }
-.band-inner { max-width: 1240px; margin: 0 auto; padding: 36px 32px 64px; position: relative; z-index: 1; }
+.band-inner { max-width: 1320px; margin: 0 auto; padding: 36px 32px 64px; position: relative; z-index: 1; }
 .eyebrow-mono {
   font-family: var(--mono); font-size: 11px; letter-spacing: .2em;
   text-transform: uppercase; color: #B79CED; margin: 0;
@@ -200,7 +200,7 @@ select.chevron {
 .footer-dark { background: var(--ink); }
 .footer-dark .inner, .footer-light {
   padding: 28px 32px; display: flex; justify-content: space-between; gap: 16px;
-  flex-wrap: wrap; max-width: 1240px; margin: 0 auto;
+  flex-wrap: wrap; max-width: 1320px; margin: 0 auto;
   font-size: 12px; letter-spacing: .06em;
 }
 .footer-dark .inner { color: rgba(255,255,255,.65); }
