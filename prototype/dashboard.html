@@ -548,13 +548,15 @@ function loadEvents() {
       return events.map(function (e) {
         var st = mine[e.id];
         var badge = st === 'going' ? '<span class="pill pill-good">Going ✓</span>'
+          : st === 'maybe' ? '<span class="pill" style="background:#FBF0E4;color:#9A6114">Maybe</span>'
           : st === 'not_going' ? '<span class="pill pill-soft">Not attending</span>'
           : '<span class="pill pill-soft">No RSVP yet</span>';
+        var btnGoing = '<button class="btn btn-ink btn-xs" onclick="dashRsvp(\'' + e.id + '\', \'going\')">I\'m going</button>';
+        var btnMaybe = '<button class="btn btn-soft btn-xs" onclick="dashRsvp(\'' + e.id + '\', \'maybe\')">Maybe</button>';
+        var btnNo = '<button class="btn btn-soft btn-xs" onclick="dashRsvp(\'' + e.id + '\', \'not_going\')">Can\'t make it</button>';
         var actions = !withButtons ? '' :
           '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">' +
-          (st === 'going'
-            ? '<button class="btn btn-soft btn-xs" onclick="dashRsvp(\'' + e.id + '\', \'not_going\')">Can\'t make it</button>'
-            : '<button class="btn btn-ink btn-xs" onclick="dashRsvp(\'' + e.id + '\', \'going\')">RSVP — I\'m going</button>') +
+          (st === 'going' ? btnMaybe + btnNo : st === 'maybe' ? btnGoing + btnNo : st === 'not_going' ? btnGoing + btnMaybe : btnGoing + btnMaybe + btnNo) +
           '</div>';
         return '<div class="row-item"><div><b>' + esc(e.title) + '</b>' +
           '<div style="font-size:12.5px;color:var(--muted)">' + fmt(e.starts_on) + ' · ' + esc(e.venue || 'Venue TBC') + '</div>' + actions + '</div>' + badge + '</div>';

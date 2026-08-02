@@ -162,10 +162,11 @@ function loadAll() {
 
     document.getElementById('rsvp-list').innerHTML = events.map(function (e) {
       var going = rsvps.filter(function (v) { return v.event_id === e.id && v.status === 'going'; }).length;
+      var maybe = rsvps.filter(function (v) { return v.event_id === e.id && v.status === 'maybe'; }).length;
       var no = rsvps.filter(function (v) { return v.event_id === e.id && v.status === 'not_going'; }).length;
       return '<div style="display:flex;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid rgba(14,12,9,.06)">' +
         '<div><b>' + esc(e.title) + '</b><div style="font-size:12.5px;color:var(--muted)">' + e.starts_on + '</div></div>' +
-        '<div style="text-align:right"><b style="color:var(--success-ink)">' + going + ' going</b><div style="font-size:12.5px;color:var(--muted)">' + no + ' can\'t make it</div></div></div>';
+        '<div style="text-align:right"><b style="color:var(--success-ink)">' + going + ' going</b><div style="font-size:12.5px;color:#9A6114">' + maybe + ' maybe</div><div style="font-size:12.5px;color:var(--muted)">' + no + ' can\'t make it</div></div></div>';
     }).join('') || '<div style="padding:16px 0;color:var(--muted)">No events.</div>';
 
     var head = '<div class="tbl-head" style="grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,.8fr) 90px;min-width:640px"><span>Date</span><span>Member</span><span>Method</span><span>Reference</span><span>Amount</span><span>Status</span></div>';

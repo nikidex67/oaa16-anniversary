@@ -167,7 +167,7 @@ function loadCounts() {
   sbShared.from('event_rsvp_counts').select('*').then(function (r) {
     (r.data || []).forEach(function (c) {
       var el = document.querySelector('.count[data-slug="' + c.slug + '"]');
-      if (el) el.textContent = c.going + ' going';
+      if (el) el.textContent = c.going + ' going' + (c.maybe > 0 ? ' · ' + c.maybe + ' maybe' : '');
     });
   });
 }
@@ -187,14 +187,22 @@ function renderZones(signedIn) {
     if (st === 'going') {
       zone.innerHTML = '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
         '<span class="pill pill-good" style="padding:8px 16px;font-size:13px">You\'re going ✓</span>' +
+        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + slug + '\', \'maybe\')">Maybe</button>' +
+        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + slug + '\', \'not_going\')">Can\'t make it</button></div>';
+    } else if (st === 'maybe') {
+      zone.innerHTML = '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
+        '<span class="pill" style="padding:8px 16px;font-size:13px;background:#FBF0E4;color:#9A6114">Maybe 🤞</span>' +
+        '<button class="btn btn-ink btn-xs" onclick="setRsvp(\'' + slug + '\', \'going\')">I\'m going</button>' +
         '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + slug + '\', \'not_going\')">Can\'t make it</button></div>';
     } else if (st === 'not_going') {
       zone.innerHTML = '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
         '<span class="pill pill-soft" style="padding:8px 16px;font-size:13px">Not attending</span>' +
-        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + slug + '\', \'going\')">Changed my mind — I\'m going</button></div>';
+        '<button class="btn btn-ink btn-xs" onclick="setRsvp(\'' + slug + '\', \'going\')">I\'m going</button>' +
+        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + slug + '\', \'maybe\')">Maybe</button></div>';
     } else {
       zone.innerHTML = '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
         '<button class="btn btn-ink btn-sm" onclick="setRsvp(\'' + slug + '\', \'going\')">RSVP — I\'m going <span>→</span></button>' +
+        '<button class="btn btn-soft btn-sm" onclick="setRsvp(\'' + slug + '\', \'maybe\')">Maybe</button>' +
         '<button class="btn btn-soft btn-sm" onclick="setRsvp(\'' + slug + '\', \'not_going\')">Can\'t make it</button></div>';
     }
   });
