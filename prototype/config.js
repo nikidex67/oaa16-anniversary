@@ -3,6 +3,9 @@
 var OAA_SUPABASE_URL = 'https://gbrbmtwpugxmenrfkloh.supabase.co';
 var OAA_SUPABASE_KEY = 'sb_publishable_i9sm2any3EigKUBkxCv7Jg_j0UmtOac';
 var OAA_PAY_INIT_URL = OAA_SUPABASE_URL + '/functions/v1/bakerypay-init';
+var OAA_PAY_BANK_URL = OAA_SUPABASE_URL + '/functions/v1/bakerypay-bank';
+var OAA_WHATSAPP_LINK = 'https://chat.whatsapp.com/E7NI1vNHNKgEQeGOUjSxWd?mode=gi_t';
+var OAA_MOMO_FEE_RATE = 0.025;  // 2.5% all-in, confirmed with Bakery Pay
 
 var OAA_HOUSE_COLORS = {
   'Aggrey House': '#C1272D', 'Baeta House': '#C1272D', 'Clark House': '#2456C4',

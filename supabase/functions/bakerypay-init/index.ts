@@ -55,9 +55,13 @@ Deno.serve(async (req) => {
   let providerRef: string
   let raw: unknown = null
 
+  let fees: { platform_fee: number; total: number } | null = null
   if (Deno.env.get('BAKERYPAY_MOCK') === 'true') {
     providerRef = 'BPMOCK-' + crypto.randomUUID().slice(0, 8).toUpperCase()
-    raw = { mock: true }
+    // Confirmed commercial terms: 2.5% all-in on MoMo, paid by the member.
+    const fee = Math.round(amount_pesewas * 0.025)
+    fees = { platform_fee: fee, total: amount_pesewas + fee }
+    raw = { mock: true, fees }
   } else {
     const res = await fetch(`${Deno.env.get('BAKERYPAY_BASE_URL')}/api/collections/alpha/initialize`, {
       method: 'POST',
@@ -79,6 +83,8 @@ Deno.serve(async (req) => {
     }
     providerRef = bp.data.reference
     raw = bp
+    const feeGhs = Number(bp.data.platform_fee ?? 0) + Number(bp.data.gateway_fee ?? 0)
+    fees = { platform_fee: Math.round(feeGhs * 100), total: Math.round(Number(bp.data.total_amount ?? amountGhs) * 100) }
   }
 
   const { error: insErr } = await db.from('payments').insert({
@@ -96,6 +102,7 @@ Deno.serve(async (req) => {
   return json({
     reference: providerRef,
     status: 'pending',
+    fees,
     message: 'Approve the payment prompt on your phone. Your dues will update automatically.',
   })
 })

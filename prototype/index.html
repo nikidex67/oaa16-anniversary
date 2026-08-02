@@ -78,7 +78,7 @@
       <a href="index.html" class="on">Home</a>
       <a href="events.html">Events</a>
       <a href="merch.html">Merch</a>
-      <button type="button" onclick="openModal('reg-modal')">Register</button>
+      <button type="button" data-reg-only onclick="openModal('reg-modal')">Register</button>
       <a href="signin.html" class="nav-signin">Sign in</a>
     </div>
   </nav>
@@ -89,7 +89,7 @@
         <h1>Ten years on. One year group.</h1>
         <p>The Achimota School Class of 2016 is reconnecting for our 10th anniversary — career fair, inter-house sports, thanksgiving and more. Register to be counted.</p>
         <div style="display:flex;gap:14px;flex-wrap:wrap">
-          <button class="btn btn-white" onclick="openModal('reg-modal')">Register <span>→</span></button>
+          <button class="btn btn-white" data-reg-only onclick="openModal('reg-modal')">Register <span>→</span></button>
           <a class="btn btn-glass" href="events.html">See what's coming</a>
         </div>
         <div class="reg-count"><i></i>425 Akoras registered</div>
@@ -125,26 +125,26 @@
     <div style="flex:1 1 480px;min-width:0;position:relative">
       <div class="ev-slider" id="ev-slider">
         <div class="ev-card" data-ev="0" onmouseenter="setEvent(0)">
-          <span class="pill pill-glass when">Sat · 5 Sep</span>
+          <span class="pill pill-glass when">Fri · 14 Aug</span>
           <div class="foot">
             <h3>Career &amp; Mentorship Fair</h3>
-            <div class="tags"><span class="pill pill-glass">Achimota School</span><span class="pill pill-glass">10:00 – 16:00</span></div>
+            <div class="tags"><span class="pill pill-glass">Achimota School</span><span class="pill pill-glass">Details soon</span></div>
             <a href="events.html#career-fair" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
           </div>
         </div>
         <div class="ev-card" data-ev="1" onmouseenter="setEvent(1)">
-          <span class="pill pill-glass when">Sat · 24 Oct</span>
+          <span class="pill pill-glass when">Sat · 15 Aug</span>
           <div class="foot">
-            <h3>Inter-house Sports</h3>
-            <div class="tags"><span class="pill pill-glass">School fields</span><span class="pill pill-glass">08:00</span></div>
-            <a href="events.html#sports" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
+            <h3>BBQ &amp; Tennis Tournament</h3>
+            <div class="tags"><span class="pill pill-glass">Venue TBC</span><span class="pill pill-glass">Details soon</span></div>
+            <a href="events.html#bbq-tennis" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
           </div>
         </div>
         <div class="ev-card" data-ev="2" onmouseenter="setEvent(2)">
-          <span class="pill pill-glass when">Sun · 25 Oct</span>
+          <span class="pill pill-glass when">Sun · 16 Aug</span>
           <div class="foot">
             <h3>Thanksgiving Service</h3>
-            <div class="tags"><span class="pill pill-glass">Achimota School</span><span class="pill pill-glass">09:30</span></div>
+            <div class="tags"><span class="pill pill-glass">Achimota School</span><span class="pill pill-glass">Details soon</span></div>
             <a href="events.html#thanksgiving" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
           </div>
         </div>
@@ -195,11 +195,13 @@
 <div id="product-modal-root"></div>
 <div id="reg-modal-root"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 <script src="shared.js"></script>
 <script>
 var events = [
   { title: 'Career & \nMentorship Fair', desc: "Panels and mentorship circles with the year group's doctors, engineers, founders, lawyers and creatives. Bring your questions — and your business cards.", date: 'Sat 5 Sep 2026', venue: 'Achimota School', time: '10:00 – 16:00', href: 'events.html#career-fair' },
-  { title: 'Inter-house Sports', desc: 'Fifteen houses, one trophy. Athletics, football, and the walking race nobody trains for. Wear your house colours.', date: 'Sat 24 Oct 2026', venue: 'Achimota School fields', time: '08:00', href: 'events.html#sports' },
+  { title: 'Inter-house Sports', desc: 'Fifteen houses, one trophy. Athletics, football, and the walking race nobody trains for. Wear your house colours.', date: 'Sat 24 Oct 2026', venue: 'Achimota School fields', time: '08:00', href: 'events.html#bbq-tennis' },
   { title: 'Thanksgiving Service', desc: 'A service of thanksgiving for ten years — followed by a group photo on the very steps from 2016. Families welcome.', date: 'Sun 25 Oct 2026', venue: 'Achimota School', time: '09:30', href: 'events.html#thanksgiving' }
 ];
 var activeEvent = 0;

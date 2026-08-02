@@ -26,11 +26,10 @@ change the generic design:
    idempotency is `(provider='bakerypay', provider_ref='BP-…')`.
 4. **Amounts are GHS decimals in their API** (e.g. `100`, `"2.50"`). Our
    ledger stays integer pesewas; convert only at the API boundary.
-5. **Fees are added ON TOP for MoMo** — we receive exactly what we ask for;
-   the member pays amount + ~2.5% platform + ~2.5% gateway (≈ GH₵315.60 on a
-   GH₵300 ask). Committee must decide whether to present dues as "GH₵300 +
-   fees" or lower the ask to absorb. Bank transfer instead DEDUCTS 0.5% from
-   what's sent, with manual admin receipt review.
+5. **Fees — CONFIRMED terms**: MoMo is **2.5% all-in**, paid by the member on
+   top (shown transparently in the pay modal). Bank transfer deducts 0.5%
+   from what's sent; the member's dues are credited with the GROSS amount and
+   the foundation absorbs that fee.
 6. **Auth is email-OTP → bearer token** (no API keys documented). A server
    integration needs a long-lived token stored in Supabase secrets, obtained
    semi-manually. Token lifetime is undocumented — blocking question below.
@@ -121,8 +120,6 @@ reference. Human-readable on bank statements → reconciliation stays sane.
 
 ## Division of labour
 
-- Schema + RLS + this design: Robbie (with Claude) — ask before diverging.
-- Provider checkout wiring + webhook implementation: you.
-- The visual design for the payment UI is in `prototype/dashboard.html`
-  (the payment modal is a mock styled after a generic processor — replace
-  with the real provider's checkout, keep the surrounding dues UI).
+Robbie (with Claude) runs the whole integration solo. Dues are GH₵240/year
+for 2024, 2025 and 2026 (GH₵720 total per member), auto-assigned to every
+registration by trigger.

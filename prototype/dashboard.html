@@ -131,13 +131,11 @@
 
       <div style="margin-top:40px">
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
-          <p class="display-sm" style="margin:0">Your events <span class="pill pill-soft" style="font-size:10.5px;vertical-align:middle">demo data</span></p>
+          <p class="display-sm" style="margin:0">Your events</p>
           <button style="border:0;background:transparent;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;color:var(--accent)" onclick="goTab('events')">View all →</button>
         </div>
-        <div class="card-list">
-          <div class="row-item"><div><b>Career &amp; Mentorship Fair</b><div style="font-size:12.5px;color:var(--muted)">Sat 5 Sep</div></div><span class="pill pill-soft">RSVP soon</span></div>
-          <div class="row-item"><div><b>Inter-house Sports</b><div style="font-size:12.5px;color:var(--muted)">Sat 24 Oct</div></div><span class="pill pill-soft">RSVP soon</span></div>
-          <div class="row-item"><div><b>Thanksgiving Service</b><div style="font-size:12.5px;color:var(--muted)">Sun 25 Oct</div></div><span class="pill pill-soft">RSVP soon</span></div>
+        <div class="card-list" id="ev-overview">
+          <div class="empty-note">Loading events…</div>
         </div>
       </div>
     </section>
@@ -173,10 +171,10 @@
 
     <!-- Events -->
     <section class="tab" id="tab-events">
-      <div class="card">
-        <h3 style="margin:0 0 8px;font-size:20px;font-weight:800">RSVPs are coming soon <span class="pill pill-soft" style="font-size:10.5px">demo</span></h3>
-        <p style="margin:0;font-size:14.5px;line-height:1.6;color:var(--muted)">Event RSVPs will live here — Career &amp; Mentorship Fair (5 Sep), Inter-house Sports (24 Oct) and the Thanksgiving Service (25 Oct). See the <a href="events.html" style="color:var(--accent);font-weight:700">events page</a> for the full details.</p>
+      <div class="card-list" id="ev-list">
+        <div class="empty-note">Loading events…</div>
       </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:14px 4px 0">Full details on the <a href="events.html" style="color:var(--accent);font-weight:700">events page</a>.</p>
     </section>
 
     <!-- Orders -->
@@ -228,26 +226,52 @@
     <div style="padding:26px 24px 24px">
 
       <div id="pay-form">
-        <div style="text-align:center;margin-bottom:20px">
+        <div style="display:flex;gap:8px;margin-bottom:18px">
+          <button class="btn btn-sm" id="tab-momo" style="flex:1;background:var(--accent);color:#fff" onclick="payTab('momo')">Mobile Money</button>
+          <button class="btn btn-sm btn-soft" id="tab-bank" style="flex:1" onclick="payTab('bank')">Bank transfer</button>
+        </div>
+        <div style="text-align:center;margin-bottom:18px">
           <div style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600">Amount (GH₵)</div>
-          <input type="number" id="pay-amount" min="1" step="1" style="text-align:center;font-size:30px;font-weight:800;max-width:200px;margin:8px auto 0;border-radius:16px">
+          <input type="number" id="pay-amount" min="1" step="1" oninput="feeLine()" style="text-align:center;font-size:30px;font-weight:800;max-width:200px;margin:8px auto 0;border-radius:16px">
           <div style="font-size:12px;color:var(--muted);margin-top:6px" id="pay-balance-note"></div>
         </div>
-        <div class="pay-field" style="margin-bottom:12px">
-          <label>Mobile money number</label>
-          <input type="tel" id="pay-phone" placeholder="0XXXXXXXXX" maxlength="10" inputmode="numeric">
+
+        <div id="momo-form">
+          <div style="background:var(--field-bg);border-radius:12px;padding:10px 14px;font-size:13px;text-align:center;margin-bottom:14px" id="fee-note">—</div>
+          <div class="pay-field" style="margin-bottom:12px">
+            <label>Mobile money number</label>
+            <input type="tel" id="pay-phone" placeholder="0XXXXXXXXX" maxlength="10" inputmode="numeric">
+          </div>
+          <div class="pay-field" style="margin-bottom:18px">
+            <label>Network</label>
+            <select id="pay-operator" class="chevron">
+              <option value="mtn">MTN MoMo</option>
+              <option value="vodafone">Telecel (Vodafone) Cash</option>
+              <option value="airteltigo">AT Money</option>
+            </select>
+          </div>
+          <div id="pay-err" style="display:none;background:#FBE4E4;color:var(--error);border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px"></div>
+          <button class="btn btn-accent" style="width:100%" id="pay-go" onclick="submitPay()">Send payment prompt</button>
+          <p style="font-size:11.5px;color:var(--muted);text-align:center;margin:14px 0 0">A prompt will appear on your phone — approve it with your MoMo PIN.<br>Processed by Bakery Pay.</p>
         </div>
-        <div class="pay-field" style="margin-bottom:18px">
-          <label>Network</label>
-          <select id="pay-operator" class="chevron">
-            <option value="mtn">MTN MoMo</option>
-            <option value="vodafone">Telecel (Vodafone) Cash</option>
-            <option value="airteltigo">AT Money</option>
-          </select>
+
+        <div id="bank-form" style="display:none">
+          <div style="background:var(--field-bg);border-radius:14px;padding:14px 16px;font-size:13px;line-height:1.7;margin-bottom:14px" id="bank-details">Loading bank details…</div>
+          <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin:0 0 14px">1. Transfer the amount above to this account.<br>2. Upload your transfer receipt below.<br>3. Your dues update once it's confirmed (1–2 days).</p>
+          <div class="pay-field" style="margin-bottom:14px">
+            <label>Transfer receipt (photo or PDF, max 5MB)</label>
+            <input type="file" id="bank-receipt" accept="image/jpeg,image/png,application/pdf" style="border-radius:14px;padding:10px 14px;background:var(--field-bg);width:100%;font-family:var(--font);font-size:13px">
+          </div>
+          <div id="bank-err" style="display:none;background:#FBE4E4;color:var(--error);border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px"></div>
+          <button class="btn btn-accent" style="width:100%" id="bank-go" onclick="submitBank()">Submit receipt for review</button>
         </div>
-        <div id="pay-err" style="display:none;background:#FBE4E4;color:var(--error);border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px"></div>
-        <button class="btn btn-accent" style="width:100%" id="pay-go" onclick="submitPay()">Send payment prompt</button>
-        <p style="font-size:11.5px;color:var(--muted);text-align:center;margin:14px 0 0">A prompt will appear on your phone — approve it with your MoMo PIN.<br>Processed by Bakery Pay. Provider fees may apply on top.</p>
+      </div>
+
+      <div id="bank-done" style="display:none;flex-direction:column;align-items:center;gap:14px;padding:12px 0 4px;text-align:center">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--success-bg);color:var(--success-ink);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800">✓</div>
+        <div style="font-size:20px;font-weight:800">Receipt submitted</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.5" id="bank-done-msg"></div>
+        <button style="width:100%;margin-top:8px;cursor:pointer;font-family:var(--font);font-weight:800;font-size:15px;padding:15px;border-radius:12px;border:0;background:var(--ink);color:#fff" onclick="closePayAndRefresh()">Done</button>
       </div>
 
       <div id="pay-waiting" style="display:none;flex-direction:column;align-items:center;gap:18px;padding:28px 0;text-align:center">
@@ -315,6 +339,7 @@ function loadMember(email) {
     member = r.data;
     renderMember();
     loadDues();
+    loadEvents();
   });
 }
 
@@ -434,13 +459,120 @@ function openPay() {
   document.getElementById('pay-form').style.display = 'block';
   document.getElementById('pay-waiting').style.display = 'none';
   document.getElementById('pay-done').style.display = 'none';
+  document.getElementById('bank-done').style.display = 'none';
   document.getElementById('pay-err').style.display = 'none';
+  document.getElementById('bank-err').style.display = 'none';
   document.getElementById('pay-amount').value = (duesState.balance / 100).toFixed(0);
   document.getElementById('pay-balance-note').textContent = 'Balance: ' + oaaGhs(duesState.balance) + ' — pay any amount up to that.';
   var phone = (member.phone || '').replace(/\D/g, '');
   if (phone.length === 9) phone = '0' + phone;
   if (/^0\d{9}$/.test(phone)) document.getElementById('pay-phone').value = phone;
+  payTab('momo');
+  feeLine();
   openModal('pay-modal');
+}
+
+function payTab(which) {
+  document.getElementById('momo-form').style.display = which === 'momo' ? 'block' : 'none';
+  document.getElementById('bank-form').style.display = which === 'bank' ? 'block' : 'none';
+  var tm = document.getElementById('tab-momo'), tb = document.getElementById('tab-bank');
+  tm.style.background = which === 'momo' ? 'var(--accent)' : 'var(--field-bg)';
+  tm.style.color = which === 'momo' ? '#fff' : 'var(--ink)';
+  tb.style.background = which === 'bank' ? 'var(--accent)' : 'var(--field-bg)';
+  tb.style.color = which === 'bank' ? '#fff' : 'var(--ink)';
+  if (which === 'bank') loadBankDetails();
+}
+
+function feeLine() {
+  var ghs = Number(document.getElementById('pay-amount').value) || 0;
+  var fee = ghs * OAA_MOMO_FEE_RATE;
+  document.getElementById('fee-note').innerHTML =
+    'You\'ll be charged <b>' + oaaGhs(Math.round((ghs + fee) * 100)) + '</b> (includes the 2.5% provider fee) — <b>' + oaaGhs(Math.round(ghs * 100)) + '</b> goes to your dues.';
+}
+
+var bankLoaded = false;
+function loadBankDetails() {
+  if (bankLoaded) return;
+  sb.auth.getSession().then(function (r) {
+    return fetch(OAA_PAY_BANK_URL, { headers: { Authorization: 'Bearer ' + r.data.session.access_token } });
+  }).then(function (res) { return res.json(); }).then(function (j) {
+    if (!j.bank) return;
+    bankLoaded = true;
+    var b = j.bank;
+    document.getElementById('bank-details').innerHTML =
+      '<b>' + b.bank_name + '</b><br>Account name: <b>' + b.account_name + '</b><br>' +
+      'Account number: <b class="mono">' + b.account_number + '</b><br>' +
+      'Branch: ' + b.branch + ' · SWIFT: <span class="mono">' + b.swift_code + '</span>';
+  });
+}
+
+function submitBank() {
+  var ghsVal = Number(document.getElementById('pay-amount').value);
+  var pesewas = Math.round(ghsVal * 100);
+  var file = document.getElementById('bank-receipt').files[0];
+  var err = document.getElementById('bank-err');
+  err.style.display = 'none';
+  if (!Number.isFinite(ghsVal) || pesewas <= 0) { err.textContent = 'Enter a valid amount.'; err.style.display = 'block'; return; }
+  if (pesewas > duesState.balance) { err.textContent = 'That\'s more than your balance of ' + oaaGhs(duesState.balance) + '.'; err.style.display = 'block'; return; }
+  if (!file) { err.textContent = 'Attach your transfer receipt.'; err.style.display = 'block'; return; }
+  var b = document.getElementById('bank-go');
+  b.disabled = true; b.textContent = 'Uploading…';
+  var fd = new FormData();
+  fd.set('amount_pesewas', String(pesewas));
+  fd.set('receipt', file);
+  sb.auth.getSession().then(function (r) {
+    return fetch(OAA_PAY_BANK_URL, { method: 'POST', headers: { Authorization: 'Bearer ' + r.data.session.access_token }, body: fd });
+  }).then(function (res) { return res.json().then(function (j) { return { ok: res.ok, j: j }; }); })
+    .then(function (r) {
+      b.disabled = false; b.textContent = 'Submit receipt for review';
+      if (!r.ok) { err.textContent = r.j.error || 'Something went wrong — try again.'; err.style.display = 'block'; return; }
+      document.getElementById('pay-form').style.display = 'none';
+      document.getElementById('bank-done').style.display = 'flex';
+      document.getElementById('bank-done-msg').textContent = oaaGhs(pesewas) + ' submitted with your receipt (ref ' + r.j.reference + '). We\'ll email you once it\'s confirmed.';
+    })
+    .catch(function () { b.disabled = false; b.textContent = 'Submit receipt for review'; err.textContent = 'Network error — try again.'; err.style.display = 'block'; });
+}
+
+/* ---------- Events (live) ---------- */
+
+function loadEvents() {
+  Promise.all([
+    sb.from('events').select('*').eq('active', true).order('starts_on'),
+    sb.from('rsvps').select('event_id, status').eq('registration_id', member.id),
+  ]).then(function (res) {
+    var events = res[0].data || [];
+    var mine = {};
+    (res[1].data || []).forEach(function (v) { mine[v.event_id] = v.status; });
+    var fmt = function (d) { return new Date(d + 'T12:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); };
+    var rows = function (withButtons) {
+      return events.map(function (e) {
+        var st = mine[e.id];
+        var badge = st === 'going' ? '<span class="pill pill-good">Going ✓</span>'
+          : st === 'not_going' ? '<span class="pill pill-soft">Not attending</span>'
+          : '<span class="pill pill-soft">No RSVP yet</span>';
+        var actions = !withButtons ? '' :
+          '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">' +
+          (st === 'going'
+            ? '<button class="btn btn-soft btn-xs" onclick="dashRsvp(\'' + e.id + '\', \'not_going\')">Can\'t make it</button>'
+            : '<button class="btn btn-ink btn-xs" onclick="dashRsvp(\'' + e.id + '\', \'going\')">RSVP — I\'m going</button>') +
+          '</div>';
+        return '<div class="row-item"><div><b>' + esc(e.title) + '</b>' +
+          '<div style="font-size:12.5px;color:var(--muted)">' + fmt(e.starts_on) + ' · ' + esc(e.venue || 'Venue TBC') + '</div>' + actions + '</div>' + badge + '</div>';
+      }).join('');
+    };
+    document.getElementById('ev-overview').innerHTML = rows(false) || '<div class="empty-note">No events yet.</div>';
+    document.getElementById('ev-list').innerHTML = rows(true) || '<div class="empty-note">No events yet.</div>';
+  });
+}
+
+function dashRsvp(eventId, status) {
+  sb.from('rsvps').upsert(
+    { event_id: eventId, registration_id: member.id, status: status, updated_at: new Date().toISOString() },
+    { onConflict: 'event_id,registration_id' }
+  ).then(function (r) {
+    if (r.error) { alert('Could not save your RSVP — try again.'); return; }
+    loadEvents();
+  });
 }
 
 function payError(msg) {

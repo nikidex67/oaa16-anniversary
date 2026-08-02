@@ -58,83 +58,83 @@
       <a href="index.html">Home</a>
       <a href="events.html" class="on">Events</a>
       <a href="merch.html">Merch</a>
-      <button type="button" onclick="openModal('reg-modal')">Register</button>
+      <button type="button" data-reg-only onclick="openModal('reg-modal')">Register</button>
       <a href="signin.html" class="nav-signin">Sign in</a>
     </div>
   </nav>
   <div class="band-inner">
     <p class="eyebrow-mono">10th Anniversary · Founders' Week</p>
     <h1 class="display-hero" style="font-size:clamp(52px,7vw,84px)">The events</h1>
-    <p class="band-sub">Three days, one year group. RSVP so we can plan numbers — your QR member card checks you in at the door.</p>
+    <p class="band-sub">One weekend, one year group — 14 to 16 August. RSVP so we can plan numbers.</p>
   </div>
 </div>
 
 <div class="wrap" style="padding-top:64px;padding-bottom:72px;display:flex;flex-direction:column;gap:28px">
 
-  <div class="event" id="career-fair" data-ev="fair">
+  <div class="event" id="career-fair" data-ev="career-fair">
     <div class="visual">
       <img src="assets/2016-crest.webp" alt="" aria-hidden="true">
-      <div class="date-chip"><span class="mono-sm">Sat</span><span class="d">5</span><span class="mono-sm">Sep</span></div>
+      <div class="date-chip"><span class="mono-sm">Fri</span><span class="d">14</span><span class="mono-sm">Aug</span></div>
       <span class="pill pill-glass tag">Career Fair</span>
     </div>
     <div class="details">
       <h3>Career &amp; Mentorship Fair</h3>
       <div class="meta">
         <span><b style="color:var(--ink)">Venue</b> Achimota School</span>
-        <span><b style="color:var(--ink)">Time</b> 10:00 – 16:00</span>
+        <span><b style="color:var(--ink)">Time</b> Details soon</span>
       </div>
       <p class="desc">Panels and mentorship circles with the year group's doctors, engineers, founders, lawyers and creatives. Bring your questions — and your business cards.</p>
       <div class="going-row">
         <span class="faces">
           <span style="background:#C1272D;color:#fff">EA</span><span style="background:#2456C4;color:#fff">FD</span><span style="background:#2F9E44;color:#fff">KO</span><span style="background:#7C3AED;color:#fff">AB</span>
         </span>
-        <span class="count" data-base="131">131 going</span>
+        <span class="count" data-slug="career-fair">— going</span>
       </div>
       <div class="rsvp-zone"></div>
     </div>
   </div>
 
-  <div class="event" id="sports" data-ev="sports">
+  <div class="event" id="bbq-tennis" data-ev="bbq-tennis">
     <div class="visual">
       <img src="assets/2016-crest.webp" alt="" aria-hidden="true">
-      <div class="date-chip"><span class="mono-sm">Sat</span><span class="d">24</span><span class="mono-sm">Oct</span></div>
-      <span class="pill pill-glass tag">Inter-house</span>
+      <div class="date-chip"><span class="mono-sm">Sat</span><span class="d">15</span><span class="mono-sm">Aug</span></div>
+      <span class="pill pill-glass tag">BBQ &amp; Tennis</span>
     </div>
     <div class="details">
-      <h3>Inter-house Sports</h3>
+      <h3>OAA 2016 BBQ &amp; Tennis Tournament</h3>
       <div class="meta">
-        <span><b style="color:var(--ink)">Venue</b> Achimota School fields</span>
-        <span><b style="color:var(--ink)">Time</b> 08:00</span>
+        <span><b style="color:var(--ink)">Venue</b> Venue TBC</span>
+        <span><b style="color:var(--ink)">Time</b> Details soon</span>
       </div>
-      <p class="desc">Fifteen houses, one trophy. Athletics, football, and the walking race nobody trains for. Wear your house colours.</p>
+      <p class="desc">An afternoon of food, music and a tennis tournament nobody has trained for. Bring your appetite and your A-game.</p>
       <div class="going-row">
         <span class="faces">
           <span style="background:#FFD400;color:#0E0C09">LM</span><span style="background:#4FA8E0;color:#fff">TN</span><span style="background:#8A4B6D;color:#fff">SA</span>
         </span>
-        <span class="count" data-base="87">87 going</span>
+        <span class="count" data-slug="bbq-tennis">— going</span>
       </div>
       <div class="rsvp-zone"></div>
     </div>
   </div>
 
-  <div class="event" id="thanksgiving" data-ev="thanks">
+  <div class="event" id="thanksgiving" data-ev="thanksgiving">
     <div class="visual">
       <img src="assets/2016-crest.webp" alt="" aria-hidden="true">
-      <div class="date-chip"><span class="mono-sm">Sun</span><span class="d">25</span><span class="mono-sm">Oct</span></div>
+      <div class="date-chip"><span class="mono-sm">Sun</span><span class="d">16</span><span class="mono-sm">Aug</span></div>
       <span class="pill pill-glass tag">Thanksgiving</span>
     </div>
     <div class="details">
-      <h3>Thanksgiving Service</h3>
+      <h3>10 Year Anniversary Thanksgiving Service</h3>
       <div class="meta">
         <span><b style="color:var(--ink)">Venue</b> Achimota School</span>
-        <span><b style="color:var(--ink)">Time</b> 09:30</span>
+        <span><b style="color:var(--ink)">Time</b> Details soon</span>
       </div>
       <p class="desc">A service of thanksgiving for ten years — followed by a group photo on the very steps from 2016. Families welcome.</p>
       <div class="going-row">
         <span class="faces">
           <span style="background:#14532D;color:#fff">BO</span><span style="background:#ED7014;color:#fff">MM</span>
         </span>
-        <span class="count" data-base="64">64 going</span>
+        <span class="count" data-slug="thanksgiving">— going</span>
       </div>
       <div class="rsvp-zone"></div>
     </div>
@@ -155,34 +155,80 @@
 </div></div>
 
 <div id="reg-modal-root"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 <script src="shared.js"></script>
 <script>
-var rsvp = { fair: 'going', sports: '', thanks: '' };
+var evs = {};          // slug -> event uuid
+var myRegId = null;
+var myRsvps = {};      // event_id -> status
 
-function renderRsvp() {
+function loadCounts() {
+  sbShared.from('event_rsvp_counts').select('*').then(function (r) {
+    (r.data || []).forEach(function (c) {
+      var el = document.querySelector('.count[data-slug="' + c.slug + '"]');
+      if (el) el.textContent = c.going + ' going';
+    });
+  });
+}
+
+function renderZones(signedIn) {
   document.querySelectorAll('.event').forEach(function (card) {
-    var key = card.dataset.ev;
-    var v = rsvp[key];
+    var slug = card.dataset.ev;
     var zone = card.querySelector('.rsvp-zone');
-    var count = card.querySelector('.count');
-    count.textContent = (Number(count.dataset.base) + (v === 'going' ? 1 : 0)) + ' going';
-    if (v === 'going') {
+    if (!signedIn) {
+      zone.innerHTML = '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
+        '<a class="btn btn-ink btn-sm" href="signin.html">Sign in to RSVP</a>' +
+        '<span style="font-size:12.5px;color:var(--muted)">Registered members only</span></div>';
+      return;
+    }
+    var eid = evs[slug];
+    var st = myRsvps[eid];
+    if (st === 'going') {
       zone.innerHTML = '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
         '<span class="pill pill-good" style="padding:8px 16px;font-size:13px">You\'re going ✓</span>' +
-        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + key + '\', \'\')">Change</button></div>';
-    } else if (v === 'no') {
+        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + slug + '\', \'not_going\')">Can\'t make it</button></div>';
+    } else if (st === 'not_going') {
       zone.innerHTML = '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">' +
         '<span class="pill pill-soft" style="padding:8px 16px;font-size:13px">Not attending</span>' +
-        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + key + '\', \'\')">Change</button></div>';
+        '<button class="btn btn-soft btn-xs" onclick="setRsvp(\'' + slug + '\', \'going\')">Changed my mind — I\'m going</button></div>';
     } else {
       zone.innerHTML = '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
-        '<button class="btn btn-ink btn-sm" onclick="setRsvp(\'' + key + '\', \'going\')">RSVP — I\'m going <span>→</span></button>' +
-        '<button class="btn btn-soft btn-sm" onclick="setRsvp(\'' + key + '\', \'no\')">Can\'t make it</button></div>';
+        '<button class="btn btn-ink btn-sm" onclick="setRsvp(\'' + slug + '\', \'going\')">RSVP — I\'m going <span>→</span></button>' +
+        '<button class="btn btn-soft btn-sm" onclick="setRsvp(\'' + slug + '\', \'not_going\')">Can\'t make it</button></div>';
     }
   });
 }
-function setRsvp(key, val) { rsvp[key] = val; renderRsvp(); }
-renderRsvp();
+
+function setRsvp(slug, status) {
+  if (!myRegId) return;
+  var eid = evs[slug];
+  sbShared.from('rsvps').upsert(
+    { event_id: eid, registration_id: myRegId, status: status, updated_at: new Date().toISOString() },
+    { onConflict: 'event_id,registration_id' }
+  ).then(function (r) {
+    if (r.error) { alert('Could not save your RSVP — try again.'); return; }
+    myRsvps[eid] = status;
+    renderZones(true);
+    loadCounts();
+  });
+}
+
+sbShared.from('events').select('id, slug').then(function (r) {
+  (r.data || []).forEach(function (e) { evs[e.slug] = e.id; });
+  loadCounts();
+  sbShared.auth.getSession().then(function (sr) {
+    if (!sr.data.session) { renderZones(false); return; }
+    sbShared.from('registrations').select('id').ilike('email', sr.data.session.user.email).maybeSingle().then(function (rr) {
+      if (!rr.data) { renderZones(false); return; }
+      myRegId = rr.data.id;
+      sbShared.from('rsvps').select('event_id, status').eq('registration_id', myRegId).then(function (vr) {
+        (vr.data || []).forEach(function (v) { myRsvps[v.event_id] = v.status; });
+        renderZones(true);
+      });
+    });
+  });
+});
 
 if (location.hash) {
   requestAnimationFrame(function () {

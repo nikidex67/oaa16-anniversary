@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Committee — OAA 16</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<style>
+.wrap-admin { max-width: 1320px; margin: 0 auto; padding: 24px 32px 72px; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 36px; }
+.stat { background: var(--field-bg); border-radius: 18px; padding: 18px 22px; }
+.stat .l { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.stat .v { font-size: 26px; font-weight: 800; margin-top: 4px; }
+.display-sm { font-family: var(--display); font-style: italic; font-weight: 400; font-size: 26px; line-height: 1.2; margin: 0 0 16px; }
+.gate { max-width: 460px; margin: 80px auto; text-align: center; }
+.search-results { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.search-results button { text-align: left; border: 0; background: var(--field-bg); border-radius: 10px; padding: 10px 14px; font-family: var(--font); font-size: 14px; cursor: pointer; }
+.search-results button:hover { background: #E4DEF5; }
+</style>
+</head>
+<body>
+
+<nav class="nav nav-light">
+  <img class="nav-logo" src="assets/oaa16-logo.png" alt="OAA 16">
+  <div class="nav-links">
+    <span class="pill pill-soft">🔒 Committee only</span>
+    <a href="#" onclick="sbA.auth.signOut().then(function(){location.href='signin.html'}); return false;">Sign out</a>
+  </div>
+</nav>
+
+<div class="gate" id="gate">
+  <img src="assets/oaa16-logo.png" alt="OAA 16" style="height:72px;margin-bottom:20px">
+  <h1 style="font-weight:800;font-size:26px;margin:0 0 8px">Committee area</h1>
+  <p style="font-size:14.5px;color:var(--muted);line-height:1.6" id="gate-msg">Checking your access…</p>
+  <div id="gate-actions" style="display:none;margin-top:16px">
+    <a class="btn btn-ink btn-sm" href="signin.html">Sign in</a>
+  </div>
+</div>
+
+<div class="wrap-admin" id="admin-ui" style="display:none">
+  <p class="page-eyebrow">Committee</p>
+  <h1 class="page-title" style="margin-bottom:6px">Operations</h1>
+  <p class="page-sub">Live numbers from the member database. Visible to committee members only.</p>
+
+  <div class="stat-grid" id="stats"></div>
+
+  <div style="display:flex;gap:36px;flex-wrap:wrap;align-items:flex-start">
+    <div style="flex:1 1 420px;min-width:0">
+      <p class="display-sm">Dues by year</p>
+      <div class="card-list" id="sched-list"><div style="padding:20px 0;color:var(--muted);font-size:14px">Loading…</div></div>
+
+      <p class="display-sm" style="margin-top:32px">Event RSVPs</p>
+      <div class="card-list" id="rsvp-list"><div style="padding:20px 0;color:var(--muted);font-size:14px">Loading…</div></div>
+    </div>
+
+    <div style="flex:1 1 420px;min-width:0">
+      <p class="display-sm">Record an offline payment</p>
+      <div class="card">
+        <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted);line-height:1.6">For cash or direct MoMo taken in person. This writes to the ledger and counts toward the member's dues immediately.</p>
+        <input type="text" id="man-search" placeholder="Search member by name or email…" oninput="manSearch()">
+        <div class="search-results" id="man-results"></div>
+        <div id="man-selected" style="display:none;background:var(--field-bg);border-radius:12px;padding:10px 14px;font-size:14px;margin-top:10px"></div>
+        <div style="display:flex;gap:12px;margin-top:14px">
+          <input type="number" id="man-amount" placeholder="Amount (GH₵)" min="1" step="1">
+          <select id="man-channel" class="chevron" style="flex:0 0 150px">
+            <option value="cash">Cash</option>
+            <option value="momo_direct">Direct MoMo</option>
+          </select>
+        </div>
+        <div id="man-msg" style="display:none;border-radius:12px;padding:10px 14px;font-size:13px;margin-top:12px"></div>
+        <button class="btn btn-accent btn-sm" style="margin-top:14px" onclick="manRecord()">Record payment</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="display-sm" style="margin-top:40px">Recent payments</p>
+  <div class="card-list" style="overflow-x:auto" id="pay-list"><div style="padding:20px 0;color:var(--muted);font-size:14px">Loading…</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+var sbA = window.supabase.createClient(OAA_SUPABASE_URL, OAA_SUPABASE_KEY);
+var myEmail = null;
+var manSel = null;
+
+sbA.auth.getSession().then(function (r) {
+  if (!r.data.session) {
+    gate('You need to sign in with a committee email to view this page.', true);
+    return;
+  }
+  myEmail = r.data.session.user.email;
+  sbA.from('committee_members').select('email').maybeSingle().then(function (c) {
+    if (!c.data) {
+      gate('Signed in as ' + myEmail + ' — this account is not on the committee list.', true);
+      return;
+    }
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('admin-ui').style.display = 'block';
+    loadAll();
+  });
+});
+
+function gate(msg, showActions) {
+  document.getElementById('gate-msg').textContent = msg;
+  document.getElementById('gate-actions').style.display = showActions ? 'block' : 'none';
+}
+
+function loadAll() {
+  sbA.from('dues_schedules').select('*').eq('active', true).then(function (sr) {
+    var schedules = sr.data || [];
+    return Promise.all([
+      sbA.from('registrations').select('id', { count: 'exact', head: true }),
+      sbA.from('payments').select('amount, status, channel, provider, provider_ref, created_at, registration_id').order('created_at', { ascending: false }).limit(400),
+      Promise.all(schedules.map(function (sc) {
+        return sbA.from('member_dues').select('id', { count: 'exact', head: true }).eq('schedule_id', sc.id)
+          .then(function (c) { return { schedule_id: sc.id, count: c.count || 0 }; });
+      })),
+      sbA.from('events').select('id, title, starts_on').order('starts_on'),
+      sbA.from('rsvps').select('event_id, status'),
+      sbA.from('registrations').select('id, first_name, last_name'),
+    ]).then(function (r) { return { schedules: schedules, r: r }; });
+  }).then(function (out) {
+    var schedules = out.schedules;
+    var r = out.r;
+    var regCount = r[0].count || 0;
+    var payments = r[1].data || [];
+    var schedCounts = r[2];
+    var events = r[3].data || [];
+    var rsvps = r[4].data || [];
+    var regs = r[5].data || [];
+    var regName = {};
+    regs.forEach(function (g) { regName[g.id] = g.first_name + ' ' + g.last_name; });
+
+    var collected = 0, pendingAmt = 0, paidBySched = {};
+    payments.forEach(function (p) {
+      if (p.status === 'success') { collected += p.amount; }
+      if (p.status === 'pending') pendingAmt += p.amount;
+    });
+
+    var countBySched = {};
+    schedCounts.forEach(function (c) { countBySched[c.schedule_id] = c.count; });
+    var totalDue = 0;
+    schedules.forEach(function (sc) { totalDue += sc.amount * (countBySched[sc.id] || 0); });
+
+    document.getElementById('stats').innerHTML =
+      stat('Members', regCount) +
+      stat('Collected', oaaGhs(collected)) +
+      stat('Outstanding', oaaGhs(Math.max(totalDue - collected, 0))) +
+      stat('Pending review', oaaGhs(pendingAmt));
+
+    document.getElementById('sched-list').innerHTML = schedules.map(function (s) {
+      var assigned = countBySched[s.id] || 0;
+      return '<div class="row-item" style="display:flex;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid rgba(14,12,9,.06)">' +
+        '<div><b>' + esc(s.name) + '</b><div style="font-size:12.5px;color:var(--muted)">' + oaaGhs(s.amount) + ' × ' + assigned + ' members</div></div>' +
+        '<b>' + oaaGhs(s.amount * assigned) + '</b></div>';
+    }).join('') || '<div style="padding:16px 0;color:var(--muted)">No schedules.</div>';
+
+    document.getElementById('rsvp-list').innerHTML = events.map(function (e) {
+      var going = rsvps.filter(function (v) { return v.event_id === e.id && v.status === 'going'; }).length;
+      var no = rsvps.filter(function (v) { return v.event_id === e.id && v.status === 'not_going'; }).length;
+      return '<div style="display:flex;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid rgba(14,12,9,.06)">' +
+        '<div><b>' + esc(e.title) + '</b><div style="font-size:12.5px;color:var(--muted)">' + e.starts_on + '</div></div>' +
+        '<div style="text-align:right"><b style="color:var(--success-ink)">' + going + ' going</b><div style="font-size:12.5px;color:var(--muted)">' + no + ' can\'t make it</div></div></div>';
+    }).join('') || '<div style="padding:16px 0;color:var(--muted)">No events.</div>';
+
+    var head = '<div class="tbl-head" style="grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,.8fr) 90px;min-width:640px"><span>Date</span><span>Member</span><span>Method</span><span>Reference</span><span>Amount</span><span>Status</span></div>';
+    document.getElementById('pay-list').innerHTML = head + (payments.slice(0, 50).map(function (p) {
+      var date = new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      var method = p.provider === 'manual' ? ('Manual · ' + (p.channel || '')) : (p.channel === 'bank_transfer' ? 'Bank transfer' : 'Mobile Money');
+      var badge = p.status === 'success' ? '<span class="pill pill-good">Paid</span>' : p.status === 'pending' ? '<span class="pill pill-soft">Pending</span>' : '<span class="pill" style="background:#FBE4E4;color:var(--error)">' + esc(p.status) + '</span>';
+      return '<div class="tbl-row" style="grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,.8fr) 90px;min-width:640px">' +
+        '<span style="color:var(--muted)">' + date + '</span><span>' + esc(regName[p.registration_id] || '—') + '</span><span>' + esc(method) + '</span>' +
+        '<span class="mono" style="font-size:12px;color:var(--muted)">' + esc(p.provider_ref) + '</span><b>' + oaaGhs(p.amount) + '</b>' + badge + '</div>';
+    }).join('') || '<div style="padding:16px 0;color:var(--muted)">No payments yet.</div>');
+  });
+}
+
+function stat(l, v) { return '<div class="stat"><div class="l">' + l + '</div><div class="v">' + v + '</div></div>'; }
+
+var searchT = null;
+function manSearch() {
+  clearTimeout(searchT);
+  var q = document.getElementById('man-search').value.trim();
+  if (q.length < 2) { document.getElementById('man-results').innerHTML = ''; return; }
+  searchT = setTimeout(function () {
+    sbA.from('registrations').select('id, first_name, last_name, email, house')
+      .or('first_name.ilike.%' + q + '%,last_name.ilike.%' + q + '%,email.ilike.%' + q + '%')
+      .limit(6).then(function (r) {
+        document.getElementById('man-results').innerHTML = (r.data || []).map(function (m) {
+          return '<button onclick=\'manPick(' + JSON.stringify(m).replace(/'/g, '&#39;') + ')\'>' +
+            esc(m.first_name + ' ' + m.last_name) + ' <span style="color:var(--muted);font-size:12.5px">· ' + esc(m.house) + ' · ' + esc(m.email) + '</span></button>';
+        }).join('');
+      });
+  }, 250);
+}
+
+function manPick(m) {
+  manSel = m;
+  document.getElementById('man-results').innerHTML = '';
+  document.getElementById('man-search').value = '';
+  var el = document.getElementById('man-selected');
+  el.style.display = 'block';
+  el.innerHTML = 'Recording for <b>' + esc(m.first_name + ' ' + m.last_name) + '</b> (' + esc(m.house) + ')';
+}
+
+function manMsg(text, ok) {
+  var el = document.getElementById('man-msg');
+  el.style.display = 'block';
+  el.style.background = ok ? 'var(--success-bg)' : '#FBE4E4';
+  el.style.color = ok ? 'var(--success-ink)' : 'var(--error)';
+  el.textContent = text;
+}
+
+function manRecord() {
+  if (!manSel) { manMsg('Search and pick a member first.', false); return; }
+  var ghs = Number(document.getElementById('man-amount').value);
+  if (!Number.isFinite(ghs) || ghs <= 0) { manMsg('Enter a valid amount.', false); return; }
+  var ref = 'MAN-' + Date.now().toString(36).toUpperCase();
+  sbA.from('payments').insert({
+    registration_id: manSel.id,
+    amount: Math.round(ghs * 100),
+    provider: 'manual',
+    provider_ref: ref,
+    status: 'success',
+    channel: document.getElementById('man-channel').value,
+    recorded_by: myEmail,
+    paid_at: new Date().toISOString(),
+  }).then(function (r) {
+    if (r.error) { manMsg('Could not record: ' + r.error.message, false); return; }
+    manMsg('Recorded ' + oaaGhs(Math.round(ghs * 100)) + ' for ' + manSel.first_name + ' (ref ' + ref + ').', true);
+    manSel = null;
+    document.getElementById('man-selected').style.display = 'none';
+    document.getElementById('man-amount').value = '';
+    loadAll();
+  });
+}
+
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+</script>
+
+</body>
+</html>
