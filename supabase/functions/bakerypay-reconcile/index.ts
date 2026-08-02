@@ -150,7 +150,7 @@ async function sendReceipt(
     Your dues balance updates automatically on <a href="https://oaa2016.org" style="color:#7C3AED">oaa2016.org</a>.
     This email is your receipt — questions? Just reply.
   </td></tr>
-  <tr><td style="padding:20px 36px;background:#F0EDF8;font-size:11.5px;line-height:1.6;color:#6B6080">
+  <tr><td align="center" style="padding:20px 36px;background:#F0EDF8;font-size:11.5px;line-height:1.6;color:#6B6080;text-align:center">
     OAA 16 · Achimota School Class of 2016 · 10 Years On
   </td></tr>
 </table>
@@ -177,7 +177,9 @@ async function sendReceipt(
       to: reg.email,
       subject: `Payment received — ${ghs(p.amount)}`,
       content: `Thanks ${first}!\n\nWe received ${ghs(p.amount)} toward your OAA 16 dues.\nReference: ${p.provider_ref}\n${textBalance}\nYour dues balance updates automatically on oaa2016.org.\n\n— OAA 16\nThis is your receipt. Questions? Just reply.`,
-      html,
+      // Collapse template whitespace: blank/indented lines become '=20'
+      // artifacts under quoted-printable encoding in some clients.
+      html: html.replace(/\n\s*/g, ' ').trim(),
     })
   } finally {
     await client.close()
