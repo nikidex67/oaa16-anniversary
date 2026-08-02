@@ -1,4 +1,4 @@
--- OAA 16 payments schema — DRAFT, not yet applied to production.
+-- OAA 16 payments schema — APPLIED to production 2 Aug 2026.
 -- See PAYMENTS.md for the design rationale. Amounts are integers in pesewas.
 
 create table public.dues_schedules (
@@ -27,7 +27,7 @@ create table public.payments (
   schedule_id     uuid references public.dues_schedules(id),  -- null = unallocated/general
   amount          integer not null check (amount > 0),        -- pesewas
   currency        text not null default 'GHS',
-  provider        text not null check (provider in ('paystack', 'manual')),
+  provider        text not null check (provider in ('bakerypay', 'manual')),
   provider_ref    text not null,          -- our DUES-XXXX-NNN reference
   status          text not null default 'pending'
                     check (status in ('pending', 'success', 'failed', 'refunded')),

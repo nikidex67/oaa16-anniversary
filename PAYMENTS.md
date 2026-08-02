@@ -46,6 +46,18 @@ change the generic design:
 - Disbursement fees, and settlement timing to a bank account.
 - Bank of Ghana licensing (theirs or their aggregator's).
 
+## Build status (2 Aug 2026)
+
+- Schema **applied to production** (tables locked by RLS, no anon access).
+- `bakerypay-init` + `bakerypay-reconcile` edge functions **deployed**, running
+  in **mock mode** (`BAKERYPAY_MOCK=true`) until real credentials exist.
+- Reconciler scheduled via pg_cron every 5 minutes.
+- End-to-end verified in mock mode: init → pending row → reconcile → success
+  → receipt email → balance view math correct; replays are no-ops.
+- To go live: set `BAKERYPAY_TOKEN`, flip `BAKERYPAY_MOCK=false`, and resolve
+  the open questions above (esp. token lifetime + the `{id}` vs reference
+  assumption in the reconciler).
+
 ## Invariants (non-negotiable)
 
 1. **Money is integers in pesewas.** Never floats, never strings with `₵`.
