@@ -69,7 +69,7 @@
 .ev-card .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 
 .merch-card {
-  flex: 0 0 320px; overflow: hidden; position: relative; min-height: 440px;
+  flex: 1 1 240px; min-width: 240px; overflow: hidden; position: relative; min-height: 440px;
   box-shadow: 0 6px 18px rgba(14,12,9,.12); display: flex; align-items: flex-end;
 }
 .merch-card .alt { position: absolute; inset: 0; opacity: 0; transition: opacity .35s; pointer-events: none; }
@@ -171,20 +171,20 @@
   <div style="margin-top:72px">
     <p class="display-section">Anniversary merch</p>
     <div class="rule"></div>
-    <div class="split">
-      <div class="split-copy">
+    <div>
+      <div class="split-copy" style="max-width:620px">
         <h3>Available now</h3>
-        <p class="desc">The anniversary tee is here! Grab yours now and rep Akora 16. Ships in 3-5 working days with free delivery within Accra.</p>
+        <p class="desc">The anniversary collection is here! Grab yours now and rep Akora 16. Ships in 3-5 working days with free delivery within Accra.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
           <a href="merch.html" class="btn btn-soft btn-sm">Browse the shop</a>
         </div>
       </div>
-      <div style="flex:1 1 480px;min-width:0;display:flex;gap:20px;flex-wrap:wrap">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:32px">
         <div class="merch-card" style="background:#0E0C09 url('assets/tee-black.png') center top/cover no-repeat">
           <div class="alt" aria-hidden="true" style="background:#0E0C09 url('assets/tee-black-back.png') center 30%/cover no-repeat"></div>
           <div class="foot">
             <h3>Black Tee</h3>
-            <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Ships in 3-5 working days</span></div>
+            <div class="tags"><span class="pill pill-glass">GH₵225</span><span class="pill pill-glass">M – 3XL</span></div>
             <button class="btn btn-white btn-sm" style="width:100%" onclick="openProduct(0)">Pre-order →</button>
           </div>
         </div>
@@ -192,8 +192,22 @@
           <div class="alt" aria-hidden="true" style="background:#EDE8F5 url('assets/tee-beige-front-3.png') center 45%/cover no-repeat"></div>
           <div class="foot">
             <h3>Beige Tee</h3>
-            <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Ships in 3-5 working days</span></div>
+            <div class="tags"><span class="pill pill-glass">GH₵225</span><span class="pill pill-glass">M – 3XL</span></div>
             <button class="btn btn-white btn-sm" style="width:100%" onclick="openProduct(1)">Pre-order →</button>
+          </div>
+        </div>
+        <div class="merch-card" style="background:#0E0C09 url('assets/baby-tee-black.jpg') center 20%/cover no-repeat">
+          <div class="foot">
+            <h3>Black Baby Tee</h3>
+            <div class="tags"><span class="pill pill-glass">GH₵150</span><span class="pill pill-glass">Free size</span></div>
+            <button class="btn btn-white btn-sm" style="width:100%" onclick="openProduct(2)">Order →</button>
+          </div>
+        </div>
+        <div class="merch-card" style="background:#EDE8F5 url('assets/baby-tee-bw.jpg') center 20%/cover no-repeat">
+          <div class="foot">
+            <h3>Black &amp; White Baby Tee</h3>
+            <div class="tags"><span class="pill pill-glass">GH₵150</span><span class="pill pill-glass">Sizes 8 – 16</span></div>
+            <button class="btn btn-white btn-sm" style="width:100%" onclick="openProduct(3)">Order →</button>
           </div>
         </div>
       </div>
