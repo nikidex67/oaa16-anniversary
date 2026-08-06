@@ -107,7 +107,7 @@
           <button class="btn btn-white" data-reg-only onclick="openModal('reg-modal')">Register <span>→</span></button>
           <a class="btn btn-glass" href="events.html">See what's coming</a>
         </div>
-        <div class="reg-count"><i></i>425 Akoras registered</div>
+        <div class="reg-count"><i></i><span id="reg-count-n">460</span>&nbsp;Akoras registered</div>
       </div>
       <div class="hero-crest"><img src="assets/2016-crest.webp" alt="2016 crest"></div>
     </div>
@@ -257,6 +257,10 @@ function goEvent(i) {
   slider.scrollTo({ left: Math.min(target, max), behavior: 'smooth' });
 }
 setEvent(0);
+
+sbShared.from('public_stats').select('registrations').single().then(function (r) {
+  if (r.data && r.data.registrations) document.getElementById('reg-count-n').textContent = r.data.registrations;
+});
 </script>
 
 </body>

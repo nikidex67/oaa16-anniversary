@@ -27,3 +27,9 @@ create policy "member reads own orders" on public.orders
 create policy "committee reads all orders" on public.orders
   for select to authenticated
   using (public.is_committee());
+
+-- Public count-only stats (added same day): the homepage "N Akoras registered"
+-- counter. View runs with owner rights, so anon sees the count and nothing else.
+create or replace view public.public_stats as
+  select count(*)::int as registrations from public.registrations;
+grant select on public.public_stats to anon, authenticated;
