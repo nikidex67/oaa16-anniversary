@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Achimota School Class of 2016 · 10 Years On</title>
-<meta name="description" content="Achimota School Class of 2016 (OAA 16) 10th anniversary. Reconnect with the year group — register your details and join the WhatsApp group.">
+<title>OAA 16 — Achimota School Class of 2016 · 10 Years On</title>
+<meta name="description" content="Achimota School Class of 2016 (OAA 16) 10th anniversary. Reconnect with the year group — register, RSVP for Founders' weekend, and manage your dues.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://oaa2016.org/">
 <meta property="og:title" content="Achimota School Class of 2016 · 10 Years On">
@@ -21,229 +21,179 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=6">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<style>
+.hero { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; padding: 40px 0 64px; }
+.hero-copy { flex: 1 1 460px; min-width: 0; }
+.hero-copy h1 {
+  font-family: var(--display); font-style: italic; font-weight: 400;
+  font-size: clamp(52px, 7vw, 87px); line-height: 1.05; margin: 14px 0 18px;
+  color: #FFFFFF; text-wrap: balance; text-transform: capitalize;
+}
+.hero-copy p { font-size: 17px; line-height: 1.65; color: rgba(255,255,255,.72); margin: 0 0 30px; max-width: 460px; text-wrap: pretty; }
+.hero-crest { flex: 1 1 380px; min-width: 0; min-height: 480px; display: flex; align-items: center; justify-content: center; }
+.hero-crest img { max-width: 86%; max-height: min(520px, 62vh); width: auto; filter: drop-shadow(0 20px 40px rgba(0,0,0,.35)); animation: crest-bob 4.5s ease-in-out infinite; }
+.reg-count { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: rgba(255,255,255,.85); margin-top: 10px; }
+.reg-count i { width: 7px; height: 7px; border-radius: 50%; background: #B79CED; animation: dot-blink 1.6s ease-in-out infinite; }
+
+.split { display: flex; gap: 48px; flex-wrap: wrap; align-items: flex-start; }
+.split-copy { flex: 0 1 340px; min-width: 0; max-width: 340px; display: flex; flex-direction: column; gap: 16px; align-self: stretch; }
+.split-copy h3 { margin: 0 0 10px; font-size: 34px; font-weight: 800; line-height: 1.15; text-wrap: balance; white-space: pre-line; }
+.split-copy .desc { margin: 0; font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 440px; text-wrap: pretty; }
+.ev-meta div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid rgba(14,12,9,.12); font-size: 14px; }
+.ev-meta div:last-child { border-bottom: 0; }
+
+.ev-slider {
+  display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x proximity;
+  scroll-padding-left: 28px;
+  padding: 32px 96px 64px 28px; margin: -32px -61px -16px -28px;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.ev-slider::-webkit-scrollbar { display: none; }
+.ev-card {
+  cursor: pointer; flex: 0 0 320px; scroll-snap-align: start; overflow: hidden;
+  position: relative; min-height: 440px;
+  background: linear-gradient(160deg, #2A1B4A, #5B21B6 45%, #7C3AED 90%);
+  box-shadow: 0 6px 18px rgba(14,12,9,.12);
+  display: flex; align-items: flex-end; transition: box-shadow .25s;
+}
+.ev-card.on { box-shadow: 0 16px 36px rgba(124,58,237,.38), inset 0 0 0 2px rgba(255,255,255,.65); }
+.ev-card .when { position: absolute; top: 16px; right: 16px; white-space: nowrap; }
+.ev-card .foot {
+  padding: 24px; width: 100%;
+  background: linear-gradient(to top, rgba(14,12,9,.72) 30%, rgba(14,12,9,.28) 75%, transparent);
+  backdrop-filter: blur(2px); display: flex; flex-direction: column;
+}
+.ev-card h3 { margin: 0 0 8px; font-size: 22px; font-weight: 800; color: #FFFFFF; }
+.ev-card .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
+.merch-card {
+  flex: 0 0 320px; overflow: hidden; position: relative; min-height: 440px;
+  box-shadow: 0 6px 18px rgba(14,12,9,.12); display: flex; align-items: flex-end;
+}
+.merch-card .alt { position: absolute; inset: 0; opacity: 0; transition: opacity .35s; pointer-events: none; }
+.merch-card:hover .alt { opacity: 1; }
+.merch-card .foot {
+  padding: 24px; width: 100%; position: relative;
+  background: linear-gradient(to top, rgba(14,12,9,.72) 30%, rgba(14,12,9,.28) 75%, transparent);
+  backdrop-filter: blur(2px); display: flex; flex-direction: column;
+}
+.merch-card h3 { margin: 0 0 12px; font-size: 22px; font-weight: 800; color: #FFFFFF; }
+.merch-card .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+</style>
 </head>
 <body>
 
-<div class="page">
+<div class="band">
+  <div class="band-bg" aria-hidden="true"></div>
+  <nav class="nav nav-dark">
+    <a href="index.html"><img class="nav-logo" src="assets/oaa16-logo-white.png" alt="OAA 16"></a>
+    <div class="nav-links">
+      <a href="index.html" class="on">Home</a>
+      <a href="events.html">Events</a>
+      <a href="merch.html">Merch</a>
+      <button type="button" data-reg-only onclick="openModal('reg-modal')">Register</button>
+      <a href="signin.html" class="nav-signin">Sign in</a>
+    </div>
+  </nav>
 
-  <!-- ============ LEFT: FORM PANEL ============ -->
-  <div class="form-panel">
-    <img src="assets/oaa16-watermark.png" alt="" aria-hidden="true" class="watermark">
-    <div class="form-panel-inner">
-      <div class="form-column">
-
-        <!-- ============ SUBMITTED STATE ============ -->
-        <div id="submitted-state" class="submitted-wrap" hidden>
-          <div class="submitted-card">
-            <div class="submitted-check">✓</div>
-            <div class="submitted-title">You're in! 🎉</div>
-            <div class="submitted-copy">We'll be in touch with anniversary updates. Join the WhatsApp group so you don't miss anything.</div>
-            <a id="whatsapp-cta" href="#" target="_blank" rel="noopener" class="whatsapp-btn">Join the WhatsApp Group <span>↗</span></a>
-          </div>
-          <div class="eyebrow center">Class of 2016 · 10 Years On</div>
+  <div class="band-inner" style="padding-top:24px">
+    <div class="hero">
+      <div class="hero-copy">
+        <h1>Ten years on. One year group.</h1>
+        <p>The Achimota School Class of 2016 is reconnecting for our 10th anniversary — career fair, inter-house sports, thanksgiving and more. Register to be counted.</p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <button class="btn btn-white" data-reg-only onclick="openModal('reg-modal')">Register <span>→</span></button>
+          <a class="btn btn-glass" href="events.html">See what's coming</a>
         </div>
+        <div class="reg-count"><i></i>425 Akoras registered</div>
+      </div>
+      <div class="hero-crest"><img src="assets/2016-crest.webp" alt="2016 crest"></div>
+    </div>
+  </div>
+</div>
 
-        <!-- ============ FORM STATE ============ -->
-        <div id="form-state" class="form-wrap">
+<div class="wrap" style="padding-top:56px;padding-bottom:72px">
 
-          <div>
-            <img src="assets/oaa16-logo.png" alt="OAA 16" class="logo">
-          </div>
-
-          <div class="heading-block">
-            <h1>Hi there, Akora</h1>
-            <p>It's been 10 years! Help us reconnect the year group. <br>Fill in your details below.</p>
-          </div>
-
-          <form id="oaa-form" novalidate>
-
-            <!-- ============ STEP 1 ============ -->
-            <div id="step-1" class="step">
-
-              <!-- Names -->
-              <div class="field-row">
-                <div class="field">
-                  <input id="oaa-first" name="firstName" type="text" placeholder="First name(s)" autocomplete="given-name">
-                  <div class="error-msg" data-error-for="firstName" hidden></div>
-                </div>
-                <div class="field">
-                  <input id="oaa-last" name="lastName" type="text" placeholder="Last name" autocomplete="family-name">
-                  <div class="error-msg" data-error-for="lastName" hidden></div>
-                </div>
-              </div>
-
-              <!-- Nickname -->
-              <div class="field-col">
-                <input id="oaa-nickname" name="nickname" type="text" placeholder="School nickname (if you had one)">
-              </div>
-
-              <!-- Email + Gender -->
-              <div class="field-row">
-                <div class="field field-wide">
-                  <input id="oaa-email" name="email" type="email" placeholder="Email address" autocomplete="email">
-                  <div class="error-msg" data-error-for="email" hidden></div>
-                </div>
-                <div class="field field-narrow">
-                  <select id="oaa-gender" name="gender" class="chevron-select" aria-label="Gender">
-                    <option value="">Gender…</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                  </select>
-                  <div class="error-msg" data-error-for="gender" hidden></div>
-                </div>
-              </div>
-
-              <!-- Phone -->
-              <div class="field-col">
-                <div class="phone-row">
-                  <select id="oaa-cc" name="countryCode" aria-label="Country code" class="cc-select"></select>
-                  <input id="oaa-phone" name="phone" type="tel" placeholder="Phone number" autocomplete="tel-national">
-                </div>
-                <div class="error-msg" data-error-for="phone" hidden></div>
-                <label class="checkbox-label">
-                  <input id="oaa-is-wa" type="checkbox">
-                  This is my WhatsApp number
-                </label>
-              </div>
-
-              <!-- WhatsApp number (only when phone is NOT WhatsApp) -->
-              <div id="wa-field" class="field-col wa-field">
-                <div class="phone-row">
-                  <select id="oaa-wa-cc" name="waCountryCode" aria-label="WhatsApp country code" class="cc-select"></select>
-                  <input id="oaa-wa" name="waPhone" type="tel" placeholder="WhatsApp number">
-                </div>
-                <div class="error-msg" data-error-for="waPhone" hidden></div>
-              </div>
-
-              <!-- WhatsApp group check -->
-              <div class="group-card">
-                <div class="group-card-label">Are you already in the OAA 16 WhatsApp group?</div>
-                <div class="group-options">
-                  <label class="radio-label">
-                    <input type="radio" name="ingroup" value="yes">
-                    Yes
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="ingroup" value="no">
-                    No
-                  </label>
-                  <div id="invite-hint" class="invite-hint" hidden><span class="dot"></span>You'll get the invite link after submitting.</div>
-                </div>
-                <div class="error-msg" data-error-for="inGroup" hidden></div>
-              </div>
-
-              <button type="button" id="next-btn" class="primary-btn">Next <span>→</span></button>
-              <div class="eyebrow center">Step 1 of 2 · Contact</div>
-            </div>
-
-            <!-- ============ STEP 2 ============ -->
-            <div id="step-2" class="step" hidden>
-
-              <!-- House + Class -->
-              <div class="field-row">
-                <div class="field">
-                  <select id="oaa-house" name="house" class="chevron-select">
-                    <option value="">Select house…</option>
-                  </select>
-                  <div class="error-msg" data-error-for="house" hidden></div>
-                </div>
-                <div class="field">
-                  <select id="oaa-class" name="classGroup" class="chevron-select">
-                    <option value="">Select class…</option>
-                    <optgroup label="Science">
-                      <option>Science 1</option><option>Science 2</option><option>Science 3</option><option>Science 4</option>
-                      <option>Science 5</option><option>Science 6</option><option>Science 7</option><option>Science 8</option>
-                    </optgroup>
-                    <optgroup label="Arts">
-                      <option>Arts 1</option><option>Arts 2</option><option>Arts 3</option><option>Arts 4</option>
-                      <option>Arts 5</option><option>Arts 6</option><option>Arts 7</option><option>Arts 8</option>
-                    </optgroup>
-                    <optgroup label="Home Econs">
-                      <option>Voc 1</option>
-                    </optgroup>
-                    <optgroup label="Visual Arts">
-                      <option>Voc 2</option>
-                    </optgroup>
-                  </select>
-                  <div class="error-msg" data-error-for="classGroup" hidden></div>
-                </div>
-              </div>
-
-              <!-- Profession + Company -->
-              <div class="field-row">
-                <div class="field">
-                  <input id="oaa-prof" name="profession" type="text" placeholder="Current profession">
-                </div>
-                <div class="field">
-                  <input id="oaa-company" name="company" type="text" placeholder="Company">
-                </div>
-              </div>
-
-              <!-- Industry -->
-              <div class="field-col">
-                <select id="oaa-industry" name="industry" class="chevron-select">
-                  <option value="">Select industry…</option>
-                  <option>Technology</option><option>Finance</option><option>Healthcare</option>
-                  <option>Law</option><option>Education</option><option>Energy</option>
-                  <option>Media &amp; Creative</option><option>Government</option>
-                  <option>Entrepreneurship</option><option>Other</option>
-                </select>
-              </div>
-
-              <!-- Description -->
-              <div class="field-col desc-field">
-                <textarea id="oaa-desc" name="description" rows="3" maxlength="300" placeholder="Briefly, what do you do?"></textarea>
-                <div class="char-count"><span id="desc-count">0</span>/300</div>
-              </div>
-
-              <button type="submit" id="register-btn" class="primary-btn">Register</button>
-              <div id="submit-error" class="error-msg center" hidden></div>
-
-              <div class="step-footer">
-                <button type="button" id="back-btn" class="back-btn"><span>←</span> Back</button>
-                <div class="eyebrow">Step 2 of 2 · About you</div>
-              </div>
-            </div>
-
-            <div class="privacy-note">We protect your privacy. Your details are used exclusively within the Akora 16 community. Stay connected with Akora 16 through our newsletter. <br>You can opt out anytime.</div>
-          </form>
+  <!-- Upcoming events -->
+  <p class="display-section">Upcoming events</p>
+  <div class="rule"></div>
+  <div class="split">
+    <div class="split-copy">
+      <div style="display:flex;flex-direction:column;gap:16px;min-height:400px">
+        <h3 id="ev-title"></h3>
+        <p class="desc" id="ev-desc"></p>
+        <div class="ev-meta" style="margin-top:8px">
+          <div><b id="ev-date"></b></div>
+          <div><b id="ev-venue"></b></div>
+          <div><b id="ev-time"></b></div>
         </div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:17px;align-items:center">
+        <a id="ev-href" href="events.html" class="btn btn-ink btn-sm">RSVP →</a>
+        <button class="arrow-btn" aria-label="Previous event" onclick="goEvent(activeEvent - 1)">←</button>
+        <button class="arrow-btn" aria-label="Next event" onclick="goEvent(activeEvent + 1)">→</button>
+      </div>
+    </div>
 
+    <div style="flex:1 1 480px;min-width:0;position:relative">
+      <div class="ev-slider" id="ev-slider">
+        <div class="ev-card" data-ev="0" onmouseenter="setEvent(0)">
+          <span class="pill pill-glass when">Fri · 14 Aug</span>
+          <div class="foot">
+            <h3>Career &amp; Mentorship Fair</h3>
+            <div class="tags"><span class="pill pill-glass">Achimota School</span><span class="pill pill-glass">Details soon</span></div>
+            <a href="events.html#career-fair" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
+          </div>
+        </div>
+        <div class="ev-card" data-ev="1" onmouseenter="setEvent(1)">
+          <span class="pill pill-glass when">Sat · 15 Aug</span>
+          <div class="foot">
+            <h3>BBQ &amp; Tennis Tournament</h3>
+            <div class="tags"><span class="pill pill-glass">Venue TBC</span><span class="pill pill-glass">Details soon</span></div>
+            <a href="events.html#bbq-tennis" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
+          </div>
+        </div>
+        <div class="ev-card" data-ev="2" onmouseenter="setEvent(2)">
+          <span class="pill pill-glass when">Sun · 16 Aug</span>
+          <div class="foot">
+            <h3>Thanksgiving Service</h3>
+            <div class="tags"><span class="pill pill-glass">Achimota School</span><span class="pill pill-glass">Details soon</span></div>
+            <a href="events.html#thanksgiving" class="btn btn-white btn-sm" style="width:100%">RSVP →</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ============ RIGHT: VISUAL PANEL ============ -->
-  <div class="visual-panel">
-    <div class="visual-overlay"></div>
-
-    <div class="visual-content">
-
-      <div class="crest-area">
-        <div class="crest-box">
-          <img src="assets/2016-crest.webp" alt="2016 crest" class="crest-img">
-          <div aria-hidden="true" class="crest-shine"></div>
+  <!-- Merch preview -->
+  <div style="margin-top:72px">
+    <p class="display-section">Anniversary merch</p>
+    <div class="rule"></div>
+    <div class="split">
+      <div class="split-copy">
+        <h3>Available now</h3>
+        <p class="desc">The anniversary tee is here! Grab yours now and rep Akora 16. Ships in 3-5 working days with free delivery within Accra.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+          <a href="merch.html" class="btn btn-soft btn-sm">Browse the shop</a>
         </div>
       </div>
-
-      <div class="visual-lower">
-        <div class="news-badge"><span class="badge-dot"></span>News &amp; Upcoming Events</div>
-
-        <div class="slides-headline">
-          <div class="slide" data-slide="0">10th Anniversary Career &amp; Mentorship fair. <span class="slide-sub">Dates, venue and lineup dropping soon.</span></div>
-          <div class="slide" data-slide="1">Join the WhatsApp Group. <span class="slide-sub">Stay in the loop with everything OAA 16.</span></div>
-        </div>
-
-        <div class="slides-footer">
-          <div class="slides-copy">
-            <div class="slide" data-slide="0">Check back here for announcements.</div>
-            <div class="slide" data-slide="1">Fill the form to find the link.</div>
+      <div style="flex:1 1 480px;min-width:0;display:flex;gap:20px;flex-wrap:wrap">
+        <div class="merch-card" style="background:#0E0C09 url('assets/tee-black.png') center top/cover no-repeat">
+          <div class="alt" aria-hidden="true" style="background:#0E0C09 url('assets/tee-black-back.png') center 30%/cover no-repeat"></div>
+          <div class="foot">
+            <h3>Black Tee</h3>
+            <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Ships in 3-5 working days</span></div>
+            <button class="btn btn-white btn-sm" style="width:100%" onclick="openProduct(0)">Pre-order →</button>
           </div>
-          <div class="slide-controls">
-            <button type="button" id="prev-slide" aria-label="Previous announcement" class="slide-btn">←</button>
-            <button type="button" id="next-slide" aria-label="Next announcement" class="slide-btn">→</button>
+        </div>
+        <div class="merch-card" style="background:#EDE8F5 url('assets/tee-beige.png') center top/cover no-repeat">
+          <div class="alt" aria-hidden="true" style="background:#EDE8F5 url('assets/tee-beige-front-3.png') center 45%/cover no-repeat"></div>
+          <div class="foot">
+            <h3>Beige Tee</h3>
+            <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Ships in 3-5 working days</span></div>
+            <button class="btn btn-white btn-sm" style="width:100%" onclick="openProduct(1)">Pre-order →</button>
           </div>
         </div>
       </div>
@@ -252,7 +202,48 @@
 
 </div>
 
+<div class="footer-dark"><div class="inner">
+  <span>© 2026 OAA 16 · Achimota School Class of 2016</span>
+  <span>info@oaa2016.org</span>
+</div></div>
+
+<div id="product-modal-root"></div>
+<div id="reg-modal-root"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
+<script src="config.js"></script>
+<script src="shared.js"></script>
+<script>
+var events = [
+  { title: 'Career & \nMentorship Fair', desc: "Panels and mentorship circles with the year group's doctors, engineers, founders, lawyers and creatives. Bring your questions — and your business cards.", date: 'Sat 5 Sep 2026', venue: 'Achimota School', time: '10:00 – 16:00', href: 'events.html#career-fair' },
+  { title: 'Inter-house Sports', desc: 'Fifteen houses, one trophy. Athletics, football, and the walking race nobody trains for. Wear your house colours.', date: 'Sat 24 Oct 2026', venue: 'Achimota School fields', time: '08:00', href: 'events.html#bbq-tennis' },
+  { title: 'Thanksgiving Service', desc: 'A service of thanksgiving for ten years — followed by a group photo on the very steps from 2016. Families welcome.', date: 'Sun 25 Oct 2026', venue: 'Achimota School', time: '09:30', href: 'events.html#thanksgiving' }
+];
+var activeEvent = 0;
+
+function setEvent(i) {
+  activeEvent = (i + 3) % 3;
+  var ev = events[activeEvent];
+  document.getElementById('ev-title').textContent = ev.title;
+  document.getElementById('ev-desc').textContent = ev.desc;
+  document.getElementById('ev-date').textContent = ev.date;
+  document.getElementById('ev-venue').textContent = ev.venue;
+  document.getElementById('ev-time').textContent = ev.time;
+  document.getElementById('ev-href').href = ev.href;
+  document.querySelectorAll('.ev-card').forEach(function (c) {
+    c.classList.toggle('on', Number(c.dataset.ev) === activeEvent);
+  });
+}
+function goEvent(i) {
+  setEvent(i);
+  var slider = document.getElementById('ev-slider');
+  var cards = slider.querySelectorAll('.ev-card');
+  var target = cards[activeEvent].offsetLeft - cards[0].offsetLeft;
+  var max = slider.scrollWidth - slider.clientWidth;
+  slider.scrollTo({ left: Math.min(target, max), behavior: 'smooth' });
+}
+setEvent(0);
+</script>
+
 </body>
 </html>
