@@ -48,11 +48,12 @@ if (sbShared) {
 /* ---------- Products ---------- */
 
 var PRODUCTS = [
-  { title: 'Black Tee', price: 22500, sizes: ['M', 'L', 'XL', '2XL', '3XL'], desc: 'Heavyweight cotton · oversized fit · 20/16 crest', imgs: ['assets/tee-black.png', 'assets/tee-black-back.png'] },
-  { title: 'Beige Tee', price: 22500, sizes: ['M', 'L', 'XL', '2XL', '3XL'], desc: 'Heavyweight cotton · oversized fit · 20/16 crest', imgs: ['assets/tee-beige-front-3.png', 'assets/tee-beige.png'] },
-  { title: 'Baby Tee', price: 15000, sizes: ['XS', 'S', 'M', 'L'], desc: 'Fitted baby tee · 20/16 crest · product photos coming soon', imgs: ['assets/tee-beige.png', 'assets/tee-beige-front-3.png'] }
+  { sku: 'black-tee', title: 'Black Tee', price: 22500, sizes: ['M', 'L', 'XL', '2XL', '3XL'], desc: 'Heavyweight cotton · oversized fit · 20/16 crest', imgs: ['assets/tee-black.png', 'assets/tee-black-back.png'] },
+  { sku: 'beige-tee', title: 'Beige Tee', price: 22500, sizes: ['M', 'L', 'XL', '2XL', '3XL'], desc: 'Heavyweight cotton · oversized fit · 20/16 crest', imgs: ['assets/tee-beige-front-3.png', 'assets/tee-beige.png'] },
+  { sku: 'black-baby-tee', title: 'Black Baby Tee', price: 15000, sizes: ['Free size'], desc: 'Fitted black baby tee · 20/16 crest · product photos coming soon', imgs: ['assets/tee-black.png', 'assets/tee-black-back.png'] },
+  { sku: 'bw-baby-tee', title: 'Black & White Baby Tee', price: 15000, sizes: ['8', '10', '12', '14', '16'], desc: 'Fitted black & white baby tee · 20/16 crest · product photos coming soon', imgs: ['assets/tee-black.png', 'assets/tee-beige.png'] }
 ];
-var prod = { idx: 0, img: 0, size: '', added: false };
+var prod = { idx: 0, img: 0, size: '', qty: 1, added: false };
 
 (function buildProductModal() {
   var root = document.getElementById('product-modal-root');
@@ -73,8 +74,17 @@ var prod = { idx: 0, img: 0, size: '', added: false };
     '<h3 id="prod-title" style="margin:0;font-size:28px;font-weight:800;line-height:1.1"></h3>' +
     '<div style="font-size:14px;color:var(--muted)" id="prod-desc"></div>' +
     '<div style="font-size:22px;font-weight:800" id="prod-price"></div>' +
-    '<select id="prod-size" class="chevron" aria-label="Select size" onchange="setProdSize(this.value)"></select>' +
-    '<button id="prod-bag" class="btn btn-ink" style="width:100%" onclick="addToBag()">Pre-order</button>' +
+    '<div style="display:flex;gap:10px"><select id="prod-size" class="chevron" aria-label="Select size" style="flex:1" onchange="setProdSize(this.value)"></select>' +
+    '<select id="prod-qty" class="chevron" aria-label="Quantity" style="flex:0 0 92px" onchange="prod.qty=Number(this.value)"><option value="1">Qty 1</option><option value="2">Qty 2</option><option value="3">Qty 3</option><option value="4">Qty 4</option><option value="5">Qty 5</option></select></div>' +
+    '<button id="prod-bag" class="btn btn-ink" style="width:100%" onclick="buyNow()">Buy now · MoMo</button>' +
+    '<div id="prod-pay" style="display:none;flex-direction:column;gap:10px;background:var(--field-bg);border-radius:14px;padding:14px 16px">' +
+    '<div style="font-size:13px;font-weight:700">Pay with Mobile Money</div>' +
+    '<input type="tel" id="prod-phone" placeholder="MoMo number · 0XXXXXXXXX" maxlength="10" style="background:#fff">' +
+    '<select id="prod-operator" class="chevron" style="background:#fff"><option value="mtn">MTN MoMo</option><option value="vodafone">Telecel Cash</option><option value="airteltigo">AT Money</option></select>' +
+    '<div id="prod-fee" style="font-size:12.5px;color:var(--muted);line-height:1.5"></div>' +
+    '<button class="btn btn-accent btn-sm" id="prod-pay-go" onclick="confirmBuy()">Send payment prompt</button>' +
+    '</div>' +
+    '<div id="prod-msg" style="display:none;border-radius:12px;padding:11px 14px;font-size:13px;line-height:1.5"></div>' +
     '<div><div style="font-size:12px;color:var(--muted)">Estimated delivery</div><b style="font-size:14.5px">Ships in 3 – 5 working days</b></div>' +
     '<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;color:var(--muted)">Also available</span>' +
     '<div style="display:flex;gap:8px" id="prod-alts"></div></div>' +
@@ -110,21 +120,115 @@ function renderProduct() {
     b.onclick = function () { prod = { idx: i, img: 0, size: '', added: false, sizeErr: false }; renderProduct(); };
     alts.appendChild(b);
   });
+  document.getElementById('prod-qty').value = String(prod.qty);
   var bag = document.getElementById('prod-bag');
-  if (prod.added) {
-    bag.textContent = '✓ Pre-order noted — size ' + prod.size;
-    bag.style.background = 'var(--success-bg)'; bag.style.color = 'var(--success-ink)';
+  if (typeof OAA_ORDER_DEADLINE !== 'undefined' && Date.now() > new Date(OAA_ORDER_DEADLINE).getTime()) {
+    bag.textContent = 'Ordering closed';
+    bag.disabled = true; bag.style.opacity = .55;
+  } else if (typeof OAA_PAYMENTS_LIVE !== 'undefined' && !OAA_PAYMENTS_LIVE) {
+    bag.textContent = 'Ordering opens soon';
+    bag.disabled = true; bag.style.opacity = .55;
   } else {
-    bag.textContent = 'Pre-order'; bag.style.background = ''; bag.style.color = '';
+    bag.textContent = 'Buy now · MoMo';
+    bag.disabled = false; bag.style.opacity = 1;
   }
 }
 
-function openProduct(idx) { prod = { idx: idx, img: 0, size: '', added: false, sizeErr: false }; renderProduct(); openModal('prod-modal'); }
+function openProduct(idx) {
+  prod = { idx: idx, img: 0, size: '', qty: 1, added: false, sizeErr: false };
+  renderProduct();
+  document.getElementById('prod-pay').style.display = 'none';
+  prodMsg('');
+  openModal('prod-modal');
+}
 function setProdImg(i) { prod.img = i; renderProduct(); }
-function setProdSize(v) { prod.size = v; prod.sizeErr = false; prod.added = false; renderProduct(); }
-function addToBag() {
+function setProdSize(v) { prod.size = v; prod.sizeErr = false; renderProduct(); }
+
+function prodMsg(text, kind) {
+  var el = document.getElementById('prod-msg');
+  if (!text) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.style.background = kind === 'ok' ? 'var(--success-bg)' : kind === 'err' ? '#FBE4E4' : 'var(--field-bg)';
+  el.style.color = kind === 'ok' ? 'var(--success-ink)' : kind === 'err' ? 'var(--error)' : 'var(--ink)';
+  el.innerHTML = text;
+}
+
+function buyNow() {
+  if (typeof OAA_PAYMENTS_LIVE !== 'undefined' && !OAA_PAYMENTS_LIVE) return;
+  if (typeof OAA_ORDER_DEADLINE !== 'undefined' && Date.now() > new Date(OAA_ORDER_DEADLINE).getTime()) return;
   if (!prod.size) { prod.sizeErr = true; renderProduct(); return; }
-  prod.added = true; renderProduct();
+  if (!sbShared) return;
+  sbShared.auth.getSession().then(function (r) {
+    if (!r.data.session) {
+      prodMsg('You need a member account to order. <a href="signin.html" style="color:var(--accent);font-weight:700">Sign in →</a> or register on the <a href="index.html" style="color:var(--accent);font-weight:700">home page</a>.');
+      return;
+    }
+    sbShared.from('registrations').select('phone').ilike('email', r.data.session.user.email).maybeSingle().then(function (q) {
+      var phone = ((q.data || {}).phone || '').replace(/\D/g, '');
+      if (phone.length === 9) phone = '0' + phone;
+      if (/^0\d{9}$/.test(phone)) document.getElementById('prod-phone').value = phone;
+      var p = PRODUCTS[prod.idx];
+      var total = p.price * prod.qty;
+      var fee = Math.round(total * OAA_MOMO_FEE_RATE);
+      document.getElementById('prod-fee').textContent =
+        prod.qty + ' × ' + p.title + ' (' + prod.size + ') = ' + oaaGhs(total) +
+        ". You'll be charged " + oaaGhs(total + fee) + ' (includes the 2.5% provider fee).';
+      document.getElementById('prod-pay').style.display = 'flex';
+      prodMsg('');
+    });
+  });
+}
+
+function confirmBuy() {
+  var phone = document.getElementById('prod-phone').value.trim();
+  if (!/^0\d{9}$/.test(phone)) { prodMsg('Enter your MoMo number as 0XXXXXXXXX.', 'err'); return; }
+  var go = document.getElementById('prod-pay-go');
+  go.disabled = true; go.textContent = 'Sending prompt…';
+  sbShared.auth.getSession().then(function (r) {
+    if (!r.data.session) { go.disabled = false; go.textContent = 'Send payment prompt'; return; }
+    fetch(OAA_PAY_INIT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + r.data.session.access_token },
+      body: JSON.stringify({
+        order: { items: [{ sku: PRODUCTS[prod.idx].sku, size: prod.size, qty: prod.qty }] },
+        phone: phone,
+        operator: document.getElementById('prod-operator').value,
+      }),
+    }).then(function (res) { return res.json(); }).then(function (d) {
+      if (!d.reference) {
+        go.disabled = false; go.textContent = 'Send payment prompt';
+        prodMsg('Could not start the payment: ' + (d.error || 'unknown error') + '. Try again.', 'err');
+        return;
+      }
+      prodMsg('Approve the prompt on your phone — confirming your order…');
+      pollOrderPayment(d.reference, 0);
+    }).catch(function () {
+      go.disabled = false; go.textContent = 'Send payment prompt';
+      prodMsg('Network error — try again.', 'err');
+    });
+  });
+}
+
+function pollOrderPayment(reference, tries) {
+  if (tries > 36) {
+    prodMsg('Still waiting on the payment. If you approved it, your order will confirm automatically — check the Orders tab on your <a href="dashboard.html" style="color:var(--accent);font-weight:700">dashboard</a>.', 'err');
+    return;
+  }
+  sbShared.from('payments').select('status').eq('provider_ref', reference).maybeSingle().then(function (r) {
+    var s = (r.data || {}).status;
+    if (s === 'success') {
+      document.getElementById('prod-pay').style.display = 'none';
+      var go = document.getElementById('prod-pay-go');
+      go.disabled = false; go.textContent = 'Send payment prompt';
+      prodMsg('✓ Order confirmed! A receipt is on its way to your email. Track it any time in the Orders tab on your <a href="dashboard.html" style="color:var(--accent);font-weight:700">dashboard</a>.', 'ok');
+    } else if (s === 'failed') {
+      var g = document.getElementById('prod-pay-go');
+      g.disabled = false; g.textContent = 'Send payment prompt';
+      prodMsg('The payment did not go through. No money moved — try again.', 'err');
+    } else {
+      setTimeout(function () { pollOrderPayment(reference, tries + 1); }, 5000);
+    }
+  });
 }
 
 /* ---------- REAL registration modal (two-step, writes to the database) ---------- */

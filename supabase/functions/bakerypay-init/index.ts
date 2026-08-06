@@ -7,12 +7,25 @@
 // Mock mode (BAKERYPAY_MOCK=true): skips the real API, fabricates a
 // reference. Lets the whole flow run before Bakery Pay credentials exist.
 //
-// Request JSON: { registration_id?, schedule_id?, amount_pesewas, phone, operator }
+// Request JSON (dues):  { registration_id?, schedule_id?, amount_pesewas, phone, operator }
+// Request JSON (merch): { registration_id?, order: { items: [{sku, size, qty}] }, phone, operator }
 // operator: mtn | vodafone | airteltigo. phone: 0XXXXXXXXX.
+// Merch orders are priced HERE from PRICES — the client never sends amounts.
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
 const OPERATORS = ['mtn', 'vodafone', 'airteltigo']
+
+// Canonical merch price list (pesewas). Keep in sync with site PRODUCTS.
+const PRICES: Record<string, { title: string; price: number; sizes: string[] }> = {
+  'black-tee': { title: 'Black Tee', price: 22500, sizes: ['M', 'L', 'XL', '2XL', '3XL'] },
+  'beige-tee': { title: 'Beige Tee', price: 22500, sizes: ['M', 'L', 'XL', '2XL', '3XL'] },
+  'black-baby-tee': { title: 'Black Baby Tee', price: 15000, sizes: ['Free size'] },
+  'bw-baby-tee': { title: 'Black & White Baby Tee', price: 15000, sizes: ['8', '10', '12', '14', '16'] },
+}
+
+// Merch orders close Fri 7 Aug 2026, 11:59 PM (Ghana = UTC).
+const ORDER_DEADLINE = Date.parse('2026-08-07T23:59:59+00:00')
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: CORS })
@@ -34,7 +47,31 @@ Deno.serve(async (req) => {
   } catch {
     return json({ error: 'invalid JSON' }, 400)
   }
-  const { registration_id, schedule_id = null, amount_pesewas, phone, operator } = body
+  const { registration_id, schedule_id = null, order = null, phone, operator } = body
+  let amount_pesewas = body.amount_pesewas
+
+  // Merch: price the order server-side and ignore any client amount.
+  let orderItems: { sku: string; title: string; size: string; qty: number; unit_price: number }[] | null = null
+  if (order) {
+    if (Date.now() > ORDER_DEADLINE) {
+      return json({ error: 'Ordering has closed — the deadline was Friday 7 Aug, 11:59 PM.' }, 400)
+    }
+    if (!Array.isArray(order.items) || order.items.length === 0 || order.items.length > 10) {
+      return json({ error: 'order.items must be a non-empty array' }, 400)
+    }
+    orderItems = []
+    let total = 0
+    for (const it of order.items) {
+      const prod = PRICES[it?.sku]
+      if (!prod) return json({ error: 'unknown sku: ' + String(it?.sku) }, 400)
+      if (!prod.sizes.includes(it?.size)) return json({ error: 'invalid size for ' + prod.title }, 400)
+      const qty = Number(it?.qty)
+      if (!Number.isInteger(qty) || qty < 1 || qty > 10) return json({ error: 'qty must be 1-10' }, 400)
+      orderItems.push({ sku: it.sku, title: prod.title, size: it.size, qty, unit_price: prod.price })
+      total += prod.price * qty
+    }
+    amount_pesewas = total
+  }
 
   if (!Number.isInteger(amount_pesewas) || amount_pesewas <= 0) {
     return json({ error: 'amount_pesewas must be a positive integer' }, 400)
@@ -87,9 +124,22 @@ Deno.serve(async (req) => {
     fees = { platform_fee: Math.round(feeGhs * 100), total: Math.round(Number(bp.data.total_amount ?? amountGhs) * 100) }
   }
 
+  let orderId: string | null = null
+  if (orderItems) {
+    const { data: ord, error: ordErr } = await db.from('orders').insert({
+      registration_id: reg.id,
+      items: orderItems,
+      total: amount_pesewas,
+      status: 'pending',
+    }).select('id').single()
+    if (ordErr || !ord) return json({ error: 'order insert failed', detail: ordErr?.message }, 500)
+    orderId = ord.id
+  }
+
   const { error: insErr } = await db.from('payments').insert({
     registration_id: reg.id,
     schedule_id,
+    order_id: orderId,
     amount: amount_pesewas,
     provider: 'bakerypay',
     provider_ref: providerRef,
@@ -102,8 +152,12 @@ Deno.serve(async (req) => {
   return json({
     reference: providerRef,
     status: 'pending',
+    order_id: orderId,
+    amount_pesewas,
     fees,
-    message: 'Approve the payment prompt on your phone. Your dues will update automatically.',
+    message: orderId
+      ? 'Approve the payment prompt on your phone. Your order is confirmed once it goes through.'
+      : 'Approve the payment prompt on your phone. Your dues will update automatically.',
   })
 })
 

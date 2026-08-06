@@ -182,10 +182,10 @@
 
     <!-- Orders -->
     <section class="tab" id="tab-orders">
-      <div class="card">
-        <h3 style="margin:0 0 8px;font-size:20px;font-weight:800">Merch orders coming soon <span class="pill pill-soft" style="font-size:10.5px">demo</span></h3>
-        <p style="margin:0;font-size:14.5px;line-height:1.6;color:var(--muted)">Your anniversary tee pre-orders will appear here with payment and pickup status. Browse the <a href="merch.html" style="color:var(--accent);font-weight:700">merch page</a> in the meantime.</p>
+      <div class="card-list" id="orders-list">
+        <div class="empty-note">Loading your orders…</div>
       </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:14px 4px 0">Order on the <a href="merch.html" style="color:var(--accent);font-weight:700">merch page</a> — paid orders are collected at anniversary events or delivered within Accra.</p>
     </section>
 
     <!-- Account -->
@@ -343,6 +343,7 @@ function loadMember(email) {
     renderMember();
     loadDues();
     loadEvents();
+    loadOrders();
   });
 }
 
@@ -393,7 +394,7 @@ function loadDues() {
     var paidBySchedule = {};
     var totalPaid = 0;
     payments.forEach(function (p) {
-      if (p.status !== 'success') return;
+      if (p.status !== 'success' || p.order_id) return;  // merch orders don't count toward dues
       totalPaid += p.amount;
       if (p.schedule_id) paidBySchedule[p.schedule_id] = (paidBySchedule[p.schedule_id] || 0) + p.amount;
     });
@@ -442,7 +443,7 @@ function loadDues() {
       var head = '<div class="tbl-head" style="grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.5fr) minmax(0,.9fr) 90px;min-width:520px"><span>Date</span><span>Method</span><span>Reference</span><span>Amount</span><span>Status</span></div>';
       var rows = payments.map(function (p) {
         var date = new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-        var method = p.provider === 'manual' ? 'Recorded by treasurer' : (p.channel === 'mobile_money' ? 'Mobile Money' : p.provider);
+        var method = p.order_id ? 'Merch order' : p.provider === 'manual' ? 'Recorded by treasurer' : (p.channel === 'mobile_money' ? 'Mobile Money' : p.provider);
         var badge = p.status === 'success' ? '<span class="pill pill-good">Paid</span>'
           : p.status === 'pending' ? '<span class="pill pill-soft">Pending</span>'
           : '<span class="pill" style="background:#FBE4E4;color:var(--error)">' + esc(p.status) + '</span>';
@@ -543,6 +544,29 @@ function submitBank() {
 }
 
 /* ---------- Events (live) ---------- */
+
+function loadOrders() {
+  sb.from('orders').select('*').eq('registration_id', member.id).order('created_at', { ascending: false }).then(function (r) {
+    var list = document.getElementById('orders-list');
+    var orders = r.data || [];
+    if (!orders.length) {
+      list.innerHTML = '<div class="empty-note">No orders yet — grab your anniversary tee on the <a href="merch.html" style="color:var(--accent);font-weight:700">merch page</a>.</div>';
+      return;
+    }
+    list.innerHTML = orders.map(function (o) {
+      var date = new Date(o.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      var items = (o.items || []).map(function (it) {
+        return esc(it.title) + ' · ' + esc(it.size) + (it.qty > 1 ? ' × ' + it.qty : '');
+      }).join(', ');
+      var badge = o.status === 'paid' ? '<span class="pill pill-good">Paid</span>'
+        : o.status === 'pending' ? '<span class="pill pill-soft">Awaiting payment</span>'
+        : '<span class="pill" style="background:#FBE4E4;color:var(--error)">' + esc(o.status) + '</span>';
+      return '<div class="row-item"><div><b>' + items + '</b>' +
+        '<div style="font-size:12.5px;color:var(--muted)">' + date + '</div></div>' +
+        '<div style="display:flex;align-items:center;gap:16px"><b>' + oaaGhs(o.total) + '</b>' + badge + '</div></div>';
+    }).join('');
+  });
+}
 
 function loadEvents() {
   Promise.all([

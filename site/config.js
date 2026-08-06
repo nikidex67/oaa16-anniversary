@@ -7,6 +7,7 @@ var OAA_PAY_BANK_URL = OAA_SUPABASE_URL + '/functions/v1/bakerypay-bank';
 var OAA_WHATSAPP_LINK = 'https://chat.whatsapp.com/E7NI1vNHNKgEQeGOUjSxWd?mode=gi_t';
 var OAA_MOMO_FEE_RATE = 0.025;  // 2.5% all-in, confirmed with Bakery Pay
 var OAA_PAYMENTS_LIVE = false;  // flip to true when Bakery Pay leaves mock mode
+var OAA_ORDER_DEADLINE = '2026-08-07T23:59:59+00:00';  // merch orders close Fri 7 Aug, 11:59 PM (Ghana = UTC)
 
 var OAA_HOUSE_COLORS = {
   'Aggrey House': '#C1272D', 'Baeta House': '#C1272D', 'Clark House': '#2456C4',

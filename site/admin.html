@@ -118,7 +118,7 @@ function loadAll() {
     var schedules = sr.data || [];
     return Promise.all([
       sbA.from('registrations').select('id', { count: 'exact', head: true }),
-      sbA.from('payments').select('amount, status, channel, provider, provider_ref, created_at, registration_id').order('created_at', { ascending: false }).limit(400),
+      sbA.from('payments').select('amount, status, channel, provider, provider_ref, created_at, registration_id, order_id').order('created_at', { ascending: false }).limit(400),
       Promise.all(schedules.map(function (sc) {
         return sbA.from('member_dues').select('id', { count: 'exact', head: true }).eq('schedule_id', sc.id)
           .then(function (c) { return { schedule_id: sc.id, count: c.count || 0 }; });
@@ -139,8 +139,12 @@ function loadAll() {
     var regName = {};
     regs.forEach(function (g) { regName[g.id] = g.first_name + ' ' + g.last_name; });
 
-    var collected = 0, pendingAmt = 0, paidBySched = {};
+    var collected = 0, pendingAmt = 0, merchAmt = 0, paidBySched = {};
     payments.forEach(function (p) {
+      if (p.order_id) {  // merch orders live outside the dues numbers
+        if (p.status === 'success') merchAmt += p.amount;
+        return;
+      }
       if (p.status === 'success') { collected += p.amount; }
       if (p.status === 'pending') pendingAmt += p.amount;
     });
@@ -154,7 +158,8 @@ function loadAll() {
       stat('Members', regCount) +
       stat('Collected', oaaGhs(collected)) +
       stat('Outstanding', oaaGhs(Math.max(totalDue - collected, 0))) +
-      stat('Pending review', oaaGhs(pendingAmt));
+      stat('Pending review', oaaGhs(pendingAmt)) +
+      stat('Merch sales', oaaGhs(merchAmt));
 
     document.getElementById('sched-list').innerHTML = schedules.map(function (s) {
       var assigned = countBySched[s.id] || 0;
@@ -175,7 +180,7 @@ function loadAll() {
     var head = '<div class="tbl-head" style="grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,.8fr) 90px;min-width:640px"><span>Date</span><span>Member</span><span>Method</span><span>Reference</span><span>Amount</span><span>Status</span></div>';
     document.getElementById('pay-list').innerHTML = head + (payments.slice(0, 50).map(function (p) {
       var date = new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-      var method = p.provider === 'manual' ? ('Manual · ' + (p.channel || '')) : (p.channel === 'bank_transfer' ? 'Bank transfer' : 'Mobile Money');
+      var method = p.order_id ? 'Merch order' : p.provider === 'manual' ? ('Manual · ' + (p.channel || '')) : (p.channel === 'bank_transfer' ? 'Bank transfer' : 'Mobile Money');
       var badge = p.status === 'success' ? '<span class="pill pill-good">Paid</span>' : p.status === 'pending' ? '<span class="pill pill-soft">Pending</span>' : '<span class="pill" style="background:#FBE4E4;color:var(--error)">' + esc(p.status) + '</span>';
       return '<div class="tbl-row" style="grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,.8fr) 90px;min-width:640px">' +
         '<span style="color:var(--muted)">' + date + '</span><span>' + esc(regName[p.registration_id] || '—') + '</span><span>' + esc(method) + '</span>' +
