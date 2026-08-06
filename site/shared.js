@@ -50,8 +50,8 @@ if (sbShared) {
 var PRODUCTS = [
   { sku: 'black-tee', title: 'Black Tee', price: 22500, sizes: ['M', 'L', 'XL', '2XL', '3XL'], desc: 'Heavyweight cotton · oversized fit · 20/16 crest', imgs: ['assets/tee-black.png', 'assets/tee-black-back.png'] },
   { sku: 'beige-tee', title: 'Beige Tee', price: 22500, sizes: ['M', 'L', 'XL', '2XL', '3XL'], desc: 'Heavyweight cotton · oversized fit · 20/16 crest', imgs: ['assets/tee-beige-front-3.png', 'assets/tee-beige.png'] },
-  { sku: 'black-baby-tee', title: 'Black Baby Tee', price: 15000, sizes: ['Free size'], desc: 'Fitted black baby tee · 20/16 crest · product photos coming soon', imgs: ['assets/tee-black.png', 'assets/tee-black-back.png'] },
-  { sku: 'bw-baby-tee', title: 'Black & White Baby Tee', price: 15000, sizes: ['8', '10', '12', '14', '16'], desc: 'Fitted black & white baby tee · 20/16 crest · product photos coming soon', imgs: ['assets/tee-black.png', 'assets/tee-beige.png'] }
+  { sku: 'black-baby-tee', title: 'Black Baby Tee', price: 15000, sizes: ['Free size'], desc: 'Fitted black baby tee · 20/16 crest chest print', imgs: ['assets/baby-tee-black.jpg', 'assets/baby-tee-black.jpg'] },
+  { sku: 'bw-baby-tee', title: 'Black & White Baby Tee', price: 15000, sizes: ['8', '10', '12', '14', '16'], desc: 'Fitted raglan baby tee · black sleeves · 20/16 crest chest print', imgs: ['assets/baby-tee-bw.jpg', 'assets/baby-tee-bw.jpg'] }
 ];
 var prod = { idx: 0, img: 0, size: '', qty: 1, added: false };
 
