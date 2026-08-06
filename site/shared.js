@@ -17,11 +17,30 @@ function hideRegisterUI() {
   document.querySelectorAll('[data-reg-only]').forEach(function (el) { el.style.display = 'none'; });
 }
 if (localStorage.getItem('oaa_registered')) hideRegisterUI();
-else if (sbShared) {
+if (sbShared) {
   sbShared.auth.getSession().then(function (r) {
     if (!r.data.session) return;
-    sbShared.from('registrations').select('id').ilike('email', r.data.session.user.email).maybeSingle().then(function (q) {
-      if (q.data) { localStorage.setItem('oaa_registered', '1'); hideRegisterUI(); }
+    sbShared.from('registrations').select('first_name, last_name, nickname, house').ilike('email', r.data.session.user.email).maybeSingle().then(function (q) {
+      if (!q.data) return;
+      localStorage.setItem('oaa_registered', '1');
+      hideRegisterUI();
+      /* swap the nav "Sign in" link for the member chip */
+      var reg = q.data;
+      var color = (typeof OAA_HOUSE_COLORS !== 'undefined' && OAA_HOUSE_COLORS[reg.house]) || '#0E0C09';
+      document.querySelectorAll('.nav-signin').forEach(function (a) {
+        a.href = 'dashboard.html';
+        a.className = 'nav-member';
+        a.textContent = '';
+        var av = document.createElement('span');
+        av.className = 'avatar';
+        av.style.background = color;
+        av.textContent = ((reg.first_name || ' ')[0] + (reg.last_name || ' ')[0]).trim().toUpperCase();
+        var nm = document.createElement('span');
+        nm.textContent = reg.nickname || (reg.first_name || '').split(' ')[0] || 'Member';
+        a.appendChild(av);
+        a.appendChild(document.createTextNode(' '));
+        a.appendChild(nm);
+      });
     });
   });
 }

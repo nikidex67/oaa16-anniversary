@@ -69,7 +69,7 @@ a:hover { color: var(--accent); }
 .nav-signin:hover { transform: translateY(-1px); }
 .nav-member {
   display: inline-flex; align-items: center; gap: 10px;
-  background: var(--field-bg); border-radius: 999px; padding: 7px 16px 7px 8px !important;
+  background: var(--field-bg) !important; border-radius: 999px; padding: 7px 16px 7px 8px !important;
   font-size: 13px !important; color: var(--ink) !important;
 }
 .nav-member .avatar {
