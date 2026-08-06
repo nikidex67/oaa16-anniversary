@@ -19,3 +19,26 @@ var OAA_HOUSE_COLORS = {
 function oaaGhs(pesewas) {
   return 'GH₵' + (pesewas / 100).toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+
+/* iOS Safari: block the bottom rubber-band (white flash past the dark footer)
+   while keeping the top bounce so pull-to-refresh still works. Touches inside
+   scrollable panels (modals, sliders, tables) are left alone. */
+(function () {
+  var startY = 0;
+  function inScrollable(el) {
+    for (; el && el !== document.body; el = el.parentElement) {
+      var s = getComputedStyle(el);
+      if (/(auto|scroll)/.test(s.overflowY + s.overflowX) &&
+          (el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth)) return true;
+    }
+    return false;
+  }
+  document.addEventListener('touchstart', function (e) {
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchmove', function (e) {
+    var el = document.scrollingElement || document.documentElement;
+    var atBottom = el.scrollTop + window.innerHeight >= el.scrollHeight - 1;
+    if (atBottom && e.touches[0].clientY < startY && !inScrollable(e.target)) e.preventDefault();
+  }, { passive: false });
+})();
