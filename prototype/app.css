@@ -28,7 +28,7 @@
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; background: #FFFFFF; }
+html, body { margin: 0; padding: 0; background: #FFFFFF; overflow-x: hidden; overflow-x: clip; }
 body { font-family: var(--font); color: var(--ink); min-height: 100vh; }
 a { color: var(--ink); }
 a:hover { color: var(--accent); }
