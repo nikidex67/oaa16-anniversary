@@ -291,3 +291,10 @@ select.chevron {
 }
 @keyframes page-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes page-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Tablet (between phone and desktop) ---------- */
+@media (min-width: 761px) and (max-width: 1024px) {
+  .wrap, .band-inner { padding-left: 28px; padding-right: 28px; }
+  .nav { padding: 16px 28px; }
+  .nav-links { gap: 18px; }
+}

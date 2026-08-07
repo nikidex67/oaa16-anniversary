@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app.css?v=4">
+<link rel="stylesheet" href="app.css?v=5">
 <style>
 .hero { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; padding: 40px 0 64px; }
 .hero-copy { flex: 1 1 460px; min-width: 0; }
@@ -81,6 +81,17 @@
 }
 .merch-card h3 { margin: 0 0 12px; font-size: 22px; font-weight: 800; color: #FFFFFF; }
 .merch-card .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
+@media (min-width: 761px) and (max-width: 1024px) {
+  .hero { gap: 28px; padding: 24px 0 48px; }
+  .hero-copy { flex: 1 1 360px; }
+  .hero-copy h1 { font-size: clamp(44px, 6vw, 64px); }
+  .hero-crest { flex: 1 1 300px; min-height: 360px; }
+  .hero-crest img { max-height: min(400px, 48vh); }
+  .split-copy { flex: 0 1 300px; }
+  .split > div:last-child { flex: 1 1 320px !important; min-width: 0; }
+  .merch-card { min-height: 380px; }
+}
 
 @media (max-width: 760px) {
   .hero { flex-direction: column-reverse; gap: 4px; padding: 28px 0 0; }
