@@ -226,8 +226,16 @@ select.chevron {
   to { opacity: 1; transform: translateY(0); }
 }
 @media (max-width: 760px) {
-  .nav { flex-wrap: nowrap; }
-  .nav.nav-open { z-index: 10; }
+  .nav {
+    flex-wrap: nowrap;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+    transition: background .25s, box-shadow .25s;
+  }
+  body { padding-top: 82px; }
+  .band { margin-top: -82px; padding-top: 82px; }
+  .nav-stuck.nav-dark { background: #0E0C09; }
+  .nav-stuck.nav-light { background: #FFFFFF; box-shadow: 0 8px 20px rgba(14,12,9,.08); }
+  .nav.nav-open { z-index: 30; }
   .nav-burger { display: inline-flex; }
   .nav .nav-links { display: none; }
   .nav.nav-open .nav-links {

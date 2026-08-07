@@ -34,5 +34,8 @@ function oaaGhs(pesewas) {
       btn.textContent = open ? '\u2715' : '\u2630';
     };
     nav.appendChild(btn);
+    var setStuck = function () { nav.classList.toggle('nav-stuck', window.scrollY > 8); };
+    window.addEventListener('scroll', setStuck, { passive: true });
+    setStuck();
   });
 })();
