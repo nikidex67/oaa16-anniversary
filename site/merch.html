@@ -29,6 +29,13 @@
 .product .price { font-size: 20px; font-weight: 800; color: #FFFFFF; }
 .product .tags { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
 
+.deadline-note {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1.5px solid #C1272D; border-radius: 14px; padding: 12px 16px;
+  font-size: 13px; line-height: 1.5; color: #0E0C09; margin-bottom: 36px; text-align: left;
+}
+.deadline-note i { width: 8px; height: 8px; border-radius: 50%; background: #C1272D; animation: dot-blink 1.6s ease-in-out infinite; flex-shrink: 0; }
+
 .faq { border-bottom: 1px solid rgba(14,12,9,.1); text-align: left; }
 .faq-q {
   width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px;
@@ -77,7 +84,7 @@
 
 <div class="wrap" style="padding-top:56px;padding-bottom:72px">
 
-  <div style="background:var(--success-bg);color:var(--success-ink);border-radius:14px;padding:12px 16px;font-size:13px;line-height:1.5;margin-bottom:36px;display:inline-block">⏰ Order deadline: Friday 7 Aug, 11:59 PM · pickup at the anniversary events (14–16 Aug) or delivery within Accra</div>
+  <div class="deadline-note"><i></i>Order deadline: Friday 7 Aug, 11:59 PM · pickup at the anniversary events (14–16 Aug) or delivery within Accra</div>
 
   <div style="display:flex;gap:24px;flex-wrap:wrap">
 
