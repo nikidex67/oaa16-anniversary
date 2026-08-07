@@ -25,7 +25,7 @@
   backdrop-filter: blur(2px); display: flex; flex-direction: column;
 }
 .product .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 12px; }
-.product h3 { margin: 0; font-size: 26px; font-weight: 800; color: #FFFFFF; }
+.product h3 { margin: 0 0 12px; font-size: 26px; font-weight: 800; color: #FFFFFF; }
 .product .price { font-size: 20px; font-weight: 800; color: #FFFFFF; }
 .product .tags { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
 
@@ -42,9 +42,8 @@
 
 @media (max-width: 760px) {
   .wrap { text-align: center; }
-  .product { flex: 1 1 calc(50% - 12px); min-width: calc(50% - 12px); max-width: none; min-height: 320px; }
-  .product h3 { font-size: 17px; }
-  .product .price { font-size: 14px; }
+  .product { flex: 1 1 calc(50% - 12px); min-width: calc(50% - 12px); max-width: none; min-height: 300px; }
+  .product h3 { font-size: 16px; margin-bottom: 8px; }
   .product .foot { padding: 12px; }
   .product .tags { gap: 5px; margin-bottom: 12px; }
   .product .tags .pill { font-size: 10px; padding: 4px 8px; }
@@ -85,8 +84,8 @@
     <div class="product" style="background:#0E0C09 url('assets/tee-black.png') center top/cover no-repeat">
       <div class="alt" aria-hidden="true" style="background:#0E0C09 url('assets/tee-black-back.png') center 30%/cover no-repeat"></div>
       <div class="foot">
-        <div class="head"><h3>Black Tee</h3><span class="price">GH₵225</span></div>
-        <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Crest front · 10 Years On back</span></div>
+        <h3>Black Tee</h3>
+        <div class="tags"><span class="pill pill-glass">GH₵225</span><span class="pill pill-glass">M – 3XL</span></div>
         <button class="btn btn-white" style="width:100%" onclick="openProduct(0)">Pre-order →</button>
       </div>
     </div>
@@ -94,8 +93,8 @@
     <div class="product" style="background:#EDE8F5 url('assets/tee-beige.png') center top/cover no-repeat">
       <div class="alt" aria-hidden="true" style="background:#EDE8F5 url('assets/tee-beige-front-3.png') center 45%/cover no-repeat"></div>
       <div class="foot">
-        <div class="head"><h3>Beige Tee</h3><span class="price">GH₵225</span></div>
-        <div class="tags"><span class="pill pill-glass">M – 3XL</span><span class="pill pill-glass">Bold crest back print</span></div>
+        <h3>Beige Tee</h3>
+        <div class="tags"><span class="pill pill-glass">GH₵225</span><span class="pill pill-glass">M – 3XL</span></div>
         <button class="btn btn-white" style="width:100%" onclick="openProduct(1)">Pre-order →</button>
       </div>
     </div>
@@ -103,23 +102,23 @@
 
     <div class="product" style="background:#0E0C09 url('assets/baby-tee-black.jpg') center 20%/cover no-repeat">
       <div class="foot">
-        <div class="head"><h3>Black Baby Tee</h3><span class="price">GH₵150</span></div>
-        <div class="tags"><span class="pill pill-glass">Free size</span><span class="pill pill-glass">Fitted cut · crest chest print</span></div>
+        <h3>Black Baby Tee</h3>
+        <div class="tags"><span class="pill pill-glass">GH₵150</span><span class="pill pill-glass">Free size</span></div>
         <button class="btn btn-white" style="width:100%" onclick="openProduct(2)">Order →</button>
       </div>
     </div>
 
     <div class="product" style="background:#EDE8F5 url('assets/baby-tee-bw.jpg') center 20%/cover no-repeat">
       <div class="foot">
-        <div class="head"><h3>Black &amp; White Baby Tee</h3><span class="price">GH₵150</span></div>
-        <div class="tags"><span class="pill pill-glass">Sizes 8 – 16</span><span class="pill pill-glass">Raglan cut · black sleeves</span></div>
+        <h3>Black &amp; White Baby Tee</h3>
+        <div class="tags"><span class="pill pill-glass">GH₵150</span><span class="pill pill-glass">Sizes 8 – 16</span></div>
         <button class="btn btn-white" style="width:100%" onclick="openProduct(3)">Order →</button>
       </div>
     </div>
 
   </div>
 
-  <div class="faqs" style="margin-top:48px;max-width:760px;margin-left:auto;margin-right:auto">
+  <div class="faqs" style="margin-top:48px">
     <div class="faq">
       <button class="faq-q" onclick="faqToggle(this)">What's the fabric like?<span class="chev">▾</span></button>
       <div class="faq-a">Heavyweight 240gsm cotton, pre-shrunk, oversized fit. Sizes M through 3XL.</div>
