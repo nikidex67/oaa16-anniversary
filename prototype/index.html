@@ -83,8 +83,10 @@
 .merch-card .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 
 @media (max-width: 760px) {
-  .hero { flex-direction: column-reverse; gap: 4px; padding: 4px 0 48px; }
+  .hero { flex-direction: column-reverse; gap: 4px; padding: 4px 0 0; }
+  .band-inner { padding-bottom: 16px !important; }
   .hero-crest { min-height: 0; flex-basis: auto; }
+  .hero-copy { flex: 0 0 auto; }
   .hero-crest img { max-width: 54%; max-height: min(325px, 39vh); }
   .split .split-copy { display: none; }
   .merch-card { flex: 1 1 calc(50% - 10px); min-width: calc(50% - 10px); min-height: 300px; }
