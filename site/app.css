@@ -234,6 +234,12 @@ select.chevron {
   body { padding-top: 82px; }
   .band { margin-top: -82px; padding-top: 82px; }
   .band-inner { text-align: center; }
+  .band-bg {
+    width: 100%;
+    background-position: center top;
+    mask-image: linear-gradient(to bottom, black 30%, transparent 56%);
+    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 56%);
+  }
   .display-section { text-align: center; }
   .split-copy { text-align: center; margin-left: auto; margin-right: auto; }
   .split-copy > div { justify-content: center; }
