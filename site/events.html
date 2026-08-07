@@ -49,6 +49,16 @@
   font-size: 9px; font-weight: 800;
 }
 .faces span + span { margin-left: -9px; }
+.read-more { display: none; border: 0; background: transparent; color: var(--accent); font-weight: 700; font-size: 13px; padding: 0; cursor: pointer; text-align: left; font-family: var(--font); }
+
+@media (max-width: 760px) {
+  .event .desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .event .desc.open { display: block; -webkit-line-clamp: unset; }
+  .read-more { display: inline-block; }
+  .event .details { padding: 22px 20px; gap: 10px; }
+  .event h3 { font-size: 22px; }
+  .event .btn { padding: 9px 14px !important; font-size: 12.5px !important; }
+}
 </style>
 </head>
 <body>
@@ -66,7 +76,7 @@
     </div>
   </nav>
   <div class="band-inner">
-    <p class="eyebrow-mono">10th Anniversary · Founders' Week</p>
+    <p class="eyebrow-mono">10th Anniversary</p>
     <h1 class="display-hero" style="font-size:clamp(52px,7vw,84px)">The events</h1>
     <p class="band-sub">One weekend, one year group — 14 to 16 August. RSVP so we can plan numbers.</p>
   </div>
@@ -160,6 +170,18 @@
 <div id="reg-modal-root"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+<script>
+document.querySelectorAll('.event .desc').forEach(function (d) {
+  var b = document.createElement('button');
+  b.className = 'read-more';
+  b.textContent = 'Read more';
+  b.onclick = function () {
+    var open = d.classList.toggle('open');
+    b.textContent = open ? 'Read less' : 'Read more';
+  };
+  d.insertAdjacentElement('afterend', b);
+});
+</script>
 <script src="shared.js"></script>
 <script>
 var evs = {};          // slug -> event uuid

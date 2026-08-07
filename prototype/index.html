@@ -81,6 +81,19 @@
 }
 .merch-card h3 { margin: 0 0 12px; font-size: 22px; font-weight: 800; color: #FFFFFF; }
 .merch-card .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
+@media (max-width: 760px) {
+  .hero { flex-direction: column-reverse; gap: 4px; padding: 4px 0 48px; }
+  .hero-crest { min-height: 0; flex-basis: auto; }
+  .hero-crest img { max-width: 43%; max-height: min(260px, 31vh); }
+  .split .split-copy { display: none; }
+  .merch-card { flex: 1 1 calc(50% - 10px); min-width: calc(50% - 10px); min-height: 300px; }
+  .merch-card h3 { font-size: 16px; margin-bottom: 8px; }
+  .merch-card .foot { padding: 12px; }
+  .merch-card .tags { gap: 5px; margin-bottom: 10px; }
+  .merch-card .tags .pill { font-size: 10px; padding: 4px 8px; }
+  .merch-card .btn { font-size: 12px; padding: 9px 8px; }
+}
 </style>
 </head>
 <body>

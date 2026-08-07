@@ -28,6 +28,16 @@
 .product h3 { margin: 0; font-size: 26px; font-weight: 800; color: #FFFFFF; }
 .product .price { font-size: 20px; font-weight: 800; color: #FFFFFF; }
 .product .tags { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+
+@media (max-width: 760px) {
+  .product { flex: 1 1 calc(50% - 12px); min-width: calc(50% - 12px); max-width: none; min-height: 320px; }
+  .product h3 { font-size: 17px; }
+  .product .price { font-size: 14px; }
+  .product .foot { padding: 12px; }
+  .product .tags { gap: 5px; margin-bottom: 12px; }
+  .product .tags .pill { font-size: 10px; padding: 4px 8px; }
+  .product .btn { font-size: 12px; padding: 9px 8px; }
+}
 .info-col { flex: 1 1 220px; min-width: 0; }
 .info-col .k { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
 .info-col p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }

@@ -30,10 +30,21 @@
 .display-sm { font-family: var(--display); font-style: italic; font-weight: 400; font-size: 26px; line-height: 1.2; margin: 0 0 16px; }
 .tab { display: none; }
 .tab.on { display: block; }
+.acc-hd { display: none; }
 @media (max-width: 920px) {
-  .side { position: static; flex: 1 1 100%; min-width: 0; flex-direction: row; flex-wrap: nowrap; overflow-x: auto; gap: 6px; padding-bottom: 6px; }
-  .side .memid, .side > div { display: none; }
-  .side button, .side a { white-space: nowrap; flex-shrink: 0; }
+  .side { display: none; }
+  .acc-hd {
+    display: flex; width: 100%; align-items: center; justify-content: space-between;
+    border: 0; cursor: pointer; font-family: var(--font);
+    background: var(--field-bg); border-radius: 14px; padding: 15px 18px;
+    font-size: 15px; font-weight: 700; color: var(--ink); margin: 5px 0;
+  }
+  .acc-hd .chev { transition: transform .2s; }
+  .acc-hd.open .chev { transform: rotate(180deg); }
+  .tab { display: none; }
+  .tab.on { display: none; }
+  .tab.acc-open { display: block; padding: 12px 2px 20px; }
+  .main h1 { font-size: 30px; }
 }
 
 .member-card { background: #0E0C09; border-radius: 24px; padding: 28px; color: #fff; position: relative; overflow: hidden; min-height: 210px; transition: background .3s; }
@@ -312,11 +323,48 @@ var TAB_META = {
 };
 
 function goTab(key) {
+  if (window.matchMedia('(max-width: 920px)').matches) {
+    accToggle(key, true);
+    var sec = document.getElementById('tab-' + key);
+    if (sec && sec.previousElementSibling) sec.previousElementSibling.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
   document.querySelectorAll('.side button[data-tab]').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === key); });
   document.querySelectorAll('.tab').forEach(function (t) { t.classList.toggle('on', t.id === 'tab-' + key); });
   document.getElementById('hd-eyebrow').textContent = TAB_META[key].ey;
   document.getElementById('hd-sub').textContent = TAB_META[key].sub;
   window.scrollTo({ top: 0 });
+}
+
+/* ---------- Mobile accordion (sections as dropdowns) ---------- */
+
+(function buildAccordion() {
+  var names = { dash: 'Account Dashboard', dues: 'Dues', events: 'Events', orders: 'Orders', account: 'Account details' };
+  Object.keys(names).forEach(function (k) {
+    var sec = document.getElementById('tab-' + k);
+    if (!sec) return;
+    var hd = document.createElement('button');
+    hd.className = 'acc-hd';
+    hd.innerHTML = '<span>' + names[k] + '</span><span class="chev">\u25BE</span>';
+    hd.onclick = function () { accToggle(k); };
+    sec.parentNode.insertBefore(hd, sec);
+    if (k === 'dash') { sec.classList.add('acc-open'); hd.classList.add('open'); }
+  });
+  var so = document.createElement('button');
+  so.className = 'acc-hd';
+  so.innerHTML = '<span>Sign out</span><span>\u2192</span>';
+  so.onclick = signOut;
+  document.getElementById('member-ui').appendChild(so);
+})();
+
+function accToggle(key, forceOpen) {
+  var sec = document.getElementById('tab-' + key);
+  if (!sec) return;
+  var hd = sec.previousElementSibling;
+  var willOpen = forceOpen === true ? true : !sec.classList.contains('acc-open');
+  document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('acc-open'); });
+  document.querySelectorAll('.acc-hd').forEach(function (h) { h.classList.remove('open'); });
+  if (willOpen) { sec.classList.add('acc-open'); hd.classList.add('open'); }
 }
 
 function signOut() {

@@ -20,3 +20,19 @@ var OAA_HOUSE_COLORS = {
 function oaaGhs(pesewas) {
   return 'GH₵' + (pesewas / 100).toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+
+/* Mobile nav: inject a hamburger toggle into every nav (hidden on desktop by CSS). */
+(function () {
+  document.querySelectorAll('.nav').forEach(function (nav) {
+    if (!nav.querySelector('.nav-links')) return;
+    var btn = document.createElement('button');
+    btn.className = 'nav-burger';
+    btn.setAttribute('aria-label', 'Menu');
+    btn.textContent = '\u2630';
+    btn.onclick = function () {
+      var open = nav.classList.toggle('nav-open');
+      btn.textContent = open ? '\u2715' : '\u2630';
+    };
+    nav.appendChild(btn);
+  });
+})();
