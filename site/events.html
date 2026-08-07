@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="app.css?v=3">
 <style>
 .event {
   scroll-margin-top: 24px; background: #FFFFFF;
@@ -165,7 +165,7 @@
 
 <div id="reg-modal-root"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
+<script src="config.js?v=3"></script>
 <script>
 document.querySelectorAll('.event .desc').forEach(function (d) {
   var b = document.createElement('button');
@@ -178,7 +178,7 @@ document.querySelectorAll('.event .desc').forEach(function (d) {
   d.insertAdjacentElement('afterend', b);
 });
 </script>
-<script src="shared.js"></script>
+<script src="shared.js?v=3"></script>
 <script>
 var evs = {};          // slug -> event uuid
 var myRegId = null;
