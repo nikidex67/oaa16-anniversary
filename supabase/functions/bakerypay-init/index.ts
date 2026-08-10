@@ -100,11 +100,12 @@ Deno.serve(async (req) => {
     fees = { platform_fee: fee, total: amount_pesewas + fee }
     raw = { mock: true, fees }
   } else {
-    const res = await fetch(`${Deno.env.get('BAKERYPAY_BASE_URL')}/api/collections/alpha/initialize`, {
+    const res = await fetch(`${Deno.env.get('BAKERYPAY_BASE_URL')}/v1/collections/alpha/initialize`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${Deno.env.get('BAKERYPAY_TOKEN')}`,
+        'X-Api-Key': Deno.env.get('BAKERY_PAY_API_KEY')!,
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: JSON.stringify({
         payer_email: reg.email,
