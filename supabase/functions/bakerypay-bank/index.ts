@@ -40,8 +40,11 @@ Deno.serve(async (req) => {
 
   if (req.method === 'GET') {
     if (mock) return json({ bank: MOCK_BANK })
-    const res = await fetch(`${Deno.env.get('BAKERYPAY_BASE_URL')}/api/collections/gamma/bank-details`, {
-      headers: { Authorization: `Bearer ${Deno.env.get('BAKERYPAY_TOKEN')}` },
+    const res = await fetch(`${Deno.env.get('BAKERYPAY_BASE_URL')}/v1/collections/gamma/bank-details`, {
+      headers: {
+        'X-Api-Key': Deno.env.get('BAKERY_PAY_API_KEY')!,
+        'Accept': 'application/json',
+      },
     })
     const bp = await res.json().catch(() => null)
     if (!res.ok || !bp?.success) return json({ error: 'could not fetch bank details' }, 502)
@@ -90,9 +93,12 @@ Deno.serve(async (req) => {
     fwd.set('payer_name', `${reg.first_name} ${reg.last_name}`)
     fwd.set('amount', String(amount_pesewas / 100))
     fwd.set('receipt', receipt, `receipt.${ext}`)
-    const res = await fetch(`${Deno.env.get('BAKERYPAY_BASE_URL')}/api/collections/gamma/initialize`, {
+    const res = await fetch(`${Deno.env.get('BAKERYPAY_BASE_URL')}/v1/collections/gamma/initialize`, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${Deno.env.get('BAKERYPAY_TOKEN')}` },
+      headers: {
+        'X-Api-Key': Deno.env.get('BAKERY_PAY_API_KEY')!,
+        'Accept': 'application/json',
+      },
       body: fwd,
     })
     const bp = await res.json().catch(() => null)
