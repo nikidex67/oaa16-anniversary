@@ -7,8 +7,8 @@
 // Mock mode (BAKERYPAY_MOCK=true): every pending mock payment resolves to
 // success on the next run.
 //
-// ASSUMPTION (open question with Bakery Pay): GET /api/collections/{id}
-// accepts the collection *reference* as the path id. Verify before go-live.
+// (open question with Bakery Pay): GET /v1/collections/{reference}
+// accepts the collection *reference* as the path id.
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { SMTPClient } from 'https://deno.land/x/denomailer@1.6.0/mod.ts'
@@ -40,8 +40,13 @@ Deno.serve(async (req) => {
       raw = { mock: true, reconciled_at: new Date().toISOString() }
     } else {
       const res = await fetch(
-        `${Deno.env.get('BAKERYPAY_BASE_URL')}/api/collections/${encodeURIComponent(p.provider_ref)}`,
-        { headers: { Authorization: `Bearer ${Deno.env.get('BAKERYPAY_TOKEN')}` } },
+        `${Deno.env.get('BAKERYPAY_BASE_URL')}/v1/collections/${encodeURIComponent(p.provider_ref)}`,
+        {
+          headers: {
+            'X-Api-Key': Deno.env.get('BAKERY_PAY_API_KEY')!,
+            'Accept': 'application/json',
+          },
+        },
       )
       const bp = await res.json().catch(() => null)
       if (!res.ok || !bp?.success) { still++; continue }  // transient — retry next run
