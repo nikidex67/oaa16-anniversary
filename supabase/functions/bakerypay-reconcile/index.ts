@@ -106,14 +106,23 @@ async function sendReceipt(
     .single()
   if (!reg) return
 
-  // Dues position across all assigned schedules (after this payment settled).
-  const { data: dues } = await db
-    .from('member_dues_status')
-    .select('amount_due, amount_paid, balance')
+  // Dues position after this payment settled. Same math as the dashboard:
+  // every successful non-merch payment counts, whether or not it was tagged
+  // to a specific year (dashboard payments are untagged by design).
+  const { data: assignments } = await db
+    .from('member_dues')
+    .select('amount_override, dues_schedules(amount)')
     .eq('registration_id', p.registration_id)
-  const totalDue = (dues ?? []).reduce((s, d) => s + d.amount_due, 0)
-  const totalPaid = (dues ?? []).reduce((s, d) => s + d.amount_paid, 0)
-  const balance = (dues ?? []).reduce((s, d) => s + d.balance, 0)
+  const totalDue = (assignments ?? []).reduce(
+    (s, a) => s + (a.amount_override ?? (a.dues_schedules as { amount: number } | null)?.amount ?? 0), 0)
+  const { data: paidRows } = await db
+    .from('payments')
+    .select('amount')
+    .eq('registration_id', p.registration_id)
+    .eq('status', 'success')
+    .is('order_id', null)
+  const totalPaid = (paidRows ?? []).reduce((s, r) => s + r.amount, 0)
+  const balance = Math.max(totalDue - totalPaid, 0)
   const hasDues = totalDue > 0
   const pct = hasDues ? Math.max(0, Math.min(100, Math.round((totalPaid / totalDue) * 100))) : 0
 
