@@ -471,20 +471,26 @@ function loadDues() {
     });
 
     var balance = Math.max(totalDue - totalPaid, 0);
+    var credit = Math.max(totalPaid - totalDue, 0);
     duesState = { totalDue: totalDue, totalPaid: totalPaid, balance: balance };
     var pct = totalDue > 0 ? Math.max(0, Math.min(100, Math.round(totalPaid / totalDue * 100))) : 0;
 
     ['glance', 'dues'].forEach(function (k) {
       document.getElementById(k + '-paid').textContent = oaaGhs(totalPaid);
       document.getElementById(k + '-total').textContent = 'of ' + oaaGhs(totalDue);
-      document.getElementById(k + '-pct').textContent = totalDue > 0 ? pct + '% paid up' : 'No dues assigned yet';
+      document.getElementById(k + '-pct').textContent = totalDue > 0
+        ? (credit > 0 ? 'Fully paid · ' + oaaGhs(credit) + ' toward future years' : pct + '% paid up')
+        : 'No dues assigned yet';
       document.getElementById(k + '-bar').style.width = pct + '%';
     });
     document.getElementById('glance-btn').textContent = (OAA_PAYMENTS_LIVE && balance > 0) ? 'Pay ' + oaaGhs(balance) + ' balance' : 'View dues';
     var payBtn = document.getElementById('pay-open-btn');
     if (!OAA_PAYMENTS_LIVE) { payBtn.textContent = 'Online payments opening soon'; payBtn.disabled = true; payBtn.style.opacity = .55; }
     else if (balance > 0) { payBtn.textContent = 'Pay ' + oaaGhs(balance) + ' balance'; payBtn.disabled = false; payBtn.style.opacity = 1; }
-    else { payBtn.textContent = totalDue > 0 ? 'Fully paid ✓' : 'No dues yet'; payBtn.disabled = true; payBtn.style.opacity = .55; }
+    else {
+      payBtn.textContent = totalDue > 0 ? (credit > 0 ? 'Fully paid + ' + oaaGhs(credit) + ' credit ✓' : 'Fully paid ✓') : 'No dues yet';
+      payBtn.disabled = true; payBtn.style.opacity = .55;
+    }
 
     var hist = document.getElementById('pay-history');
     if (!payments.length) {

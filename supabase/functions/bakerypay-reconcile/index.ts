@@ -133,6 +133,8 @@ async function sendReceipt(
        <td align="right" style="padding:10px 0;font-size:16px;font-weight:700;color:#7C3AED;border-top:1.5px solid #0E0C09">${ghs(balance)}</td></tr>`
     : `<tr><td style="padding:10px 0;font-size:14px;color:#6B6080;border-top:1.5px solid #0E0C09">Balance</td>
        <td align="right" style="padding:10px 0;font-size:15px;font-weight:700;color:#1E7A55;border-top:1.5px solid #0E0C09">Fully paid ✓</td></tr>`
+       + (totalPaid > totalDue ? `<tr><td style="padding:10px 0;font-size:14px;color:#6B6080">Credit toward future years</td>
+       <td align="right" style="padding:10px 0;font-size:15px;font-weight:700;color:#7C3AED">${ghs(totalPaid - totalDue)}</td></tr>` : '')
 
   const progress = !hasDues ? '' : `
     <tr><td colspan="2" style="padding:16px 0 4px">
