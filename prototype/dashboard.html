@@ -481,7 +481,9 @@ function loadDues() {
       document.getElementById(k + '-pct').textContent = totalDue > 0
         ? (credit > 0 ? 'Fully paid · ' + oaaGhs(credit) + ' toward future years' : pct + '% paid up')
         : 'No dues assigned yet';
-      document.getElementById(k + '-bar').style.width = pct + '%';
+      var bar = document.getElementById(k + '-bar');
+      bar.style.width = pct + '%';
+      if (totalDue > 0 && totalPaid >= totalDue) bar.style.background = 'var(--success-ink)';
     });
     document.getElementById('glance-btn').textContent = (OAA_PAYMENTS_LIVE && balance > 0) ? 'Pay ' + oaaGhs(balance) + ' balance' : 'View dues';
     var payBtn = document.getElementById('pay-open-btn');
