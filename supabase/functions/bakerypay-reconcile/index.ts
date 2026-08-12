@@ -23,7 +23,7 @@ Deno.serve(async (req) => {
 
   const { data: pending, error } = await db
     .from('payments')
-    .select('id, registration_id, amount, provider_ref, order_id, created_at')
+    .select('id, registration_id, amount, provider_ref, order_id, raw_payload, created_at')
     .eq('provider', 'bakerypay')
     .eq('status', 'pending')
     .order('created_at')
@@ -39,21 +39,29 @@ Deno.serve(async (req) => {
       outcome = 'success'
       raw = { mock: true, reconciled_at: new Date().toISOString() }
     } else {
-      const res = await fetch(
+      const hdrs = {
+        'X-Api-Key': Deno.env.get('BAKERY_PAY_API_KEY')!,
+        'Accept': 'application/json',
+      }
+      // Look up by our reference first; fall back to Bakery Pay's numeric id
+      // (captured in raw_payload at initialize) if the reference 404s.
+      let res = await fetch(
         `${Deno.env.get('BAKERYPAY_BASE_URL')}/v1/collections/${encodeURIComponent(p.provider_ref)}`,
-        {
-          headers: {
-            'X-Api-Key': Deno.env.get('BAKERY_PAY_API_KEY')!,
-            'Accept': 'application/json',
-          },
-        },
+        { headers: hdrs },
       )
-      const bp = await res.json().catch(() => null)
+      let bp = await res.json().catch(() => null)
+      if (!res.ok || !bp?.success) {
+        const bpId = (p.raw_payload as { data?: { id?: number } } | null)?.data?.id
+        if (bpId != null) {
+          res = await fetch(`${Deno.env.get('BAKERYPAY_BASE_URL')}/v1/collections/${bpId}`, { headers: hdrs })
+          bp = await res.json().catch(() => null)
+        }
+      }
       if (!res.ok || !bp?.success) { still++; continue }  // transient — retry next run
       raw = bp
       const s = String(bp.data?.status ?? '').toLowerCase()
-      if (s === 'success' || s === 'successful' || s === 'completed') outcome = 'success'
-      else if (s === 'failed' || s === 'declined' || s === 'cancelled') outcome = 'failed'
+      if (s === 'success' || s === 'successful' || s === 'completed' || s === 'paid') outcome = 'success'
+      else if (s === 'failed' || s === 'declined' || s === 'cancelled' || s === 'expired') outcome = 'failed'
     }
 
     if (outcome === 'pending') { still++; continue }
