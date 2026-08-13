@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dues leaderboard — OAA 16</title>
+<style>
+@font-face {
+  font-family: 'Cabinet Grotesk';
+  src: url('https://cdn.fontshare.com/wf/J2PZYZURCR7HNQKXCZ4VXYA3K5FFCCLT/PZSZLWHMBCE7FFGOUYDEU33FAESUMA3X/JFDL5FBAQ2WMYL3LGKSCZKAIFCS2UQ63.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+:root {
+  --ink: #0E0C09;
+  --muted: #6B6080;
+  --field-bg: #F0EDF8;
+  --accent: #7C3AED;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #FFFFFF; }
+body {
+  font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+  color: var(--ink);
+  padding: 48px 24px 64px;
+}
+.wrap { max-width: 720px; margin: 0 auto; }
+.logo { display: block; margin: 0 auto 28px; height: 84px; width: auto; }
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+  text-align: center;
+}
+h1 {
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 1.1;
+  margin: 10px 0 6px;
+  text-align: center;
+}
+.asof { font-size: 13px; color: var(--muted); text-align: center; margin: 0 0 32px; }
+.stats { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+.stat {
+  background: var(--field-bg);
+  border-radius: 18px;
+  padding: 14px 26px;
+  text-align: center;
+  min-width: 110px;
+}
+.stat .label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.stat .value { font-size: 26px; font-weight: 800; line-height: 1.2; }
+.stat .value .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 2px; }
+.row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.rank { width: 26px; font-size: 13px; font-weight: 700; color: var(--muted); text-align: right; flex-shrink: 0; }
+.house { width: 108px; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.track { flex: 1; background: var(--field-bg); border-radius: 999px; height: 22px; overflow: hidden; }
+.bar { height: 100%; border-radius: 0 999px 999px 0; }
+.count { width: 74px; font-size: 13px; font-weight: 700; color: var(--muted); flex-shrink: 0; }
+.footer { margin-top: 36px; font-size: 11px; letter-spacing: .1em; color: var(--muted); text-align: center; line-height: 1.6; }
+@media (max-width: 560px) {
+  .house { width: 88px; font-size: 13px; }
+  h1 { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="logo" src="site/assets/oaa16-logo.png" alt="OAA 16">
+  <div class="eyebrow">Class of 2016 · 10 Years On</div>
+  <h1>Dues leaderboard</h1>
+  <p class="asof">GH₵34,294 collected · as of 12 August 2026</p>
+
+  <div class="stats">
+    <div class="stat"><div class="label">Collected</div><div class="value">GH₵34.3k</div></div>
+    <div class="stat"><div class="label">Members paid</div><div class="value">72</div></div>
+    <div class="stat"><div class="label">Fully paid</div><div class="value">16</div></div>
+  </div>
+
+  <div id="board"></div>
+
+  <div class="footer">Bar colours match house colours</div>
+</div>
+
+<script>
+var ROWS = [
+  { house: 'Kingsley', n: 3560, c: '#FFD400' },
+  { house: 'Baeta', n: 3283, c: '#C1272D' },
+  { house: 'Cadbury', n: 3170, c: '#5B3A29' },
+  { house: 'Slessor', n: 2995, c: '#8A4B6D' },
+  { house: 'OAA', n: 2770, c: '#7C3AED' },
+  { house: 'Clark', n: 2680, c: '#2456C4' },
+  { house: 'Aggrey', n: 2520, c: '#C1272D' },
+  { house: 'McCarthy', n: 2510, c: '#ED7014' },
+  { house: 'Fraser', n: 2000, c: '#2F9E44' },
+  { house: 'SOA', n: 1940, c: '#14532D' },
+  { house: 'Kwapong', n: 1280, c: '#7C3AED' },
+  { house: 'Guggisberg', n: 796, c: '#2456C4' },
+  { house: 'Gyamfi', n: 730, c: '#2F9E44' },
+  { house: 'Livingstone', n: 480, c: '#FFD400' },
+  { house: 'Lugard', n: 340, c: '#4FA8E0' }
+];
+var max = ROWS[0].n;
+var board = document.getElementById('board');
+var rank = 0;
+ROWS.forEach(function (r, i) {
+  if (i === 0 || r.n < ROWS[i - 1].n) rank = i + 1;
+  var row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML =
+    '<div class="rank">' + rank + '</div>' +
+    '<div class="house">' + r.house + '</div>' +
+    '<div class="track"><div class="bar" style="background:' + r.c + ';width:' + Math.round(r.n / max * 100) + '%"></div></div>' +
+    '<div class="count">GH₵' + r.n.toLocaleString() + '</div>';
+  board.appendChild(row);
+});
+</script>
+</body>
+</html>
